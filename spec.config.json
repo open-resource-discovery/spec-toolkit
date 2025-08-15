@@ -1,0 +1,20 @@
+{
+  "generalConfig": {
+    "sortProperties": false
+  },
+  "outputPath": "src/generated/spec/spec-v1",
+  "docsConfig": [
+    {
+      "type": "spec",
+      "id": "spec",
+      "sourceFilePath": "./spec/v1/spec.schema.yaml",
+      "sourceIntroFilePath": "./spec/v1/spec.intro.md",
+      "examplesFolderPath": "./spec/v1/examples/specJsonSchema",
+      "mdFrontmatter": {
+        "title": "JSON Schema Specification",
+        "sidebar_position": "2",
+        "description": "Describes the technical interface / schema for the spec."
+      }
+    }
+  ]
+}

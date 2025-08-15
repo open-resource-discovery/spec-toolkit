@@ -1,0 +1,20 @@
+{
+  "generalConfig": {
+    "sortProperties": false
+  },
+  "docsConfig": [
+    {
+      "type": "spec",
+      "id": "my-spec",
+      "sourceFilePath": "./src/__tests__/testData/valid/test1-my-spec.schema.yaml",
+      "sourceIntroFilePath": "./src/__tests__/testData/valid/test1-my-spec-intro.schema.md",
+      "sourceOutroFilePath": "./src/__tests__/testData/valid/test1-my-spec-outro.schema.md",
+      "mdFrontmatter": {
+        "title": "Interface Documentation for my-spec",
+        "sidebar_position": "1",
+        "description": "Describes the technical interface / schema for my-spec.",
+        "toc_max_heading_level": "4"
+      }
+    }
+  ]
+}

@@ -1,0 +1,767 @@
+{
+  "description": "This is the interface description of Spec v1.\nIts purpose is to describe all properties allowed to be maintained in a specification document.",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/open-resource-discovery/spec-toolkit/spec-v1/spec.schema.json#",
+  "title": "Spec Json Schema Root",
+  "type": "object",
+  "x-custom-typescript-types": [
+    {
+      "typeName": "SpecJsonSchemaArray",
+      "typeValue": "unknown",
+      "description": "Workaround for infinite type recursion\nhttps://github.com/Microsoft/TypeScript/issues/3496#issuecomment-128553540\n"
+    },
+    {
+      "typeName": "SpecToolkitPluginXxPropertyKey",
+      "typeValue": "string"
+    }
+  ],
+  "properties": {
+    "$id": {
+      "type": "string"
+    },
+    "$schema": {
+      "$ref": "#/definitions/SpecJsonSchemaVersion"
+    },
+    "title": {
+      "type": "string",
+      "description": "Descriptive title document text."
+    },
+    "description": {
+      "type": "string"
+    },
+    "type": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/SpecJsonSchemaTypeName"
+        },
+        {
+          "$ref": "#/definitions/SpecJsonSchemaTypeNameArray"
+        }
+      ]
+    },
+    "$ref": {
+      "type": "string",
+      "format": "uri-reference",
+      "description": "Reference to another schema.\nThis is used to link to other schemas or definitions within the specification document.\n"
+    },
+    "properties": {
+      "$ref": "#/definitions/Properties"
+    },
+    "patternProperties": {
+      "$ref": "#/definitions/PatternProperties"
+    },
+    "definitions": {
+      "$ref": "#/definitions/JsonSchemaDefinitions"
+    },
+    "examples": {
+      "type": "array",
+      "description": "Examples of the property value.\nThis is used to provide examples of how the property can be used in practice.\n",
+      "items": {
+        "$ref": "#/definitions/Example"
+      }
+    },
+    "required": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Required properties of the object.\nThis is used to define which properties are required in the specification document.\n"
+    },
+    "additionalProperties": {
+      "type": "boolean",
+      "description": "Allow additional properties in the object.\nThis is used to define whether additional properties are allowed in the specification document.\n"
+    },
+    "x-custom-typescript-types": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/XCustomTypescriptType"
+      }
+    },
+    "x-property-order": {
+      "type": "array",
+      "description": "Optionally reorder an objects properties by this list. Unlisted properties will be appended in their original order.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "x-recommended": {
+      "type": "array",
+      "description": "Mark properties as recommended (use like required).",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "patternProperties": {
+    "^x-[a-z]+(-[a-z]+)+$": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "array",
+        "object",
+        "null"
+      ],
+      "description": "Spec Toolkit plugin specific x- properties.\nMUST start with `x-<pluginName>-` and can be used to extend the specification document with additional properties.\n",
+      "tsType": "unknown // replaceKeyType_{SpecToolkitPluginXxPropertyKey}",
+      "examples": [
+        "x-ums-implements",
+        "x-ums-type"
+      ]
+    }
+  },
+  "required": [
+    "definitions"
+  ],
+  "additionalProperties": false,
+  "definitions": {
+    "SpecJsonSchemaTypeName": {
+      "title": "Spec Json Schema Type Name",
+      "type": "string",
+      "description": "Name of the type used in the Spec JSON Schema.\nThis is used to define the type of properties in the specification document.\n",
+      "enum": [
+        "string",
+        "number",
+        "integer",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "SpecJsonSchemaTypeNameArray": {
+      "title": "Spec Json Schema Type Name Array",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/SpecJsonSchemaTypeName"
+      },
+      "description": "Array of type names used in the Spec JSON Schema.\nThis is used to define multiple types for a property in the specification document.\n"
+    },
+    "Example": {
+      "title": "Example",
+      "type": [
+        "object",
+        "string",
+        "array",
+        "boolean"
+      ],
+      "description": "Example item used in the examples array.\nThis is used to provide an example of how the property can be used in practice.\n"
+    },
+    "SpecJsonSchemaType": {
+      "title": "Spec Json Schema Type",
+      "type": "string",
+      "description": "Primitive type.\n@see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-6.1.1\n",
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "object"
+        },
+        {
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "tsType": "string | number | boolean | SpecJsonSchema | SpecJsonSchemaArray | null;"
+    },
+    "SpecJsonSchemaVersion": {
+      "title": "Spec Json Schema Version",
+      "type": "string"
+    },
+    "Properties": {
+      "title": "Properties",
+      "type": "object",
+      "patternProperties": {
+        "^(?![@]|__|\\.|::).+$": {
+          "$ref": "#/definitions/SpecJsonSchema"
+        }
+      }
+    },
+    "PatternProperties": {
+      "title": "Pattern Properties",
+      "type": "object",
+      "patternProperties": {
+        "^(?![@]|__|\\.|::).+$": {
+          "$ref": "#/definitions/SpecJsonSchema"
+        }
+      }
+    },
+    "SpecJsonSchema": {
+      "title": "Spec Json Schema",
+      "type": "object",
+      "description": "The main object of the Spec JSON Schema, based on JSON Schema v7.\n@see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01\n",
+      "properties": {
+        "$comment": {
+          "type": "string"
+        },
+        "$ref": {
+          "type": "string"
+        },
+        "type": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/SpecJsonSchemaTypeName"
+            },
+            {
+              "$ref": "#/definitions/SpecJsonSchemaTypeNameArray"
+            }
+          ]
+        },
+        "enum": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SpecJsonSchemaType"
+          }
+        },
+        "const": {
+          "$ref": "#/definitions/SpecJsonSchemaType"
+        },
+        "maximum": {
+          "type": "number"
+        },
+        "exclusiveMaximum": {
+          "type": "number"
+        },
+        "minimum": {
+          "type": "number"
+        },
+        "exclusiveMinimum": {
+          "type": "number"
+        },
+        "maxLength": {
+          "type": "number"
+        },
+        "minLength": {
+          "type": "number"
+        },
+        "pattern": {
+          "type": "string"
+        },
+        "items": {
+          "$ref": "#/definitions/SpecJsonSchema"
+        },
+        "additionalItems": {
+          "$ref": "#/definitions/SpecJsonSchema"
+        },
+        "maxItems": {
+          "type": "number"
+        },
+        "minItems": {
+          "type": "number"
+        },
+        "minProperties": {
+          "type": "number"
+        },
+        "required": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "properties": {
+          "$ref": "#/definitions/Properties"
+        },
+        "patternProperties": {
+          "$ref": "#/definitions/PatternProperties"
+        },
+        "additionalProperties": {
+          "type": "boolean"
+        },
+        "if": {
+          "$ref": "#/definitions/SpecJsonSchema"
+        },
+        "then": {
+          "$ref": "#/definitions/SpecJsonSchema"
+        },
+        "else": {
+          "$ref": "#/definitions/SpecJsonSchema"
+        },
+        "allOf": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SpecJsonSchema"
+          }
+        },
+        "anyOf": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SpecJsonSchema"
+          }
+        },
+        "oneOf": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SpecJsonSchema"
+          }
+        },
+        "format": {
+          "type": "string",
+          "description": "Format of the property value.\nThis is used to specify the expected format of the property value, such as date-time, email, etc.\n@see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-7\n@see https://datatracker.ietf.org/doc/html/draft-handrews-json-schema-validation-01#section-7.3\n",
+          "enum": [
+            "date-time",
+            "date",
+            "time",
+            "uri",
+            "uri-reference",
+            "uri-template",
+            "iri",
+            "iri-reference",
+            "email",
+            "hostname",
+            "idn-hostname",
+            "ipv4",
+            "ipv6",
+            "json-pointer",
+            "relative-json-pointer",
+            "regex"
+          ],
+          "tsType": "'date-time' | 'date' | 'time' | 'uri' | 'uri-reference' | 'uri-template' | 'iri' | 'iri-reference' | 'email' | 'hostname' | 'idn-hostname' | 'ipv4' | 'ipv6' | 'json-pointer' | 'relative-json-pointer' | 'regex' | string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "default": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        },
+        "examples": {
+          "type": "array",
+          "description": "Examples of the property value.\nThis is used to provide examples of how the property can be used in practice.\n",
+          "items": {
+            "$ref": "#/definitions/Example"
+          }
+        },
+        "x-recommended": {
+          "type": "array",
+          "description": "Mark properties as recommended (use like required).",
+          "items": {
+            "type": "string"
+          }
+        },
+        "x-introduced-in-version": {
+          "type": "string",
+          "description": "Version of the specification when this entity or property was introduced."
+        },
+        "x-deprecated-in-version": {
+          "type": "string",
+          "description": "Version of the specification when this entity or property was deprecated."
+        },
+        "x-deprecation-text": {
+          "type": "string",
+          "description": "Text to be shown in the documentation when this property is deprecated.\nUse this to provide a reason for deprecation and/or a migration suggestion.\n"
+        },
+        "x-feature-status": {
+          "type": "string",
+          "description": "Feature Status. Use this to mark something as alpha or beta.",
+          "enum": [
+            "alpha",
+            "beta"
+          ]
+        },
+        "x-pattern-properties-description": {
+          "type": "string",
+          "description": "Add a human readable description for the patternProperties construct"
+        },
+        "x-property-order": {
+          "type": "array",
+          "description": "Optionally reorder an objects properties by this list. Unlisted properties will be appended in their original order.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "x-association-target": {
+          "type": "array",
+          "description": "Point to the association target entity and optionally the property which is used as its ID.\nUse a $ref pointer array as values\n",
+          "items": {
+            "type": "string"
+          }
+        },
+        "x-hide-property": {
+          "type": "boolean",
+          "description": "Hide property from generated documentation, but keep it in exported JSON Schema."
+        },
+        "x-hide-properties": {
+          "type": "boolean",
+          "description": "Hide properties table from generated documentation, but keep it in exported JSON Schema."
+        },
+        "x-extension-points": {
+          "type": "array",
+          "description": "Define extension points in the target document",
+          "items": {
+            "type": "string"
+          }
+        },
+        "x-header-level": {
+          "type": "number",
+          "description": "Define the MD heading level in the target document. Default value: 3\n",
+          "default": 3
+        },
+        "x-abstract": {
+          "type": "boolean",
+          "description": "Marks JSON Schema object as abstract\n\nEntities marked as abstract will not be part of the final interface documentation\nAn abstract entity could indicate which properties are shared between multiple entities.\nAbstract entities can be necessary for polymorphic association, e.g. for UMS model export they are mandatory.\n"
+        },
+        "tsType": {
+          "type": "string",
+          "description": "Overwrite the generated TypeScript Type.\n\nUsed and defined by json-schema-to-typescript [tsType](https://github.com/bcherny/json-schema-to-typescript?tab=readme-ov-file#custom-schema-properties).\nFor advanced use cases where the json-schema-to-typescript library doesn't support to define the \"key\" type of patternProperties. Use `// replaceKeyType_` as workaround.\nIn the curly brackets you can combine multiple type names by the pipe/vertical bar character.\n",
+          "examples": [
+            "tsType: unknown // replaceKeyType_{YourTypeNameHere}"
+          ]
+        }
+      },
+      "patternProperties": {
+        "^x-[a-z]+(-[a-z]+)+$": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object",
+            "null"
+          ],
+          "description": "Spec Toolkit plugin specific x- properties.\nMUST start with `x-<pluginName>-` and can be used to extend the specification document with additional properties.\n",
+          "tsType": "unknown // replaceKeyType_{SpecToolkitPluginXxPropertyKey}",
+          "examples": [
+            "x-ums-implements",
+            "x-ums-type"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "SpecExtensionJsonSchema": {
+      "title": "Spec Extension Json Schema",
+      "type": "object",
+      "description": "The main object of the Spec Extension JSON Schema, based on JSON Schema v7.\n@see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01\n",
+      "properties": {
+        "$comment": {
+          "type": "string"
+        },
+        "$ref": {
+          "type": "string"
+        },
+        "type": {
+          "oneOf": [
+            {
+              "$ref": "#/definitions/SpecJsonSchemaTypeName"
+            },
+            {
+              "$ref": "#/definitions/SpecJsonSchemaTypeNameArray"
+            }
+          ]
+        },
+        "enum": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SpecJsonSchemaType"
+          }
+        },
+        "const": {
+          "$ref": "#/definitions/SpecJsonSchemaType"
+        },
+        "maximum": {
+          "type": "number"
+        },
+        "exclusiveMaximum": {
+          "type": "number"
+        },
+        "minimum": {
+          "type": "number"
+        },
+        "exclusiveMinimum": {
+          "type": "number"
+        },
+        "maxLength": {
+          "type": "number"
+        },
+        "minLength": {
+          "type": "number"
+        },
+        "pattern": {
+          "type": "string"
+        },
+        "items": {
+          "$ref": "#/definitions/SpecJsonSchema"
+        },
+        "additionalItems": {
+          "$ref": "#/definitions/SpecJsonSchema"
+        },
+        "maxItems": {
+          "type": "number"
+        },
+        "minItems": {
+          "type": "number"
+        },
+        "minProperties": {
+          "type": "number"
+        },
+        "required": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "properties": {
+          "$ref": "#/definitions/Properties"
+        },
+        "patternProperties": {
+          "$ref": "#/definitions/PatternProperties"
+        },
+        "additionalProperties": {
+          "type": "boolean"
+        },
+        "if": {
+          "$ref": "#/definitions/SpecJsonSchema"
+        },
+        "then": {
+          "$ref": "#/definitions/SpecJsonSchema"
+        },
+        "else": {
+          "$ref": "#/definitions/SpecJsonSchema"
+        },
+        "allOf": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SpecJsonSchema"
+          }
+        },
+        "anyOf": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SpecJsonSchema"
+          }
+        },
+        "oneOf": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SpecJsonSchema"
+          }
+        },
+        "format": {
+          "type": "string",
+          "description": "Format of the property value.\nThis is used to specify the expected format of the property value, such as date-time, email, etc.\n@see https://tools.ietf.org/html/draft-handrews-json-schema-validation-01#section-7\n@see https://datatracker.ietf.org/doc/html/draft-handrews-json-schema-validation-01#section-7.3\n",
+          "enum": [
+            "date-time",
+            "date",
+            "time",
+            "uri",
+            "uri-reference",
+            "uri-template",
+            "iri",
+            "iri-reference",
+            "email",
+            "hostname",
+            "idn-hostname",
+            "ipv4",
+            "ipv6",
+            "json-pointer",
+            "relative-json-pointer",
+            "regex"
+          ],
+          "tsType": "'date-time' | 'date' | 'time' | 'uri' | 'uri-reference' | 'uri-template' | 'iri' | 'iri-reference' | 'email' | 'hostname' | 'idn-hostname' | 'ipv4' | 'ipv6' | 'json-pointer' | 'relative-json-pointer' | 'regex' | string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "default": {
+          "type": [
+            "string",
+            "number",
+            "boolean"
+          ]
+        },
+        "examples": {
+          "type": "array",
+          "description": "Examples of the property value.\nThis is used to provide examples of how the property can be used in practice.\n",
+          "items": {
+            "$ref": "#/definitions/Example"
+          }
+        },
+        "x-recommended": {
+          "type": "array",
+          "description": "Mark properties as recommended (use like required).",
+          "items": {
+            "type": "string"
+          }
+        },
+        "x-introduced-in-version": {
+          "type": "string",
+          "description": "Version of the specification when this entity or property was introduced."
+        },
+        "x-deprecated-in-version": {
+          "type": "string",
+          "description": "Version of the specification when this entity or property was deprecated."
+        },
+        "x-deprecation-text": {
+          "type": "string",
+          "description": "Text to be shown in the documentation when this property is deprecated.\nUse this to provide a reason for deprecation and/or a migration suggestion.\n"
+        },
+        "x-feature-status": {
+          "type": "string",
+          "description": "Feature Status. Use this to mark something as alpha or beta.",
+          "enum": [
+            "alpha",
+            "beta"
+          ]
+        },
+        "x-pattern-properties-description": {
+          "type": "string",
+          "description": "Add a human readable description for the patternProperties construct"
+        },
+        "x-property-order": {
+          "type": "array",
+          "description": "Optionally reorder an objects properties by this list. Unlisted properties will be appended in their original order.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "x-association-target": {
+          "type": "array",
+          "description": "Point to the association target entity and optionally the property which is used as its ID.\nUse a $ref pointer array as values\n",
+          "items": {
+            "type": "string"
+          }
+        },
+        "x-hide-property": {
+          "type": "boolean",
+          "description": "Hide property from generated documentation, but keep it in exported JSON Schema."
+        },
+        "x-hide-properties": {
+          "type": "boolean",
+          "description": "Hide properties table from generated documentation, but keep it in exported JSON Schema."
+        },
+        "x-extension-points": {
+          "type": "array",
+          "description": "Define extension points in the target document",
+          "items": {
+            "type": "string"
+          }
+        },
+        "x-header-level": {
+          "type": "number",
+          "description": "Define the MD heading level in the target document. Default value: 3\n",
+          "default": 3
+        },
+        "x-abstract": {
+          "type": "boolean",
+          "description": "Marks JSON Schema object as abstract\n\nEntities marked as abstract will not be part of the final interface documentation\nAn abstract entity could indicate which properties are shared between multiple entities.\nAbstract entities can be necessary for polymorphic association, e.g. for UMS model export they are mandatory.\n"
+        },
+        "tsType": {
+          "type": "string",
+          "description": "Overwrite the generated TypeScript Type.\n\nUsed and defined by json-schema-to-typescript [tsType](https://github.com/bcherny/json-schema-to-typescript?tab=readme-ov-file#custom-schema-properties).\nFor advanced use cases where the json-schema-to-typescript library doesn't support to define the \"key\" type of patternProperties. Use `// replaceKeyType_` as workaround.\nIn the curly brackets you can combine multiple type names by the pipe/vertical bar character.\n",
+          "examples": [
+            "tsType: unknown // replaceKeyType_{YourTypeNameHere}"
+          ]
+        },
+        "x-extension-targets": {
+          "type": "array",
+          "description": "Indicate which target document extension pointers this property is merged into",
+          "items": {
+            "type": "string"
+          }
+        },
+        "x-ref-to-doc": {
+          "$ref": "#/definitions/XPropertyRefToDoc"
+        }
+      },
+      "patternProperties": {
+        "^x-[a-z]+(-[a-z]+)+$": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object",
+            "null"
+          ],
+          "description": "Spec Toolkit plugin specific x- properties.\nMUST start with `x-<pluginName>-` and can be used to extend the specification document with additional properties.\n",
+          "tsType": "unknown // replaceKeyType_{SpecToolkitPluginXxPropertyKey}",
+          "examples": [
+            "x-ums-implements",
+            "x-ums-type"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "XPropertyRefToDoc": {
+      "type": "object",
+      "title": "Xx Property Ref To Doc",
+      "description": "TODO: move this to spec-extension.schema.yaml\nNote: This property is only relevant for spec extensions!\nReference to a interface in the core spec.\nThis is used to link from a spec extension to a specific document in the core spec.\n",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Title of the referenced document."
+        },
+        "ref": {
+          "type": "string",
+          "format": "uri-reference",
+          "description": "URI reference to the referenced document."
+        }
+      },
+      "required": [
+        "title",
+        "ref"
+      ]
+    },
+    "XCustomTypescriptType": {
+      "title": "Xx Property Custom TypeScript Type",
+      "type": "object",
+      "description": "Custom TypeScript type that can be used in the document.",
+      "properties": {
+        "typeName": {
+          "type": "string",
+          "description": "Name of the custom TypeScript type to be generated."
+        },
+        "typeValue": {
+          "type": "string",
+          "description": "Value of the custom TypeScript type to be generated."
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "typeName",
+        "typeValue"
+      ]
+    },
+    "JsonSchemaDefinitions": {
+      "title": "Json Schema Definitions",
+      "type": "object",
+      "description": "Definitions of the specification document.",
+      "patternProperties": {
+        "^(?![@]|__|\\.|::).+$": {
+          "$ref": "#/definitions/JsonSchemaDefinition"
+        }
+      },
+      "minProperties": 1
+    },
+    "JsonSchemaDefinition": {
+      "title": "Json Schema Definition",
+      "anyOf": [
+        {
+          "$ref": "#/definitions/SpecJsonSchema"
+        },
+        {
+          "$ref": "#/definitions/SpecExtensionJsonSchema"
+        }
+      ]
+    }
+  }
+}

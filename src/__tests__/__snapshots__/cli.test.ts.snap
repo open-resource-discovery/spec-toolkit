@@ -1,0 +1,3713 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`CLI End-to-End Tests test 1: successful run with valid configuration and valid schema file 1`] = `
+"---
+title: "Interface Documentation for my-spec"
+sidebar_position: "1"
+description: "Describes the technical interface / schema for my-spec."
+toc_max_heading_level: "4"
+---
+
+## My-spec Intro Text Goes here
+
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+
+Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat
+
+## Schema Definitions
+
+* The root schema of the document is [CSN Interop Effective Document](#csn-interop-effective-document)
+* The interface is available as JSON Schema: [my-spec.schema.json](https://sap.github.io/csn-interop-specification/spec-v1/csn-interop-effective.schema.json#).
+
+
+### CSN Interop Effective Document
+
+**Type**: Object(<a href="#csn-interop-effective-document_$schema">$schema</a>, <a href="#csn-interop-effective-document_$id">$id</a>, <a href="#csn-interop-effective-document_csninteropeffective">csnInteropEffective</a>, <a href="#csn-interop-effective-document_$version">$version</a>, <a href="#csn-interop-effective-document_meta">meta</a>, <a href="#csn-interop-effective-document_definitions">definitions</a>, <a href="#csn-interop-effective-document_i18n">i18n</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="csn-interop-effective-document_$schema">$schema<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#csn-interop-effective-document_$schema" title="#csn-interop-effective-document.$schema"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Link to JSON Schema for this CSN Interop Effective document.<br/>Adding this helps with automatic validation and code intelligence in some editors / IDEs.<br/><br/>See https://tour.json-schema.org/content/06-Combining-Subschemas/02-id-and-schema<br/><hr/>**JSON Schema Format**: \`uri-reference\`<br/>**Recommended Values**: <ul><li>\`"https://sap.github.io/csn-interop-specification/spec-v1/csn-interop-effective.schema.json#"\`</li></ul></div>|
+|<div className="interface-property-name anchor" id="csn-interop-effective-document_$id">$id<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#csn-interop-effective-document_$id" title="#csn-interop-effective-document.$id"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Optional URI for this document, that can acts as an ID or as location to retrieve the document.<br/><br/>See https://tour.json-schema.org/content/06-Combining-Subschemas/02-id-and-schema<br/><hr/>**JSON Schema Format**: \`uri-reference\`</div>|
+|<div className="interface-property-name anchor" id="csn-interop-effective-document_csninteropeffective">csnInteropEffective<br/><span className="mandatory">MANDATORY</span><a className="hash-link" href="#csn-interop-effective-document_csninteropeffective" title="#csn-interop-effective-document.csnInteropEffective"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Existence of this property indicated that the file is a CSN Interop Effective document.<br/>The value states the specification version it has been created against.<hr/>**Allowed Values**: <ul><li>\`"1.0"\`</li></ul></div>|
+|<div className="interface-property-name anchor" id="csn-interop-effective-document_$version">$version<br/><span className="mandatory">MANDATORY</span><a className="hash-link" href="#csn-interop-effective-document_$version" title="#csn-interop-effective-document.$version"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">The version of the CDS CSN. For this version of CSN Interop it is fixed to \`2.0\`.<br/><br/>This MUST be provided to ensure that CSN Interop is a valid subset of CDS CSN in general.<hr/>**Allowed Values**: <ul><li>\`"2.0"\`</li></ul></div>|
+|<div className="interface-property-name anchor" id="csn-interop-effective-document_meta">meta<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#csn-interop-effective-document_meta" title="#csn-interop-effective-document.meta"></a></div>|<div className="interface-property-type">[Meta](#meta)</div>|<div className="interface-property-description">Meta information that apply to the CSN document as a whole.</div>|
+|<div className="interface-property-name anchor" id="csn-interop-effective-document_definitions">definitions<br/><span className="mandatory">MANDATORY</span><a className="hash-link" href="#csn-interop-effective-document_definitions" title="#csn-interop-effective-document.definitions"></a></div>|<div className="interface-property-type">[Definitions](#definitions)</div>|<div className="interface-property-description">Dictionary of CSN modeling artifacts.<br/></div>|
+|<div className="interface-property-name anchor" id="csn-interop-effective-document_i18n">i18n<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#csn-interop-effective-document_i18n" title="#csn-interop-effective-document.i18n"></a></div>|<div className="interface-property-type">[i18n](#i18n)</div>|<div className="interface-property-description">Dictionary of translated texts.<br/></div>|
+| Additional Properties<br/><i><code className="regex">^__.+$</code></i><br/><span className="optional">OPTIONAL</span> | string \\| number \\| boolean \\| array \\| object | Private properties, starting with \`__\`.<br/><br/>MAY be ignored by the consumers, as they have no cross-aligned, standardized semantics.<br/><br/><i>Additional properties MUST follow key name regexp pattern</i>: <code className="regex">^__.+$</code> |
+
+
+### Meta
+
+Meta information about the CSN document and its creator.
+
+**Type**: Object(<a href="#meta_creator">creator</a>, <a href="#meta_flavor">flavor</a>, <a href="#meta_document">document</a>, <a href="#meta_features">features</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="meta_creator">creator<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#meta_creator" title="Meta.creator"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Informal description of the creator of this CSN Document.<hr/>**Example Values**: <ul className="examples"><li>\`"CDS Compiler v4.5.0"\`</li></ul></div>|
+|<div className="interface-property-name anchor" id="meta_flavor">flavor<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#meta_flavor" title="Meta.flavor"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Informal hint which CSN flavor is used. The values are currently NOT standardized.<br/><br/>A CSN flavor can be understood as an alias to particular [feature set](#) of CSN overall.<br/>In CSN Interop we leave some features open and to be defined in the document itself, this is why we don't have a fixed flavor.<hr/>**Example Values**: <ul className="examples"><li>\`"effective"\`</li><li>\`"inferred"\`</li></ul></div>|
+|<div className="interface-property-name anchor" id="meta_document">document<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#meta_document" title="Meta.document"></a></div>|<div className="interface-property-type">[Document (Metadata)](#document-metadata)</div>|<div className="interface-property-description">Meta information about the document content.</div>|
+|<div className="interface-property-name anchor" id="meta_features">features<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#meta_features" title="Meta.features"></a></div>|<div className="interface-property-type">[Features (Metadata)](#features-metadata)</div>|<div className="interface-property-description">Feature dimensions that this CSN document fulfills.</div>|
+| Additional Properties<br/><i><code className="regex">^__.+$</code></i><br/><span className="optional">OPTIONAL</span> | string \\| number \\| boolean \\| array \\| object | Private properties, starting with \`__\`.<br/><br/>MAY be ignored by the consumers, as they have no cross-aligned, standardized semantics.<br/><br/><i>Additional properties MUST follow key name regexp pattern</i>: <code className="regex">^__.+$</code> |
+
+
+###### Example Values:
+
+
+\`\`\`js
+{
+  "creator": "CDS Compiler v4.5.0",
+  "flavor": "inferred",
+  "document": {
+    "version": "1.2.1"
+  }
+}
+\`\`\`
+
+
+### Document (Metadata)
+
+Metadata that describes the document (and what it represents) itself.
+
+**Type**: Object(<a href="#document-metadata_version">version</a>, <a href="#document-metadata_title">title</a>, <a href="#document-metadata_doc">doc</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="document-metadata_version">version<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#document-metadata_version" title="MetaDocument.version"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">The version of the CSN document / the described model itself (not the specification).<br/><br/>We RECOMMEND to use the [SemVer](https://semver.org/) standard.<hr/>**Example Values**: <ul className="examples"><li>\`"1.3.4"\`</li></ul></div>|
+|<div className="interface-property-name anchor" id="document-metadata_title">title<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#document-metadata_title" title="MetaDocument.title"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Human readable title for the CSN document (plain-text).<br/><br/>MUST NOT contain linebreaks.<hr/>**Maximum Length**: \`255\`</div>|
+|<div className="interface-property-name anchor" id="document-metadata_doc">doc<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#document-metadata_doc" title="MetaDocument.doc"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Human readable documentation that describes the overall CSN document.<br/><br/>SHOULD be provided and interpreted as [CommonMark](https://spec.commonmark.org/) (Markdown).</div>|
+
+
+### Features (Metadata)
+
+CSN feature-dimensions this document fulfills.
+
+It is RECOMMENDED to explicitly state all feature dimensions of the document.
+Otherwise the consumer cannot rely on the information and may have to figure this out on his own.
+
+**Type**: Object(<a href="#features-metadata_complete">complete</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="features-metadata_complete">complete<br/><span className="recommended">RECOMMENDED</span><a className="hash-link" href="#features-metadata_complete" title="MetaFeatures.complete"></a></div>|<div className="interface-property-type">boolean</div>|<div className="interface-property-description">Whether this document is complete and self-contained.<br/><br/>It is RECOMMENDED to have complete CSN documents and set this to \`true\`.<br/><br/>If true references to other CDS elements (e.g. \`cds.Association\`) MUST be resolvable within the same document.</div>|
+
+
+###### Example Values:
+
+
+\`\`\`js
+{
+  "complete": true
+}
+\`\`\`
+
+
+### Definitions
+
+Each entry in the definitions dictionary is a definition of a named modeling artefact.
+The \`name\` is the absolute, fully qualified name of the definition, and the value is a record with the definition details.
+
+Definition names MUST:
+- Not be an empty string.
+- Not start with \`@\`, \`__\`, \`.\`, \`::\`.
+- Not end with \`.\` or \`::\`.
+- Not contain the substring \`..\` or \`:::\`.
+- Not contain the substring \`::\` more than once.
+
+See [Primer: Definitions](../primer.md#definitions).
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| Additional Properties<br/><i><code className="regex">^(?![@]\\|__\\|\\\\.\\|\\:\\:).+$</code></i><br/><span className="optional">OPTIONAL</span> | [DefinitionEntry](#definitionentry) | <i>Additional properties MUST follow key name regexp pattern</i>: <code className="regex">^(?![@]\\|__\\|\\\\.\\|\\:\\:).+$</code> |
+| <i>*</i> | | <i>Additional, unspecified properties MAY be added to the object</i>. |
+
+
+###### Example Values:
+
+
+\`\`\`js
+{
+  "SomeEntity": {
+    "kind": "entity",
+    "elements": {
+      "SomeElement": {
+        "@SomeProperty.upperCase": true,
+        "type": "cds.String"
+      }
+    }
+  }
+}
+\`\`\`
+
+
+### DefinitionEntry
+
+Definition of a CDS modeling artifact, put into [Definitions](#definitions).
+
+**Type**: 
+[Context Definition](#context-definition) \\| [Entity Definition](#entity-definition) \\| [Service Definition](#service-definition) \\| [Type Definition](#type-definition)<br/>
+
+### Entity Definition
+
+Entity definition refers to the structured description of an object or concept.
+
+If it is exposed through a [Service](#service-definition), it describes a data model.
+To expose it through a Service, the service name MUST be prefixed to the Entity name, separated by a \`.\` (dot).
+The actual data serialization format is defined by the Service protocol and chosen data format [mapping](../mappings).
+
+If the entity is not exposed via a service, it only describes a conceptual domain object.
+
+**Type**: Object(<a href="#entity-definition_kind">kind</a>, <a href="#entity-definition_elements">elements</a>, <a href="#entity-definition_doc">doc</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="entity-definition_kind">kind<br/><span className="mandatory">MANDATORY</span><a className="hash-link" href="#entity-definition_kind" title="EntityDefinition.kind"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">The modeling artefact is an entity.<hr/>**Constant Value**: \`entity\`</div>|
+|<div className="interface-property-name anchor" id="entity-definition_elements">elements<br/><span className="mandatory">MANDATORY</span><a className="hash-link" href="#entity-definition_elements" title="EntityDefinition.elements"></a></div>|<div className="interface-property-type">[Element Definitions](#element-definitions)</div>|<div className="interface-property-description">Dictionary of the elements of the entity.<br/>The dictionary key is the element \`name\`, the value the element itself.<br/><br/>MUST have at least one element.</div>|
+|<div className="interface-property-name anchor" id="entity-definition_doc">doc<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#entity-definition_doc" title="EntityDefinition.doc"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Human readable documentation, usually for developer documentation.<br/><br/>SHOULD be provided and interpreted as [CommonMark](https://spec.commonmark.org/) (Markdown).<br/><br/>If a human readable title is needed, use the [@EndUserText.label](./extensions/end-user-text#endusertextlabel) annotation.</div>|
+| Additional Properties<br/><i><code className="regex">^(@\\|__).+$</code></i><br/><span className="optional">OPTIONAL</span> | string \\| number \\| boolean \\| array \\| object | Annotations or private properties MAY be added.<br/><br/>**Annotations** MUST start with \`@\`.<br/><br/>In CSN Interop Effective the annotations MUST follow the "flattened" form:<br/>Every record / object in an annotation will be flattened into a \`.\` (dot).<br/>Exception: Once there is an array, the flattening is stopped and the values inside the array are preserved as they are ("structured").<br/><br/>Correct annotations examples:<br/>- \`"@Common.bar": "foo"\`<br/>- \`"@Common.foo.bar": true\`<br/>- \`"@Common.array": [{ "foo": true }]\`<br/><br/>Or<br/><br/>**Private properties**, starting with \`__\`.<br/>MAY be ignored by the consumers, as they have no cross-aligned, standardized semantics.<br/><br/><i>Additional properties MUST follow key name regexp pattern</i>: <code className="regex">^(@\\|__).+$</code> |
+| <i>*</i> | | <i>Additional, unspecified properties MAY be added to the object</i>. |
+
+
+### Service Definition
+
+A CDS Service indicates that [Entities](#entity-definition) are exposed to outside consumers via an API.
+
+To assign Entities or Custom Types to a Service, their name MUST be prefixed with the service name, separated by a \`.\`.
+Please be aware that this will also change the \`target\` values of \`cds.Association\` and \`cds.Composition\`.
+For an example, see [airline-service.json](./examples/airline.md).
+
+A consumer MAY decide to shorten the names by only considering the Entities assigned to a particular Service and then removing the Service prefixes again.
+
+To indicate which assigned Entities are root in a composition hierarchy, use the [\`@ObjectModel.compositionRoot\`](./extensions/object-model#objectmodelcompositionroot) annotation.
+
+See [Primer: Service Definitions](../primer.md#service-definitions).
+
+**Type**: Object(<a href="#service-definition_kind">kind</a>, <a href="#service-definition_doc">doc</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="service-definition_kind">kind<br/><span className="mandatory">MANDATORY</span><a className="hash-link" href="#service-definition_kind" title="ServiceDefinition.kind"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">The modeling artefact is a service.<hr/>**Constant Value**: \`service\`</div>|
+|<div className="interface-property-name anchor" id="service-definition_doc">doc<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#service-definition_doc" title="ServiceDefinition.doc"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Human readable documentation, usually for developer documentation.<br/><br/>SHOULD be provided and interpreted as [CommonMark](https://spec.commonmark.org/) (Markdown).<br/><br/>If a human readable title is needed, use the [@EndUserText.label](./extensions/end-user-text#endusertextlabel) annotation.</div>|
+| Additional Properties<br/><i><code className="regex">^(@\\|__).+$</code></i><br/><span className="optional">OPTIONAL</span> | string \\| number \\| boolean \\| array \\| object | Annotations or private properties MAY be added.<br/><br/>**Annotations** MUST start with \`@\`.<br/><br/>In CSN Interop Effective the annotations MUST follow the "flattened" form:<br/>Every record / object in an annotation will be flattened into a \`.\` (dot).<br/>Exception: Once there is an array, the flattening is stopped and the values inside the array are preserved as they are ("structured").<br/><br/>Correct annotations examples:<br/>- \`"@Common.bar": "foo"\`<br/>- \`"@Common.foo.bar": true\`<br/>- \`"@Common.array": [{ "foo": true }]\`<br/><br/>Or<br/><br/>**Private properties**, starting with \`__\`.<br/>MAY be ignored by the consumers, as they have no cross-aligned, standardized semantics.<br/><br/><i>Additional properties MUST follow key name regexp pattern</i>: <code className="regex">^(@\\|__).+$</code> |
+| <i>*</i> | | <i>Additional, unspecified properties MAY be added to the object</i>. |
+
+
+### Context Definition
+
+A context corresponds to a CAP CSN Namespace.
+It is used to create a bounded context that bundles elements of different kinds together.
+
+To assign Services, Entities or Custom Types to a context, their name MUST be prefixed with the context name, separated by a \`.\`.
+
+The context can also be useful to avoid local or global name collisions.
+
+See [Primer: Context](../primer.md#context-definitions).
+
+**Type**: Object(<a href="#context-definition_kind">kind</a>, <a href="#context-definition_doc">doc</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="context-definition_kind">kind<br/><span className="mandatory">MANDATORY</span><a className="hash-link" href="#context-definition_kind" title="ContextDefinition.kind"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">The modeling artefact is a context.<hr/>**Constant Value**: \`context\`</div>|
+|<div className="interface-property-name anchor" id="context-definition_doc">doc<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#context-definition_doc" title="ContextDefinition.doc"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Human readable documentation, usually for developer documentation.<br/><br/>SHOULD be provided and interpreted as [CommonMark](https://spec.commonmark.org/) (Markdown).<br/><br/>If a human readable title is needed, use the [@EndUserText.label](./extensions/end-user-text#endusertextlabel) annotation.</div>|
+| Additional Properties<br/><i><code className="regex">^(@\\|__).+$</code></i><br/><span className="optional">OPTIONAL</span> | string \\| number \\| boolean \\| array \\| object | Annotations or private properties MAY be added.<br/><br/>**Annotations** MUST start with \`@\`.<br/><br/>In CSN Interop Effective the annotations MUST follow the "flattened" form:<br/>Every record / object in an annotation will be flattened into a \`.\` (dot).<br/>Exception: Once there is an array, the flattening is stopped and the values inside the array are preserved as they are ("structured").<br/><br/>Correct annotations examples:<br/>- \`"@Common.bar": "foo"\`<br/>- \`"@Common.foo.bar": true\`<br/>- \`"@Common.array": [{ "foo": true }]\`<br/><br/>Or<br/><br/>**Private properties**, starting with \`__\`.<br/>MAY be ignored by the consumers, as they have no cross-aligned, standardized semantics.<br/><br/><i>Additional properties MUST follow key name regexp pattern</i>: <code className="regex">^(@\\|__).+$</code> |
+| <i>*</i> | | <i>Additional, unspecified properties MAY be added to the object</i>. |
+
+
+### EntityRelationshipPropertyType
+
+Defines the logical Property Type of a property.
+The reason is to have an ID to relate to the property, especially to state that it can be used as an ID or is part of a composite ID.
+
+**Type:** string<br/>
+**Regex Pattern**: <code className="regex">^([a-z0-9-]+(?\\:[.][a-z0-9-]+)\\*)\\:([a-zA-Z0-9._\\\\-]+)(\\:v[1-9][0-9]\\*)?$</code>
+
+###### Example Values:
+
+
+\`\`\`js
+"sap.vdm.gfn:BillOfMaterialUUID"
+\`\`\`
+
+
+
+### i18n
+
+i18n contains translated texts for one or more languages.
+They are usually used in annotations like [\`@EnduserText\`](./extensions/end-user-text).
+
+Key is the language key, value is a dictionary of language text translations.
+
+The language key MUST follow the standard of [RFC 1766](https://datatracker.ietf.org/doc/rfc1766/) (or IETF's [BCP 47](https://www.rfc-editor.org/rfc/bcp/bcp47.txt)).
+
+See [Primer: Language-dependent annotation values](../primer.md#language-dependent-annotation-values).
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| Additional Properties<br/><i><code className="regex">^[a-zA-Z]\\{2,8\\}(-[a-zA-Z0-9]\\{1,8\\})\\{0,2\\}$</code></i><br/><span className="optional">OPTIONAL</span> | [Language texts](#language-texts) | <i>Additional properties MUST follow key name regexp pattern</i>: <code className="regex">^[a-zA-Z]\\{2,8\\}(-[a-zA-Z0-9]\\{1,8\\})\\{0,2\\}$</code> |
+| <i>*</i> | | <i>Additional, unspecified properties MAY be added to the object</i>. |
+
+
+###### Example Values:
+
+
+\`\`\`js
+{
+  "de": {
+    "I_COSTCENTER@ENDUSERTEXT.LABEL": "Kostenstelle",
+    "I_COSTCENTER.CONTROLLINGAREA@ENDUSERTEXT.LABEL": "Kostenrechnungskreis"
+  }
+}
+\`\`\`
+
+
+### Type Definition
+
+In CSN it is possible to define Custom Types.
+
+**Type**: 
+[Boolean Type Definition](#boolean-type-definition) \\| [String Type Definition](#string-type-definition)<br/>
+
+#### Boolean Type Definition
+
+A type definition of type \`cds.Boolean\`.
+
+**Type**: Object(<a href="#boolean-type-definition_kind">kind</a>, <a href="#boolean-type-definition_type">type</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="boolean-type-definition_kind">kind<br/><span className="mandatory">MANDATORY</span><a className="hash-link" href="#boolean-type-definition_kind" title="BooleanTypeDefinition.kind"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">The kind property is used when defining derived types. In this case Kind = "type".<hr/>**Constant Value**: \`type\`</div>|
+|<div className="interface-property-name anchor" id="boolean-type-definition_type">type<br/><span className="mandatory">MANDATORY</span><a className="hash-link" href="#boolean-type-definition_type" title="BooleanTypeDefinition.type"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">The modeling artefact is a \`cds.Boolean\` type.<hr/>**Constant Value**: \`cds.Boolean\`</div>|
+| Additional Properties<br/><i><code className="regex">^(@\\|__).+$</code></i><br/><span className="optional">OPTIONAL</span> | string \\| number \\| boolean \\| array \\| object | Annotations or private properties MAY be added.<br/><br/>**Annotations** MUST start with \`@\`.<br/><br/>In CSN Interop Effective the annotations MUST follow the "flattened" form:<br/>Every record / object in an annotation will be flattened into a \`.\` (dot).<br/>Exception: Once there is an array, the flattening is stopped and the values inside the array are preserved as they are ("structured").<br/><br/>Correct annotations examples:<br/>- \`"@Common.bar": "foo"\`<br/>- \`"@Common.foo.bar": true\`<br/>- \`"@Common.array": [{ "foo": true }]\`<br/><br/>Or<br/><br/>**Private properties**, starting with \`__\`.<br/>MAY be ignored by the consumers, as they have no cross-aligned, standardized semantics.<br/><br/><i>Additional properties MUST follow key name regexp pattern</i>: <code className="regex">^(@\\|__).+$</code> |
+| <i>*</i> | | <i>Additional, unspecified properties MAY be added to the object</i>. |
+
+
+###### Example Values:
+
+
+\`\`\`js
+{
+  "kind": "type",
+  "type": "cds.Boolean"
+}
+\`\`\`
+
+
+### Element Definitions
+
+Dictionary of Element where the key is the name of the element and the value its definition.
+
+The value can either be a standard [CDS Type](#cds-type) (\`cds.*\`) or a [Custom Type](#custom-type).
+
+Element names MUST:
+- Not be an empty string.
+- Not start with \`@\`, \`__\`, \`::\`.
+- Not end with \`::\`.
+- Not contain the substring \`.\` or \`:::\`.
+- Not contain the substring \`::\` more than once.
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| Additional Properties<br/><i><code className="regex">^(?![@]\\|__\\|\\\\.\\|\\:\\:).+$</code></i><br/><span className="optional">OPTIONAL</span> | [ElementEntry](#elemententry) | <i>Additional properties MUST follow key name regexp pattern</i>: <code className="regex">^(?![@]\\|__\\|\\\\.\\|\\:\\:).+$</code> |
+| <i>*</i> | | <i>Additional, unspecified properties MAY be added to the object</i>. |
+
+
+### ElementEntry
+
+Definition of an Element, as put into [Element Definitions](#element-definitions).
+
+An element can be either of a standard [CDS Types](#cds-type) or a [Custom Type](#custom-type).
+
+Please note that CSN Interop does not support arrays of scalar types or arrays of arrays, see [Primer: Cardinality](../primer.md#cardinality).
+
+**Type**: Object(<a href="#elemententry_type">type</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="elemententry_type">type<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#elemententry_type" title="ElementEntry.type"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description"></div>|
+
+
+#### String Type Definition
+
+A type definition of type \`cds.String\`.
+
+**Type**: Object(<a href="#string-type-definition_kind">kind</a>, <a href="#string-type-definition_type">type</a>, <a href="#string-type-definition_someoldproperty">someOldProperty</a>, <a href="#string-type-definition_somenewproperty">someNewProperty</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="string-type-definition_kind">kind<br/><span className="mandatory">MANDATORY</span><a className="hash-link" href="#string-type-definition_kind" title="StringTypeDefinition.kind"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">The kind property is used when defining derived types. In this case Kind = "type".<hr/>**Constant Value**: \`type\`</div>|
+|<div className="interface-property-name anchor" id="string-type-definition_type">type<br/><span className="mandatory">MANDATORY</span><a className="hash-link" href="#string-type-definition_type" title="StringTypeDefinition.type"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">The modeling artefact is a \`cds.String\` type.<hr/>**Constant Value**: \`cds.String\`</div>|
+|<div className="interface-property-name anchor" id="string-type-definition_someoldproperty">someOldProperty<br/><span className="optional">OPTIONAL</span><br/><span className="deprecated" title="Descriptive text here explaining the deprecation reason. Use \`someNewProperty\` instead.">DEPRECATED</span><a className="hash-link" href="#string-type-definition_someoldproperty" title="StringTypeDefinition.someOldProperty"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description"><span class="deprecated">DEPRECATION-TEXT</span>: Descriptive text here explaining the deprecation reason. Use \`someNewProperty\` instead.<hr/>Some old property that is specific to the \`cds.String\` type.<br/><br/>This property is optional and can be used to define additional properties of the \`cds.String\` type.<br/>It is not part of the standard CDS types, but can be used in custom definitions.<br/><strong>Introduced in Version</strong>: 1.3.0<br/><strong>Deprecated in Version</strong>: 1.9.9</div>|
+|<div className="interface-property-name anchor" id="string-type-definition_somenewproperty">someNewProperty<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#string-type-definition_somenewproperty" title="StringTypeDefinition.someNewProperty"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Some new property that is specific to the \`cds.String\` type.<br/><br/>This property is optional and can be used to define additional properties of the \`cds.String\` type.<br/>It is not part of the standard CDS types, but can be used in custom definitions.<hr/><strong>Introduced in Version</strong>: 1.9.9</div>|
+| Additional Properties<br/><i><code className="regex">^(@\\|__).+$</code></i><br/><span className="optional">OPTIONAL</span> | string \\| number \\| boolean \\| array \\| object | Annotations or private properties MAY be added.<br/><br/>**Annotations** MUST start with \`@\`.<br/><br/>In CSN Interop Effective the annotations MUST follow the "flattened" form:<br/>Every record / object in an annotation will be flattened into a \`.\` (dot).<br/>Exception: Once there is an array, the flattening is stopped and the values inside the array are preserved as they are ("structured").<br/><br/>Correct annotations examples:<br/>- \`"@Common.bar": "foo"\`<br/>- \`"@Common.foo.bar": true\`<br/>- \`"@Common.array": [{ "foo": true }]\`<br/><br/>Or<br/><br/>**Private properties**, starting with \`__\`.<br/>MAY be ignored by the consumers, as they have no cross-aligned, standardized semantics.<br/><br/><i>Additional properties MUST follow key name regexp pattern</i>: <code className="regex">^(@\\|__).+$</code> |
+| <i>*</i> | | <i>Additional, unspecified properties MAY be added to the object</i>. |
+
+
+###### Example Values:
+
+
+\`\`\`js
+{
+  "kind": "type",
+  "type": "cds.String",
+  "length": 3
+}
+\`\`\`
+
+
+### Language texts
+
+Language Text contains translations for one specific languages.
+
+Key is the i18n key, value is the translation of the term.
+
+An i18n pointer is a string that starts with \`{i18n>\` and ends with \`}\`. In between is the key.
+
+Example: To link to the i18n key \`I_COSTCENTER@ENDUSERTEXT.LABEL\`, the i18n pointer is \`{i18n>I_COSTCENTER@ENDUSERTEXT.LABEL}\`.
+
+The i18n pointers within the document MUST be fully self contained:
+- An i18n resolved pointer MUST be used (referred to) within this CSN document at least once.
+- All i18n pointers in this CSN document MUST have a corresponding i18n dictionary entry.
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| Additional Properties<br/><i><code className="regex">^.+$</code></i><br/><span className="optional">OPTIONAL</span> | string | Translation of the term.<br/><br/><i>Additional properties MUST follow key name regexp pattern</i>: <code className="regex">^.+$</code> |
+| <i>*</i> | | <i>Additional, unspecified properties MAY be added to the object</i>. |
+
+
+###### Example Values:
+
+
+\`\`\`js
+{
+  "I_COSTCENTER@ENDUSERTEXT.LABEL": "Kostenstelle",
+  "I_COSTCENTER.CONTROLLINGAREA@ENDUSERTEXT.LABEL": "Kostenrechnungskreis"
+}
+\`\`\`
+
+
+### Element Reference
+
+Element reference to an element within the current entity.
+
+**Type:** string
+
+## My-spec Outro Text Goes here
+
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam"
+`;
+
+exports[`CLI End-to-End Tests test 1: successful run with valid configuration and valid schema file 2`] = `
+"{
+  "description": "This is the interface description of CSN Interop Effective v1.\\nIts purpose is to be an aligned import / export format for CSN that works across tech-stacks in a wider SAP ecosystem.\\n\\nFor a more extensive documentation on CSN in general, consider the [CAP CSN](https://cap.cloud.sap/docs/cds/csn) documentation.",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://sap.github.io/csn-interop-specification/spec-v1/csn-interop-effective.schema.json#",
+  "title": "CSN Interop Effective Document",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "format": "uri-reference",
+      "description": "Link to JSON Schema for this CSN Interop Effective document.\\nAdding this helps with automatic validation and code intelligence in some editors / IDEs.\\n\\nSee https://tour.json-schema.org/content/06-Combining-Subschemas/02-id-and-schema\\n",
+      "anyOf": [
+        {
+          "const": "https://sap.github.io/csn-interop-specification/spec-v1/csn-interop-effective.schema.json#"
+        },
+        {
+          "type": "string",
+          "format": "uri-reference"
+        }
+      ]
+    },
+    "$id": {
+      "type": "string",
+      "format": "uri-reference",
+      "description": "Optional URI for this document, that can acts as an ID or as location to retrieve the document.\\n\\nSee https://tour.json-schema.org/content/06-Combining-Subschemas/02-id-and-schema\\n"
+    },
+    "csnInteropEffective": {
+      "type": "string",
+      "description": "Existence of this property indicated that the file is a CSN Interop Effective document.\\nThe value states the specification version it has been created against.",
+      "enum": [
+        "1.0"
+      ]
+    },
+    "$version": {
+      "type": "string",
+      "description": "The version of the CDS CSN. For this version of CSN Interop it is fixed to \`2.0\`.\\n\\nThis MUST be provided to ensure that CSN Interop is a valid subset of CDS CSN in general.",
+      "enum": [
+        "2.0"
+      ]
+    },
+    "meta": {
+      "type": "object",
+      "description": "Meta information that apply to the CSN document as a whole.",
+      "$ref": "#/definitions/Meta"
+    },
+    "definitions": {
+      "$ref": "#/definitions/Definitions",
+      "description": "Dictionary of CSN modeling artifacts.\\n"
+    },
+    "i18n": {
+      "$ref": "#/definitions/i18n",
+      "description": "Dictionary of translated texts.\\n"
+    }
+  },
+  "patternProperties": {
+    "^__.+$": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "array",
+        "object"
+      ],
+      "description": "Private properties, starting with \`__\`.\\n\\nMAY be ignored by the consumers, as they have no cross-aligned, standardized semantics.\\n",
+      "tsType": "unknown // replaceKeyType_{PrivatePropertyKey}"
+    }
+  },
+  "required": [
+    "csnInteropEffective",
+    "$version",
+    "definitions"
+  ],
+  "additionalProperties": false,
+  "definitions": {
+    "Meta": {
+      "title": "Meta",
+      "type": "object",
+      "description": "Meta information about the CSN document and its creator.",
+      "properties": {
+        "creator": {
+          "type": "string",
+          "description": "Informal description of the creator of this CSN Document.",
+          "examples": [
+            "CDS Compiler v4.5.0"
+          ]
+        },
+        "flavor": {
+          "type": "string",
+          "description": "Informal hint which CSN flavor is used. The values are currently NOT standardized.\\n\\nA CSN flavor can be understood as an alias to particular [feature set](#) of CSN overall.\\nIn CSN Interop we leave some features open and to be defined in the document itself, this is why we don't have a fixed flavor.",
+          "examples": [
+            "effective",
+            "inferred"
+          ]
+        },
+        "document": {
+          "$ref": "#/definitions/MetaDocument"
+        },
+        "features": {
+          "$ref": "#/definitions/MetaFeatures"
+        }
+      },
+      "patternProperties": {
+        "^__.+$": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "Private properties, starting with \`__\`.\\n\\nMAY be ignored by the consumers, as they have no cross-aligned, standardized semantics.\\n",
+          "tsType": "unknown // replaceKeyType_{PrivatePropertyKey}"
+        }
+      },
+      "examples": [
+        {
+          "creator": "CDS Compiler v4.5.0",
+          "flavor": "inferred",
+          "document": {
+            "version": "1.2.1"
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "MetaDocument": {
+      "title": "Document (Metadata)",
+      "type": "object",
+      "description": "Metadata that describes the document (and what it represents) itself.",
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "The version of the CSN document / the described model itself (not the specification).\\n\\nWe RECOMMEND to use the [SemVer](https://semver.org/) standard.",
+          "examples": [
+            "1.3.4"
+          ]
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 255,
+          "description": "Human readable title for the CSN document (plain-text).\\n\\nMUST NOT contain linebreaks."
+        },
+        "doc": {
+          "type": "string",
+          "description": "Human readable documentation that describes the overall CSN document.\\n\\nSHOULD be provided and interpreted as [CommonMark](https://spec.commonmark.org/) (Markdown)."
+        }
+      },
+      "additionalProperties": false
+    },
+    "MetaFeatures": {
+      "title": "Features (Metadata)",
+      "type": "object",
+      "description": "CSN feature-dimensions this document fulfills.\\n\\nIt is RECOMMENDED to explicitly state all feature dimensions of the document.\\nOtherwise the consumer cannot rely on the information and may have to figure this out on his own.",
+      "properties": {
+        "complete": {
+          "type": "boolean",
+          "description": "Whether this document is complete and self-contained.\\n\\nIt is RECOMMENDED to have complete CSN documents and set this to \`true\`.\\n\\nIf true references to other CDS elements (e.g. \`cds.Association\`) MUST be resolvable within the same document."
+        }
+      },
+      "x-recommended": [
+        "complete"
+      ],
+      "examples": [
+        {
+          "complete": true
+        }
+      ],
+      "additionalProperties": false
+    },
+    "Definitions": {
+      "title": "Definitions",
+      "type": "object",
+      "description": "Each entry in the definitions dictionary is a definition of a named modeling artefact.\\nThe \`name\` is the absolute, fully qualified name of the definition, and the value is a record with the definition details.\\n\\nDefinition names MUST:\\n- Not be an empty string.\\n- Not start with \`@\`, \`__\`, \`.\`, \`::\`.\\n- Not end with \`.\` or \`::\`.\\n- Not contain the substring \`..\` or \`:::\`.\\n- Not contain the substring \`::\` more than once.\\n\\nSee [Primer: Definitions](../primer.md#definitions).",
+      "patternProperties": {
+        "^(?![@]|__|\\\\.|::).+$": {
+          "$ref": "#/definitions/DefinitionEntry"
+        }
+      },
+      "minProperties": 1,
+      "additionalProperties": true,
+      "examples": [
+        {
+          "SomeEntity": {
+            "kind": "entity",
+            "elements": {
+              "SomeElement": {
+                "@SomeProperty.upperCase": true,
+                "type": "cds.String"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "DefinitionEntry": {
+      "type": "object",
+      "description": "Definition of a CDS modeling artifact, put into [Definitions](#definitions).",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "context",
+            "entity",
+            "service",
+            "type"
+          ],
+          "description": "The modeling artefact kind.\\nIt's value is been used as a _discriminator_ to distinguish the matching schema that should be further validated."
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "context"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "$ref": "#/definitions/ContextDefinition"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "entity"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "$ref": "#/definitions/EntityDefinition"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "service"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "$ref": "#/definitions/ServiceDefinition"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "type"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "$ref": "#/definitions/TypeDefinition"
+          }
+        }
+      ],
+      "title": "DefinitionEntry"
+    },
+    "EntityDefinition": {
+      "title": "Entity Definition",
+      "type": "object",
+      "description": "Entity definition refers to the structured description of an object or concept.\\n\\nIf it is exposed through a [Service](#service-definition), it describes a data model.\\nTo expose it through a Service, the service name MUST be prefixed to the Entity name, separated by a \`.\` (dot).\\nThe actual data serialization format is defined by the Service protocol and chosen data format [mapping](../mappings).\\n\\nIf the entity is not exposed via a service, it only describes a conceptual domain object.",
+      "x-extension-points": [
+        "Entity"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "entity",
+          "description": "The modeling artefact is an entity.",
+          "tsType": "EntityKind"
+        },
+        "elements": {
+          "$ref": "#/definitions/ElementDefinitions"
+        },
+        "doc": {
+          "type": "string",
+          "description": "Human readable documentation, usually for developer documentation.\\n\\nSHOULD be provided and interpreted as [CommonMark](https://spec.commonmark.org/) (Markdown).\\n\\nIf a human readable title is needed, use the [@EndUserText.label](./extensions/end-user-text#endusertextlabel) annotation."
+        },
+        "abstract": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "Proper syntax element in ABAP CDS producing Abstract CDS Entities"
+        },
+        "customEntity": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "Proper syntax element in ABAP CDS producing Custom CDS Entities"
+        },
+        "tableFunction": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "Proper syntax element in ABAP CDS producing CDS Table Functions."
+        },
+        "externalEntity": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "Proper syntax element in ABAP CDS producing CDS  External Entities"
+        },
+        "providerContract": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "ABAP CDS Projection have the additional information of a provider contract"
+        },
+        "rootEntity": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "ABAP CDS Root View Entities define a RAP Business Object."
+        },
+        "transient": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "Special kind of analytical ABAP CDS Projection view."
+        },
+        "literal": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "In the selection element list of a CDS view."
+        },
+        "toCompositionChild": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "When redirecting associations in ABAP CDS Projections with the additional keywords \\"to composition child\\", this indicates a Parent-Child-Composition an requires the redirection target to have a matching \\"to parent\\" association redefinition."
+        },
+        "toParent": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "When redirecting associations in ABAP CDS Projections with the additional keywords \\"to composition child\\", this indicates a Parent-Child-Composition an requires the redirection target to have a matching \\"to parent\\" association redefinition."
+        },
+        "hana_on_asString": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "Contains the SQL on condition as string"
+        }
+      },
+      "patternProperties": {
+        "^(@|__).+$": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "Annotations or private properties MAY be added.\\n\\n**Annotations** MUST start with \`@\`.\\n\\nIn CSN Interop Effective the annotations MUST follow the \\"flattened\\" form:\\nEvery record / object in an annotation will be flattened into a \`.\` (dot).\\nException: Once there is an array, the flattening is stopped and the values inside the array are preserved as they are (\\"structured\\").\\n\\nCorrect annotations examples:\\n- \`\\"@Common.bar\\": \\"foo\\"\`\\n- \`\\"@Common.foo.bar\\": true\`\\n- \`\\"@Common.array\\": [{ \\"foo\\": true }]\`\\n\\nOr\\n\\n**Private properties**, starting with \`__\`.\\nMAY be ignored by the consumers, as they have no cross-aligned, standardized semantics.",
+          "tsType": "unknown // replaceKeyType_{PrivatePropertyKey|AnnotationPropertyKey}"
+        }
+      },
+      "required": [
+        "kind",
+        "elements"
+      ],
+      "additionalProperties": true
+    },
+    "ServiceDefinition": {
+      "title": "Service Definition",
+      "type": "object",
+      "description": "A CDS Service indicates that [Entities](#entity-definition) are exposed to outside consumers via an API.\\n\\nTo assign Entities or Custom Types to a Service, their name MUST be prefixed with the service name, separated by a \`.\`.\\nPlease be aware that this will also change the \`target\` values of \`cds.Association\` and \`cds.Composition\`.\\nFor an example, see [airline-service.json](./examples/airline.md).\\n\\nA consumer MAY decide to shorten the names by only considering the Entities assigned to a particular Service and then removing the Service prefixes again.\\n\\nTo indicate which assigned Entities are root in a composition hierarchy, use the [\`@ObjectModel.compositionRoot\`](./extensions/object-model#objectmodelcompositionroot) annotation.\\n\\nSee [Primer: Service Definitions](../primer.md#service-definitions).",
+      "x-extension-points": [
+        "Service"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "service",
+          "description": "The modeling artefact is a service.",
+          "tsType": "ServiceKind"
+        },
+        "doc": {
+          "type": "string",
+          "description": "Human readable documentation, usually for developer documentation.\\n\\nSHOULD be provided and interpreted as [CommonMark](https://spec.commonmark.org/) (Markdown).\\n\\nIf a human readable title is needed, use the [@EndUserText.label](./extensions/end-user-text#endusertextlabel) annotation."
+        }
+      },
+      "patternProperties": {
+        "^(@|__).+$": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "Annotations or private properties MAY be added.\\n\\n**Annotations** MUST start with \`@\`.\\n\\nIn CSN Interop Effective the annotations MUST follow the \\"flattened\\" form:\\nEvery record / object in an annotation will be flattened into a \`.\` (dot).\\nException: Once there is an array, the flattening is stopped and the values inside the array are preserved as they are (\\"structured\\").\\n\\nCorrect annotations examples:\\n- \`\\"@Common.bar\\": \\"foo\\"\`\\n- \`\\"@Common.foo.bar\\": true\`\\n- \`\\"@Common.array\\": [{ \\"foo\\": true }]\`\\n\\nOr\\n\\n**Private properties**, starting with \`__\`.\\nMAY be ignored by the consumers, as they have no cross-aligned, standardized semantics.",
+          "tsType": "unknown // replaceKeyType_{PrivatePropertyKey|AnnotationPropertyKey}"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "additionalProperties": true
+    },
+    "ContextDefinition": {
+      "title": "Context Definition",
+      "type": "object",
+      "description": "A context corresponds to a CAP CSN Namespace.\\nIt is used to create a bounded context that bundles elements of different kinds together.\\n\\nTo assign Services, Entities or Custom Types to a context, their name MUST be prefixed with the context name, separated by a \`.\`.\\n\\nThe context can also be useful to avoid local or global name collisions.\\n\\nSee [Primer: Context](../primer.md#context-definitions).",
+      "x-extension-points": [
+        "Context"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "context",
+          "description": "The modeling artefact is a context.",
+          "tsType": "ContextKind"
+        },
+        "doc": {
+          "type": "string",
+          "description": "Human readable documentation, usually for developer documentation.\\n\\nSHOULD be provided and interpreted as [CommonMark](https://spec.commonmark.org/) (Markdown).\\n\\nIf a human readable title is needed, use the [@EndUserText.label](./extensions/end-user-text#endusertextlabel) annotation."
+        }
+      },
+      "patternProperties": {
+        "^(@|__).+$": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "Annotations or private properties MAY be added.\\n\\n**Annotations** MUST start with \`@\`.\\n\\nIn CSN Interop Effective the annotations MUST follow the \\"flattened\\" form:\\nEvery record / object in an annotation will be flattened into a \`.\` (dot).\\nException: Once there is an array, the flattening is stopped and the values inside the array are preserved as they are (\\"structured\\").\\n\\nCorrect annotations examples:\\n- \`\\"@Common.bar\\": \\"foo\\"\`\\n- \`\\"@Common.foo.bar\\": true\`\\n- \`\\"@Common.array\\": [{ \\"foo\\": true }]\`\\n\\nOr\\n\\n**Private properties**, starting with \`__\`.\\nMAY be ignored by the consumers, as they have no cross-aligned, standardized semantics.",
+          "tsType": "unknown // replaceKeyType_{PrivatePropertyKey|AnnotationPropertyKey}"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "additionalProperties": true
+    },
+    "EntityRelationshipPropertyType": {
+      "title": "EntityRelationshipPropertyType",
+      "type": "string",
+      "description": "Defines the logical Property Type of a property.\\nThe reason is to have an ID to relate to the property, especially to state that it can be used as an ID or is part of a composite ID.",
+      "pattern": "^([a-z0-9-]+(?:[.][a-z0-9-]+)*):([a-zA-Z0-9._\\\\-]+)(:v[1-9][0-9]*)?$",
+      "examples": [
+        "sap.vdm.gfn:BillOfMaterialUUID"
+      ]
+    },
+    "i18n": {
+      "title": "i18n",
+      "type": "object",
+      "description": "i18n contains translated texts for one or more languages.\\nThey are usually used in annotations like [\`@EnduserText\`](./extensions/end-user-text).\\n\\nKey is the language key, value is a dictionary of language text translations.\\n\\nThe language key MUST follow the standard of [RFC 1766](https://datatracker.ietf.org/doc/rfc1766/) (or IETF's [BCP 47](https://www.rfc-editor.org/rfc/bcp/bcp47.txt)).\\n\\nSee [Primer: Language-dependent annotation values](../primer.md#language-dependent-annotation-values).",
+      "patternProperties": {
+        "^[a-zA-Z]{2,8}(-[a-zA-Z0-9]{1,8}){0,2}$": {
+          "$ref": "#/definitions/LanguageText"
+        }
+      },
+      "additionalProperties": true,
+      "examples": [
+        {
+          "de": {
+            "I_COSTCENTER@ENDUSERTEXT.LABEL": "Kostenstelle",
+            "I_COSTCENTER.CONTROLLINGAREA@ENDUSERTEXT.LABEL": "Kostenrechnungskreis"
+          }
+        }
+      ]
+    },
+    "TypeDefinition": {
+      "title": "Type Definition",
+      "type": "object",
+      "description": "In CSN it is possible to define Custom Types.",
+      "x-extension-points": [
+        "Type"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "type",
+          "description": "The kind property is used when defining derived types.\\nIn this case \`Kind = \\"type\\"\` MUST be provided.",
+          "tsType": "TypeKind"
+        },
+        "type": {
+          "type": "string",
+          "description": "The CDS data type of the derived type.\\n\\nCustom types in CSN Interop Effective MUST always point to a \`cds.*\` type.",
+          "enum": [
+            "cds.Boolean",
+            "cds.String"
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "cds.Boolean"
+              }
+            },
+            "required": [
+              "kind",
+              "type"
+            ]
+          },
+          "then": {
+            "$ref": "#/definitions/BooleanTypeDefinition"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "cds.String"
+              }
+            },
+            "required": [
+              "kind",
+              "type"
+            ]
+          },
+          "then": {
+            "$ref": "#/definitions/StringTypeDefinition"
+          }
+        }
+      ],
+      "required": [
+        "kind",
+        "type"
+      ]
+    },
+    "BooleanTypeDefinition": {
+      "title": "Boolean Type Definition",
+      "type": "object",
+      "description": "A type definition of type \`cds.Boolean\`.",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "type",
+          "description": "The kind property is used when defining derived types. In this case Kind = \\"type\\"."
+        },
+        "type": {
+          "type": "string",
+          "const": "cds.Boolean",
+          "description": "The modeling artefact is a \`cds.Boolean\` type.",
+          "tsType": "BooleanCdsType"
+        }
+      },
+      "patternProperties": {
+        "^(@|__).+$": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "Annotations or private properties MAY be added.\\n\\n**Annotations** MUST start with \`@\`.\\n\\nIn CSN Interop Effective the annotations MUST follow the \\"flattened\\" form:\\nEvery record / object in an annotation will be flattened into a \`.\` (dot).\\nException: Once there is an array, the flattening is stopped and the values inside the array are preserved as they are (\\"structured\\").\\n\\nCorrect annotations examples:\\n- \`\\"@Common.bar\\": \\"foo\\"\`\\n- \`\\"@Common.foo.bar\\": true\`\\n- \`\\"@Common.array\\": [{ \\"foo\\": true }]\`\\n\\nOr\\n\\n**Private properties**, starting with \`__\`.\\nMAY be ignored by the consumers, as they have no cross-aligned, standardized semantics.",
+          "tsType": "unknown // replaceKeyType_{PrivatePropertyKey|AnnotationPropertyKey}"
+        }
+      },
+      "required": [
+        "kind",
+        "type"
+      ],
+      "additionalProperties": true,
+      "x-extension-points": [
+        "Type",
+        "BooleanType"
+      ],
+      "examples": [
+        {
+          "kind": "type",
+          "type": "cds.Boolean"
+        }
+      ]
+    },
+    "ElementDefinitions": {
+      "title": "Element Definitions",
+      "type": "object",
+      "description": "Dictionary of Element where the key is the name of the element and the value its definition.\\n\\nThe value can either be a standard [CDS Type](#cds-type) (\`cds.*\`) or a [Custom Type](#custom-type).\\n\\nElement names MUST:\\n- Not be an empty string.\\n- Not start with \`@\`, \`__\`, \`::\`.\\n- Not end with \`::\`.\\n- Not contain the substring \`.\` or \`:::\`.\\n- Not contain the substring \`::\` more than once.",
+      "minProperties": 1,
+      "patternProperties": {
+        "^(?![@]|__|\\\\.|::).+$": {
+          "$ref": "#/definitions/ElementEntry"
+        }
+      },
+      "additionalProperties": true
+    },
+    "ElementEntry": {
+      "type": "object",
+      "description": "Definition of an Element, as put into [Element Definitions](#element-definitions).\\n\\nAn element can be either of a standard [CDS Types](#cds-type) or a [Custom Type](#custom-type).\\n\\nPlease note that CSN Interop does not support arrays of scalar types or arrays of arrays, see [Primer: Cardinality](../primer.md#cardinality).",
+      "properties": {
+        "type": {
+          "type": "string"
+        }
+      },
+      "title": "ElementEntry"
+    },
+    "StringTypeDefinition": {
+      "title": "String Type Definition",
+      "type": "object",
+      "description": "A type definition of type \`cds.String\`.",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "type",
+          "description": "The kind property is used when defining derived types. In this case Kind = \\"type\\"."
+        },
+        "type": {
+          "type": "string",
+          "const": "cds.String",
+          "description": "The modeling artefact is a \`cds.String\` type.",
+          "tsType": "StringCdsType"
+        },
+        "someOldProperty": {
+          "type": "string",
+          "description": "Some old property that is specific to the \`cds.String\` type.\\n\\nThis property is optional and can be used to define additional properties of the \`cds.String\` type.\\nIt is not part of the standard CDS types, but can be used in custom definitions.",
+          "x-introduced-in-version": "1.3.0"
+        },
+        "someNewProperty": {
+          "type": "string",
+          "description": "Some new property that is specific to the \`cds.String\` type.\\n\\nThis property is optional and can be used to define additional properties of the \`cds.String\` type.\\nIt is not part of the standard CDS types, but can be used in custom definitions.",
+          "x-introduced-in-version": "1.9.9"
+        }
+      },
+      "patternProperties": {
+        "^(@|__).+$": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "Annotations or private properties MAY be added.\\n\\n**Annotations** MUST start with \`@\`.\\n\\nIn CSN Interop Effective the annotations MUST follow the \\"flattened\\" form:\\nEvery record / object in an annotation will be flattened into a \`.\` (dot).\\nException: Once there is an array, the flattening is stopped and the values inside the array are preserved as they are (\\"structured\\").\\n\\nCorrect annotations examples:\\n- \`\\"@Common.bar\\": \\"foo\\"\`\\n- \`\\"@Common.foo.bar\\": true\`\\n- \`\\"@Common.array\\": [{ \\"foo\\": true }]\`\\n\\nOr\\n\\n**Private properties**, starting with \`__\`.\\nMAY be ignored by the consumers, as they have no cross-aligned, standardized semantics.",
+          "tsType": "unknown // replaceKeyType_{PrivatePropertyKey|AnnotationPropertyKey}"
+        }
+      },
+      "required": [
+        "type",
+        "kind"
+      ],
+      "additionalProperties": true,
+      "x-extension-points": [
+        "Type",
+        "StringType"
+      ],
+      "examples": [
+        {
+          "kind": "type",
+          "type": "cds.String",
+          "length": 3
+        }
+      ]
+    },
+    "LanguageText": {
+      "title": "Language texts",
+      "type": "object",
+      "description": "Language Text contains translations for one specific languages.\\n\\nKey is the i18n key, value is the translation of the term.\\n\\nAn i18n pointer is a string that starts with \`{i18n>\` and ends with \`}\`. In between is the key.\\n\\nExample: To link to the i18n key \`I_COSTCENTER@ENDUSERTEXT.LABEL\`, the i18n pointer is \`{i18n>I_COSTCENTER@ENDUSERTEXT.LABEL}\`.\\n\\nThe i18n pointers within the document MUST be fully self contained:\\n- An i18n resolved pointer MUST be used (referred to) within this CSN document at least once.\\n- All i18n pointers in this CSN document MUST have a corresponding i18n dictionary entry.",
+      "patternProperties": {
+        "^.+$": {
+          "type": "string",
+          "description": "Translation of the term."
+        }
+      },
+      "additionalProperties": true,
+      "examples": [
+        {
+          "I_COSTCENTER@ENDUSERTEXT.LABEL": "Kostenstelle",
+          "I_COSTCENTER.CONTROLLINGAREA@ENDUSERTEXT.LABEL": "Kostenrechnungskreis"
+        }
+      ]
+    },
+    "ElementReference": {
+      "title": "Element Reference",
+      "description": "Element reference to an element within the current entity.",
+      "type": "string"
+    }
+  }
+}"
+`;
+
+exports[`CLI End-to-End Tests test 1: successful run with valid configuration and valid schema file 3`] = `
+"// AUTO-GENERATED definition files. Do not modify directly.
+
+/**
+ * Definition of a CDS modeling artifact, put into [Definitions](#definitions).
+ *
+ * This interface was referenced by \`Definitions\`'s JSON-Schema definition
+ * via the \`patternProperty\` "^(?![@]|__|\\.|::).+$".
+ */
+export type DefinitionEntry = ContextDefinition | EntityDefinition | ServiceDefinition | TypeDefinition;
+/**
+ * In CSN it is possible to define Custom Types.
+ */
+export type TypeDefinition = BooleanTypeDefinition | StringTypeDefinition;
+
+/**
+ * This is the interface description of CSN Interop Effective v1.
+ * Its purpose is to be an aligned import / export format for CSN that works across tech-stacks in a wider SAP ecosystem.
+ *
+ * For a more extensive documentation on CSN in general, consider the [CAP CSN](https://cap.cloud.sap/docs/cds/csn) documentation.
+ */
+export interface CSNInteropEffectiveDocument {
+  /**
+   * Link to JSON Schema for this CSN Interop Effective document.
+   * Adding this helps with automatic validation and code intelligence in some editors / IDEs.
+   *
+   * See https://tour.json-schema.org/content/06-Combining-Subschemas/02-id-and-schema
+   *
+   */
+  $schema?: ("https://sap.github.io/csn-interop-specification/spec-v1/csn-interop-effective.schema.json#" | string) &
+    string;
+  /**
+   * Optional URI for this document, that can acts as an ID or as location to retrieve the document.
+   *
+   * See https://tour.json-schema.org/content/06-Combining-Subschemas/02-id-and-schema
+   *
+   */
+  $id?: string;
+  /**
+   * Existence of this property indicated that the file is a CSN Interop Effective document.
+   * The value states the specification version it has been created against.
+   */
+  csnInteropEffective: "1.0";
+  /**
+   * The version of the CDS CSN. For this version of CSN Interop it is fixed to \`2.0\`.
+   *
+   * This MUST be provided to ensure that CSN Interop is a valid subset of CDS CSN in general.
+   */
+  $version: "2.0";
+  meta?: Meta;
+  definitions: Definitions;
+  i18n?: I18N;
+  /**
+   * Private properties, starting with \`__\`.
+   *
+   * MAY be ignored by the consumers, as they have no cross-aligned, standardized semantics.
+   *
+   */
+  [k: PrivatePropertyKey]: unknown;
+}
+/**
+ * Meta information that apply to the CSN document as a whole.
+ */
+export interface Meta {
+  /**
+   * Informal description of the creator of this CSN Document.
+   */
+  creator?: string;
+  /**
+   * Informal hint which CSN flavor is used. The values are currently NOT standardized.
+   *
+   * A CSN flavor can be understood as an alias to particular [feature set](#) of CSN overall.
+   * In CSN Interop we leave some features open and to be defined in the document itself, this is why we don't have a fixed flavor.
+   */
+  flavor?: string;
+  document?: DocumentMetadata;
+  features?: FeaturesMetadata;
+  /**
+   * Private properties, starting with \`__\`.
+   *
+   * MAY be ignored by the consumers, as they have no cross-aligned, standardized semantics.
+   *
+   */
+  [k: PrivatePropertyKey]: unknown;
+}
+/**
+ * Metadata that describes the document (and what it represents) itself.
+ */
+export interface DocumentMetadata {
+  /**
+   * The version of the CSN document / the described model itself (not the specification).
+   *
+   * We RECOMMEND to use the [SemVer](https://semver.org/) standard.
+   */
+  version?: string;
+  /**
+   * Human readable title for the CSN document (plain-text).
+   *
+   * MUST NOT contain linebreaks.
+   */
+  title?: string;
+  /**
+   * Human readable documentation that describes the overall CSN document.
+   *
+   * SHOULD be provided and interpreted as [CommonMark](https://spec.commonmark.org/) (Markdown).
+   */
+  doc?: string;
+}
+/**
+ * CSN feature-dimensions this document fulfills.
+ *
+ * It is RECOMMENDED to explicitly state all feature dimensions of the document.
+ * Otherwise the consumer cannot rely on the information and may have to figure this out on his own.
+ */
+export interface FeaturesMetadata {
+  /**
+   * Whether this document is complete and self-contained.
+   *
+   * It is RECOMMENDED to have complete CSN documents and set this to \`true\`.
+   *
+   * If true references to other CDS elements (e.g. \`cds.Association\`) MUST be resolvable within the same document.
+   */
+  complete?: boolean;
+}
+/**
+ * Dictionary of CSN modeling artifacts.
+ *
+ */
+export interface Definitions {
+  [k: string]: unknown | undefined;
+}
+/**
+ * A context corresponds to a CAP CSN Namespace.
+ * It is used to create a bounded context that bundles elements of different kinds together.
+ *
+ * To assign Services, Entities or Custom Types to a context, their name MUST be prefixed with the context name, separated by a \`.\`.
+ *
+ * The context can also be useful to avoid local or global name collisions.
+ *
+ * See [Primer: Context](../primer.md#context-definitions).
+ */
+export interface ContextDefinition {
+  /**
+   * The modeling artefact is a context.
+   */
+  kind: ContextKind;
+  /**
+   * Human readable documentation, usually for developer documentation.
+   *
+   * SHOULD be provided and interpreted as [CommonMark](https://spec.commonmark.org/) (Markdown).
+   *
+   * If a human readable title is needed, use the [@EndUserText.label](./extensions/end-user-text#endusertextlabel) annotation.
+   */
+  doc?: string;
+  [k: string]: unknown | undefined;
+}
+/**
+ * Entity definition refers to the structured description of an object or concept.
+ *
+ * If it is exposed through a [Service](#service-definition), it describes a data model.
+ * To expose it through a Service, the service name MUST be prefixed to the Entity name, separated by a \`.\` (dot).
+ * The actual data serialization format is defined by the Service protocol and chosen data format [mapping](../mappings).
+ *
+ * If the entity is not exposed via a service, it only describes a conceptual domain object.
+ */
+export interface EntityDefinition {
+  /**
+   * The modeling artefact is an entity.
+   */
+  kind: EntityKind;
+  elements: ElementDefinitions;
+  /**
+   * Human readable documentation, usually for developer documentation.
+   *
+   * SHOULD be provided and interpreted as [CommonMark](https://spec.commonmark.org/) (Markdown).
+   *
+   * If a human readable title is needed, use the [@EndUserText.label](./extensions/end-user-text#endusertextlabel) annotation.
+   */
+  doc?: string;
+  /**
+   * Proper syntax element in ABAP CDS producing Abstract CDS Entities
+   */
+  abstract?:
+    | string
+    | number
+    | boolean
+    | unknown[]
+    | {
+        [k: string]: unknown | undefined;
+      };
+  /**
+   * Proper syntax element in ABAP CDS producing Custom CDS Entities
+   */
+  customEntity?:
+    | string
+    | number
+    | boolean
+    | unknown[]
+    | {
+        [k: string]: unknown | undefined;
+      };
+  /**
+   * Proper syntax element in ABAP CDS producing CDS Table Functions.
+   */
+  tableFunction?:
+    | string
+    | number
+    | boolean
+    | unknown[]
+    | {
+        [k: string]: unknown | undefined;
+      };
+  /**
+   * Proper syntax element in ABAP CDS producing CDS  External Entities
+   */
+  externalEntity?:
+    | string
+    | number
+    | boolean
+    | unknown[]
+    | {
+        [k: string]: unknown | undefined;
+      };
+  /**
+   * ABAP CDS Projection have the additional information of a provider contract
+   */
+  providerContract?:
+    | string
+    | number
+    | boolean
+    | unknown[]
+    | {
+        [k: string]: unknown | undefined;
+      };
+  /**
+   * ABAP CDS Root View Entities define a RAP Business Object.
+   */
+  rootEntity?:
+    | string
+    | number
+    | boolean
+    | unknown[]
+    | {
+        [k: string]: unknown | undefined;
+      };
+  /**
+   * Special kind of analytical ABAP CDS Projection view.
+   */
+  transient?:
+    | string
+    | number
+    | boolean
+    | unknown[]
+    | {
+        [k: string]: unknown | undefined;
+      };
+  /**
+   * In the selection element list of a CDS view.
+   */
+  literal?:
+    | string
+    | number
+    | boolean
+    | unknown[]
+    | {
+        [k: string]: unknown | undefined;
+      };
+  /**
+   * When redirecting associations in ABAP CDS Projections with the additional keywords "to composition child", this indicates a Parent-Child-Composition an requires the redirection target to have a matching "to parent" association redefinition.
+   */
+  toCompositionChild?:
+    | string
+    | number
+    | boolean
+    | unknown[]
+    | {
+        [k: string]: unknown | undefined;
+      };
+  /**
+   * When redirecting associations in ABAP CDS Projections with the additional keywords "to composition child", this indicates a Parent-Child-Composition an requires the redirection target to have a matching "to parent" association redefinition.
+   */
+  toParent?:
+    | string
+    | number
+    | boolean
+    | unknown[]
+    | {
+        [k: string]: unknown | undefined;
+      };
+  /**
+   * Contains the SQL on condition as string
+   */
+  hana_on_asString?:
+    | string
+    | number
+    | boolean
+    | unknown[]
+    | {
+        [k: string]: unknown | undefined;
+      };
+  [k: string]: unknown | undefined;
+}
+/**
+ * Dictionary of Element where the key is the name of the element and the value its definition.
+ *
+ * The value can either be a standard [CDS Type](#cds-type) (\`cds.*\`) or a [Custom Type](#custom-type).
+ *
+ * Element names MUST:
+ * - Not be an empty string.
+ * - Not start with \`@\`, \`__\`, \`::\`.
+ * - Not end with \`::\`.
+ * - Not contain the substring \`.\` or \`:::\`.
+ * - Not contain the substring \`::\` more than once.
+ */
+export interface ElementDefinitions {
+  [k: string]: unknown | undefined;
+}
+/**
+ * Definition of an Element, as put into [Element Definitions](#element-definitions).
+ *
+ * An element can be either of a standard [CDS Types](#cds-type) or a [Custom Type](#custom-type).
+ *
+ * Please note that CSN Interop does not support arrays of scalar types or arrays of arrays, see [Primer: Cardinality](../primer.md#cardinality).
+ *
+ * This interface was referenced by \`ElementDefinitions\`'s JSON-Schema definition
+ * via the \`patternProperty\` "^(?![@]|__|\\.|::).+$".
+ */
+export interface ElementEntry {
+  type?: string;
+  [k: string]: unknown | undefined;
+}
+/**
+ * A CDS Service indicates that [Entities](#entity-definition) are exposed to outside consumers via an API.
+ *
+ * To assign Entities or Custom Types to a Service, their name MUST be prefixed with the service name, separated by a \`.\`.
+ * Please be aware that this will also change the \`target\` values of \`cds.Association\` and \`cds.Composition\`.
+ * For an example, see [airline-service.json](./examples/airline.md).
+ *
+ * A consumer MAY decide to shorten the names by only considering the Entities assigned to a particular Service and then removing the Service prefixes again.
+ *
+ * To indicate which assigned Entities are root in a composition hierarchy, use the [\`@ObjectModel.compositionRoot\`](./extensions/object-model#objectmodelcompositionroot) annotation.
+ *
+ * See [Primer: Service Definitions](../primer.md#service-definitions).
+ */
+export interface ServiceDefinition {
+  /**
+   * The modeling artefact is a service.
+   */
+  kind: ServiceKind;
+  /**
+   * Human readable documentation, usually for developer documentation.
+   *
+   * SHOULD be provided and interpreted as [CommonMark](https://spec.commonmark.org/) (Markdown).
+   *
+   * If a human readable title is needed, use the [@EndUserText.label](./extensions/end-user-text#endusertextlabel) annotation.
+   */
+  doc?: string;
+  [k: string]: unknown | undefined;
+}
+/**
+ * A type definition of type \`cds.Boolean\`.
+ */
+export interface BooleanTypeDefinition {
+  /**
+   * The kind property is used when defining derived types. In this case Kind = "type".
+   */
+  kind: "type";
+  /**
+   * The modeling artefact is a \`cds.Boolean\` type.
+   */
+  type: BooleanCdsType;
+  [k: string]: unknown | undefined;
+}
+/**
+ * A type definition of type \`cds.String\`.
+ */
+export interface StringTypeDefinition {
+  /**
+   * The kind property is used when defining derived types. In this case Kind = "type".
+   */
+  kind: "type";
+  /**
+   * The modeling artefact is a \`cds.String\` type.
+   */
+  type: StringCdsType;
+  /**
+   * Some old property that is specific to the \`cds.String\` type.
+   *
+   * This property is optional and can be used to define additional properties of the \`cds.String\` type.
+   * It is not part of the standard CDS types, but can be used in custom definitions.
+   */
+  someOldProperty?: string;
+  /**
+   * Some new property that is specific to the \`cds.String\` type.
+   *
+   * This property is optional and can be used to define additional properties of the \`cds.String\` type.
+   * It is not part of the standard CDS types, but can be used in custom definitions.
+   */
+  someNewProperty?: string;
+  [k: string]: unknown | undefined;
+}
+/**
+ * Dictionary of translated texts.
+ *
+ */
+export interface I18N {
+  [k: string]: unknown | undefined;
+}
+/**
+ * Language Text contains translations for one specific languages.
+ *
+ * Key is the i18n key, value is the translation of the term.
+ *
+ * An i18n pointer is a string that starts with \`{i18n>\` and ends with \`}\`. In between is the key.
+ *
+ * Example: To link to the i18n key \`I_COSTCENTER@ENDUSERTEXT.LABEL\`, the i18n pointer is \`{i18n>I_COSTCENTER@ENDUSERTEXT.LABEL}\`.
+ *
+ * The i18n pointers within the document MUST be fully self contained:
+ * - An i18n resolved pointer MUST be used (referred to) within this CSN document at least once.
+ * - All i18n pointers in this CSN document MUST have a corresponding i18n dictionary entry.
+ *
+ * This interface was referenced by \`I18N\`'s JSON-Schema definition
+ * via the \`patternProperty\` "^[a-zA-Z]{2,8}(-[a-zA-Z0-9]{1,8}){0,2}$".
+ */
+export interface LanguageTexts {
+  [k: string]: unknown | undefined;
+}
+
+export type PrivatePropertyKey = \`__\${string}\`;
+
+export type AnnotationPropertyKey = \`@\${string}\`;
+
+export type EntityKind = "entity";
+
+export type ContextKind = "context";
+
+export type ServiceKind = "service";
+
+export type TypeKind = "type";
+
+export type BooleanCdsType = "cds.Boolean";
+
+export type StringCdsType = "cds.String";
+"
+`;
+
+exports[`CLI End-to-End Tests test 4: successful run with valid configuration file and valid spec extension schema files 1`] = `
+"---
+title: "Interface Documentation for my-spec"
+sidebar_position: "1"
+description: "Describes the technical interface / schema for my-spec."
+toc_max_heading_level: "4"
+---
+
+## My-spec Intro Text Goes here
+
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+
+Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat
+
+## Schema Definitions
+
+* The root schema of the document is [CSN Interop Effective Document](#csn-interop-effective-document)
+* The interface is available as JSON Schema: [my-spec.schema.json](https://sap.github.io/csn-interop-specification/spec-v1/csn-interop-effective.schema.json#).
+
+
+### CSN Interop Effective Document
+
+**Type**: Object(<a href="#csn-interop-effective-document_$schema">$schema</a>, <a href="#csn-interop-effective-document_$id">$id</a>, <a href="#csn-interop-effective-document_csninteropeffective">csnInteropEffective</a>, <a href="#csn-interop-effective-document_$version">$version</a>, <a href="#csn-interop-effective-document_meta">meta</a>, <a href="#csn-interop-effective-document_definitions">definitions</a>, <a href="#csn-interop-effective-document_i18n">i18n</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="csn-interop-effective-document_$schema">$schema<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#csn-interop-effective-document_$schema" title="#csn-interop-effective-document.$schema"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Link to JSON Schema for this CSN Interop Effective document.<br/>Adding this helps with automatic validation and code intelligence in some editors / IDEs.<br/><br/>See https://tour.json-schema.org/content/06-Combining-Subschemas/02-id-and-schema<br/><hr/>**JSON Schema Format**: \`uri-reference\`<br/>**Recommended Values**: <ul><li>\`"https://sap.github.io/csn-interop-specification/spec-v1/csn-interop-effective.schema.json#"\`</li></ul></div>|
+|<div className="interface-property-name anchor" id="csn-interop-effective-document_$id">$id<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#csn-interop-effective-document_$id" title="#csn-interop-effective-document.$id"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Optional URI for this document, that can acts as an ID or as location to retrieve the document.<br/><br/>See https://tour.json-schema.org/content/06-Combining-Subschemas/02-id-and-schema<br/><hr/>**JSON Schema Format**: \`uri-reference\`</div>|
+|<div className="interface-property-name anchor" id="csn-interop-effective-document_csninteropeffective">csnInteropEffective<br/><span className="mandatory">MANDATORY</span><a className="hash-link" href="#csn-interop-effective-document_csninteropeffective" title="#csn-interop-effective-document.csnInteropEffective"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Existence of this property indicated that the file is a CSN Interop Effective document.<br/>The value states the specification version it has been created against.<hr/>**Allowed Values**: <ul><li>\`"1.0"\`</li></ul></div>|
+|<div className="interface-property-name anchor" id="csn-interop-effective-document_$version">$version<br/><span className="mandatory">MANDATORY</span><a className="hash-link" href="#csn-interop-effective-document_$version" title="#csn-interop-effective-document.$version"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">The version of the CDS CSN. For this version of CSN Interop it is fixed to \`2.0\`.<br/><br/>This MUST be provided to ensure that CSN Interop is a valid subset of CDS CSN in general.<hr/>**Allowed Values**: <ul><li>\`"2.0"\`</li></ul></div>|
+|<div className="interface-property-name anchor" id="csn-interop-effective-document_meta">meta<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#csn-interop-effective-document_meta" title="#csn-interop-effective-document.meta"></a></div>|<div className="interface-property-type">[Meta](#meta)</div>|<div className="interface-property-description">Meta information that apply to the CSN document as a whole.</div>|
+|<div className="interface-property-name anchor" id="csn-interop-effective-document_definitions">definitions<br/><span className="mandatory">MANDATORY</span><a className="hash-link" href="#csn-interop-effective-document_definitions" title="#csn-interop-effective-document.definitions"></a></div>|<div className="interface-property-type">[Definitions](#definitions)</div>|<div className="interface-property-description">Dictionary of CSN modeling artifacts.<br/></div>|
+|<div className="interface-property-name anchor" id="csn-interop-effective-document_i18n">i18n<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#csn-interop-effective-document_i18n" title="#csn-interop-effective-document.i18n"></a></div>|<div className="interface-property-type">[i18n](#i18n)</div>|<div className="interface-property-description">Dictionary of translated texts.<br/></div>|
+| Additional Properties<br/><i><code className="regex">^__.+$</code></i><br/><span className="optional">OPTIONAL</span> | string \\| number \\| boolean \\| array \\| object | Private properties, starting with \`__\`.<br/><br/>MAY be ignored by the consumers, as they have no cross-aligned, standardized semantics.<br/><br/><i>Additional properties MUST follow key name regexp pattern</i>: <code className="regex">^__.+$</code> |
+
+
+### Meta
+
+Meta information about the CSN document and its creator.
+
+**Type**: Object(<a href="#meta_creator">creator</a>, <a href="#meta_flavor">flavor</a>, <a href="#meta_document">document</a>, <a href="#meta_features">features</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="meta_creator">creator<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#meta_creator" title="Meta.creator"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Informal description of the creator of this CSN Document.<hr/>**Example Values**: <ul className="examples"><li>\`"CDS Compiler v4.5.0"\`</li></ul></div>|
+|<div className="interface-property-name anchor" id="meta_flavor">flavor<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#meta_flavor" title="Meta.flavor"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Informal hint which CSN flavor is used. The values are currently NOT standardized.<br/><br/>A CSN flavor can be understood as an alias to particular [feature set](#) of CSN overall.<br/>In CSN Interop we leave some features open and to be defined in the document itself, this is why we don't have a fixed flavor.<hr/>**Example Values**: <ul className="examples"><li>\`"effective"\`</li><li>\`"inferred"\`</li></ul></div>|
+|<div className="interface-property-name anchor" id="meta_document">document<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#meta_document" title="Meta.document"></a></div>|<div className="interface-property-type">[Document (Metadata)](#document-metadata)</div>|<div className="interface-property-description">Meta information about the document content.</div>|
+|<div className="interface-property-name anchor" id="meta_features">features<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#meta_features" title="Meta.features"></a></div>|<div className="interface-property-type">[Features (Metadata)](#features-metadata)</div>|<div className="interface-property-description">Feature dimensions that this CSN document fulfills.</div>|
+| Additional Properties<br/><i><code className="regex">^__.+$</code></i><br/><span className="optional">OPTIONAL</span> | string \\| number \\| boolean \\| array \\| object | Private properties, starting with \`__\`.<br/><br/>MAY be ignored by the consumers, as they have no cross-aligned, standardized semantics.<br/><br/><i>Additional properties MUST follow key name regexp pattern</i>: <code className="regex">^__.+$</code> |
+
+
+###### Example Values:
+
+
+\`\`\`js
+{
+  "creator": "CDS Compiler v4.5.0",
+  "flavor": "inferred",
+  "document": {
+    "version": "1.2.1"
+  }
+}
+\`\`\`
+
+
+### Document (Metadata)
+
+Metadata that describes the document (and what it represents) itself.
+
+**Type**: Object(<a href="#document-metadata_version">version</a>, <a href="#document-metadata_title">title</a>, <a href="#document-metadata_doc">doc</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="document-metadata_version">version<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#document-metadata_version" title="MetaDocument.version"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">The version of the CSN document / the described model itself (not the specification).<br/><br/>We RECOMMEND to use the [SemVer](https://semver.org/) standard.<hr/>**Example Values**: <ul className="examples"><li>\`"1.3.4"\`</li></ul></div>|
+|<div className="interface-property-name anchor" id="document-metadata_title">title<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#document-metadata_title" title="MetaDocument.title"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Human readable title for the CSN document (plain-text).<br/><br/>MUST NOT contain linebreaks.<hr/>**Maximum Length**: \`255\`</div>|
+|<div className="interface-property-name anchor" id="document-metadata_doc">doc<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#document-metadata_doc" title="MetaDocument.doc"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Human readable documentation that describes the overall CSN document.<br/><br/>SHOULD be provided and interpreted as [CommonMark](https://spec.commonmark.org/) (Markdown).</div>|
+
+
+### Features (Metadata)
+
+CSN feature-dimensions this document fulfills.
+
+It is RECOMMENDED to explicitly state all feature dimensions of the document.
+Otherwise the consumer cannot rely on the information and may have to figure this out on his own.
+
+**Type**: Object(<a href="#features-metadata_complete">complete</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="features-metadata_complete">complete<br/><span className="recommended">RECOMMENDED</span><a className="hash-link" href="#features-metadata_complete" title="MetaFeatures.complete"></a></div>|<div className="interface-property-type">boolean</div>|<div className="interface-property-description">Whether this document is complete and self-contained.<br/><br/>It is RECOMMENDED to have complete CSN documents and set this to \`true\`.<br/><br/>If true references to other CDS elements (e.g. \`cds.Association\`) MUST be resolvable within the same document.</div>|
+
+
+###### Example Values:
+
+
+\`\`\`js
+{
+  "complete": true
+}
+\`\`\`
+
+
+### Definitions
+
+Each entry in the definitions dictionary is a definition of a named modeling artefact.
+The \`name\` is the absolute, fully qualified name of the definition, and the value is a record with the definition details.
+
+Definition names MUST:
+- Not be an empty string.
+- Not start with \`@\`, \`__\`, \`.\`, \`::\`.
+- Not end with \`.\` or \`::\`.
+- Not contain the substring \`..\` or \`:::\`.
+- Not contain the substring \`::\` more than once.
+
+See [Primer: Definitions](../primer.md#definitions).
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| Additional Properties<br/><i><code className="regex">^(?![@]\\|__\\|\\\\.\\|\\:\\:).+$</code></i><br/><span className="optional">OPTIONAL</span> | [DefinitionEntry](#definitionentry) | <i>Additional properties MUST follow key name regexp pattern</i>: <code className="regex">^(?![@]\\|__\\|\\\\.\\|\\:\\:).+$</code> |
+| <i>*</i> | | <i>Additional, unspecified properties MAY be added to the object</i>. |
+
+
+###### Example Values:
+
+
+\`\`\`js
+{
+  "SomeEntity": {
+    "kind": "entity",
+    "elements": {
+      "SomeElement": {
+        "@SomeProperty.upperCase": true,
+        "type": "cds.String"
+      }
+    }
+  }
+}
+\`\`\`
+
+
+### DefinitionEntry
+
+Definition of a CDS modeling artifact, put into [Definitions](#definitions).
+
+**Type**: 
+[Context Definition](#context-definition) \\| [Entity Definition](#entity-definition) \\| [Service Definition](#service-definition) \\| [Type Definition](#type-definition)<br/>
+
+### Entity Definition
+
+Entity definition refers to the structured description of an object or concept.
+
+If it is exposed through a [Service](#service-definition), it describes a data model.
+To expose it through a Service, the service name MUST be prefixed to the Entity name, separated by a \`.\` (dot).
+The actual data serialization format is defined by the Service protocol and chosen data format [mapping](../mappings).
+
+If the entity is not exposed via a service, it only describes a conceptual domain object.
+
+**Type**: Object(<a href="#entity-definition_kind">kind</a>, <a href="#entity-definition_elements">elements</a>, <a href="#entity-definition_doc">doc</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="entity-definition_kind">kind<br/><span className="mandatory">MANDATORY</span><a className="hash-link" href="#entity-definition_kind" title="EntityDefinition.kind"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">The modeling artefact is an entity.<hr/>**Constant Value**: \`entity\`</div>|
+|<div className="interface-property-name anchor" id="entity-definition_elements">elements<br/><span className="mandatory">MANDATORY</span><a className="hash-link" href="#entity-definition_elements" title="EntityDefinition.elements"></a></div>|<div className="interface-property-type">[Element Definitions](#element-definitions)</div>|<div className="interface-property-description">Dictionary of the elements of the entity.<br/>The dictionary key is the element \`name\`, the value the element itself.<br/><br/>MUST have at least one element.</div>|
+|<div className="interface-property-name anchor" id="entity-definition_doc">doc<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#entity-definition_doc" title="EntityDefinition.doc"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Human readable documentation, usually for developer documentation.<br/><br/>SHOULD be provided and interpreted as [CommonMark](https://spec.commonmark.org/) (Markdown).<br/><br/>If a human readable title is needed, use the [@EndUserText.label](./extensions/end-user-text#endusertextlabel) annotation.</div>|
+| Additional Properties<br/><i><code className="regex">^(@\\|__).+$</code></i><br/><span className="optional">OPTIONAL</span> | string \\| number \\| boolean \\| array \\| object | Annotations or private properties MAY be added.<br/><br/>**Annotations** MUST start with \`@\`.<br/><br/>In CSN Interop Effective the annotations MUST follow the "flattened" form:<br/>Every record / object in an annotation will be flattened into a \`.\` (dot).<br/>Exception: Once there is an array, the flattening is stopped and the values inside the array are preserved as they are ("structured").<br/><br/>Correct annotations examples:<br/>- \`"@Common.bar": "foo"\`<br/>- \`"@Common.foo.bar": true\`<br/>- \`"@Common.array": [{ "foo": true }]\`<br/><br/>Or<br/><br/>**Private properties**, starting with \`__\`.<br/>MAY be ignored by the consumers, as they have no cross-aligned, standardized semantics.<br/><br/><i>Additional properties MUST follow key name regexp pattern</i>: <code className="regex">^(@\\|__).+$</code> |
+| <i>*</i> | | <i>Additional, unspecified properties MAY be added to the object</i>. |
+
+
+### Service Definition
+
+A CDS Service indicates that [Entities](#entity-definition) are exposed to outside consumers via an API.
+
+To assign Entities or Custom Types to a Service, their name MUST be prefixed with the service name, separated by a \`.\`.
+Please be aware that this will also change the \`target\` values of \`cds.Association\` and \`cds.Composition\`.
+For an example, see [airline-service.json](./examples/airline.md).
+
+A consumer MAY decide to shorten the names by only considering the Entities assigned to a particular Service and then removing the Service prefixes again.
+
+To indicate which assigned Entities are root in a composition hierarchy, use the [\`@ObjectModel.compositionRoot\`](./extensions/object-model#objectmodelcompositionroot) annotation.
+
+See [Primer: Service Definitions](../primer.md#service-definitions).
+
+**Type**: Object(<a href="#service-definition_kind">kind</a>, <a href="#service-definition_doc">doc</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="service-definition_kind">kind<br/><span className="mandatory">MANDATORY</span><a className="hash-link" href="#service-definition_kind" title="ServiceDefinition.kind"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">The modeling artefact is a service.<hr/>**Constant Value**: \`service\`</div>|
+|<div className="interface-property-name anchor" id="service-definition_doc">doc<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#service-definition_doc" title="ServiceDefinition.doc"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Human readable documentation, usually for developer documentation.<br/><br/>SHOULD be provided and interpreted as [CommonMark](https://spec.commonmark.org/) (Markdown).<br/><br/>If a human readable title is needed, use the [@EndUserText.label](./extensions/end-user-text#endusertextlabel) annotation.</div>|
+| Additional Properties<br/><i><code className="regex">^(@\\|__).+$</code></i><br/><span className="optional">OPTIONAL</span> | string \\| number \\| boolean \\| array \\| object | Annotations or private properties MAY be added.<br/><br/>**Annotations** MUST start with \`@\`.<br/><br/>In CSN Interop Effective the annotations MUST follow the "flattened" form:<br/>Every record / object in an annotation will be flattened into a \`.\` (dot).<br/>Exception: Once there is an array, the flattening is stopped and the values inside the array are preserved as they are ("structured").<br/><br/>Correct annotations examples:<br/>- \`"@Common.bar": "foo"\`<br/>- \`"@Common.foo.bar": true\`<br/>- \`"@Common.array": [{ "foo": true }]\`<br/><br/>Or<br/><br/>**Private properties**, starting with \`__\`.<br/>MAY be ignored by the consumers, as they have no cross-aligned, standardized semantics.<br/><br/><i>Additional properties MUST follow key name regexp pattern</i>: <code className="regex">^(@\\|__).+$</code> |
+| <i>*</i> | | <i>Additional, unspecified properties MAY be added to the object</i>. |
+
+
+### Context Definition
+
+A context corresponds to a CAP CSN Namespace.
+It is used to create a bounded context that bundles elements of different kinds together.
+
+To assign Services, Entities or Custom Types to a context, their name MUST be prefixed with the context name, separated by a \`.\`.
+
+The context can also be useful to avoid local or global name collisions.
+
+See [Primer: Context](../primer.md#context-definitions).
+
+**Type**: Object(<a href="#context-definition_kind">kind</a>, <a href="#context-definition_doc">doc</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="context-definition_kind">kind<br/><span className="mandatory">MANDATORY</span><a className="hash-link" href="#context-definition_kind" title="ContextDefinition.kind"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">The modeling artefact is a context.<hr/>**Constant Value**: \`context\`</div>|
+|<div className="interface-property-name anchor" id="context-definition_doc">doc<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#context-definition_doc" title="ContextDefinition.doc"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Human readable documentation, usually for developer documentation.<br/><br/>SHOULD be provided and interpreted as [CommonMark](https://spec.commonmark.org/) (Markdown).<br/><br/>If a human readable title is needed, use the [@EndUserText.label](./extensions/end-user-text#endusertextlabel) annotation.</div>|
+| Additional Properties<br/><i><code className="regex">^(@\\|__).+$</code></i><br/><span className="optional">OPTIONAL</span> | string \\| number \\| boolean \\| array \\| object | Annotations or private properties MAY be added.<br/><br/>**Annotations** MUST start with \`@\`.<br/><br/>In CSN Interop Effective the annotations MUST follow the "flattened" form:<br/>Every record / object in an annotation will be flattened into a \`.\` (dot).<br/>Exception: Once there is an array, the flattening is stopped and the values inside the array are preserved as they are ("structured").<br/><br/>Correct annotations examples:<br/>- \`"@Common.bar": "foo"\`<br/>- \`"@Common.foo.bar": true\`<br/>- \`"@Common.array": [{ "foo": true }]\`<br/><br/>Or<br/><br/>**Private properties**, starting with \`__\`.<br/>MAY be ignored by the consumers, as they have no cross-aligned, standardized semantics.<br/><br/><i>Additional properties MUST follow key name regexp pattern</i>: <code className="regex">^(@\\|__).+$</code> |
+| <i>*</i> | | <i>Additional, unspecified properties MAY be added to the object</i>. |
+
+
+### EntityRelationshipPropertyType
+
+Defines the logical Property Type of a property.
+The reason is to have an ID to relate to the property, especially to state that it can be used as an ID or is part of a composite ID.
+
+**Type:** string<br/>
+**Regex Pattern**: <code className="regex">^([a-z0-9-]+(?\\:[.][a-z0-9-]+)\\*)\\:([a-zA-Z0-9._\\\\-]+)(\\:v[1-9][0-9]\\*)?$</code>
+
+###### Example Values:
+
+
+\`\`\`js
+"sap.vdm.gfn:BillOfMaterialUUID"
+\`\`\`
+
+
+
+### i18n
+
+i18n contains translated texts for one or more languages.
+They are usually used in annotations like [\`@EnduserText\`](./extensions/end-user-text).
+
+Key is the language key, value is a dictionary of language text translations.
+
+The language key MUST follow the standard of [RFC 1766](https://datatracker.ietf.org/doc/rfc1766/) (or IETF's [BCP 47](https://www.rfc-editor.org/rfc/bcp/bcp47.txt)).
+
+See [Primer: Language-dependent annotation values](../primer.md#language-dependent-annotation-values).
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| Additional Properties<br/><i><code className="regex">^[a-zA-Z]\\{2,8\\}(-[a-zA-Z0-9]\\{1,8\\})\\{0,2\\}$</code></i><br/><span className="optional">OPTIONAL</span> | [Language texts](#language-texts) | <i>Additional properties MUST follow key name regexp pattern</i>: <code className="regex">^[a-zA-Z]\\{2,8\\}(-[a-zA-Z0-9]\\{1,8\\})\\{0,2\\}$</code> |
+| <i>*</i> | | <i>Additional, unspecified properties MAY be added to the object</i>. |
+
+
+###### Example Values:
+
+
+\`\`\`js
+{
+  "de": {
+    "I_COSTCENTER@ENDUSERTEXT.LABEL": "Kostenstelle",
+    "I_COSTCENTER.CONTROLLINGAREA@ENDUSERTEXT.LABEL": "Kostenrechnungskreis"
+  }
+}
+\`\`\`
+
+
+### Type Definition
+
+In CSN it is possible to define Custom Types.
+
+**Type**: 
+[Boolean Type Definition](#boolean-type-definition) \\| [String Type Definition](#string-type-definition)<br/>
+
+#### Boolean Type Definition
+
+A type definition of type \`cds.Boolean\`.
+
+**Type**: Object(<a href="#boolean-type-definition_kind">kind</a>, <a href="#boolean-type-definition_type">type</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="boolean-type-definition_kind">kind<br/><span className="mandatory">MANDATORY</span><a className="hash-link" href="#boolean-type-definition_kind" title="BooleanTypeDefinition.kind"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">The kind property is used when defining derived types. In this case Kind = "type".<hr/>**Constant Value**: \`type\`</div>|
+|<div className="interface-property-name anchor" id="boolean-type-definition_type">type<br/><span className="mandatory">MANDATORY</span><a className="hash-link" href="#boolean-type-definition_type" title="BooleanTypeDefinition.type"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">The modeling artefact is a \`cds.Boolean\` type.<hr/>**Constant Value**: \`cds.Boolean\`</div>|
+| Additional Properties<br/><i><code className="regex">^(@\\|__).+$</code></i><br/><span className="optional">OPTIONAL</span> | string \\| number \\| boolean \\| array \\| object | Annotations or private properties MAY be added.<br/><br/>**Annotations** MUST start with \`@\`.<br/><br/>In CSN Interop Effective the annotations MUST follow the "flattened" form:<br/>Every record / object in an annotation will be flattened into a \`.\` (dot).<br/>Exception: Once there is an array, the flattening is stopped and the values inside the array are preserved as they are ("structured").<br/><br/>Correct annotations examples:<br/>- \`"@Common.bar": "foo"\`<br/>- \`"@Common.foo.bar": true\`<br/>- \`"@Common.array": [{ "foo": true }]\`<br/><br/>Or<br/><br/>**Private properties**, starting with \`__\`.<br/>MAY be ignored by the consumers, as they have no cross-aligned, standardized semantics.<br/><br/><i>Additional properties MUST follow key name regexp pattern</i>: <code className="regex">^(@\\|__).+$</code> |
+| <i>*</i> | | <i>Additional, unspecified properties MAY be added to the object</i>. |
+
+
+###### Example Values:
+
+
+\`\`\`js
+{
+  "kind": "type",
+  "type": "cds.Boolean"
+}
+\`\`\`
+
+
+### Element Definitions
+
+Dictionary of Element where the key is the name of the element and the value its definition.
+
+The value can either be a standard [CDS Type](#cds-type) (\`cds.*\`) or a [Custom Type](#custom-type).
+
+Element names MUST:
+- Not be an empty string.
+- Not start with \`@\`, \`__\`, \`::\`.
+- Not end with \`::\`.
+- Not contain the substring \`.\` or \`:::\`.
+- Not contain the substring \`::\` more than once.
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| Additional Properties<br/><i><code className="regex">^(?![@]\\|__\\|\\\\.\\|\\:\\:).+$</code></i><br/><span className="optional">OPTIONAL</span> | [ElementEntry](#elemententry) | <i>Additional properties MUST follow key name regexp pattern</i>: <code className="regex">^(?![@]\\|__\\|\\\\.\\|\\:\\:).+$</code> |
+| <i>*</i> | | <i>Additional, unspecified properties MAY be added to the object</i>. |
+
+
+### ElementEntry
+
+Definition of an Element, as put into [Element Definitions](#element-definitions).
+
+An element can be either of a standard [CDS Types](#cds-type) or a [Custom Type](#custom-type).
+
+Please note that CSN Interop does not support arrays of scalar types or arrays of arrays, see [Primer: Cardinality](../primer.md#cardinality).
+
+**Type**: Object(<a href="#elemententry_type">type</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="elemententry_type">type<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#elemententry_type" title="ElementEntry.type"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description"></div>|
+
+
+#### String Type Definition
+
+A type definition of type \`cds.String\`.
+
+**Type**: Object(<a href="#string-type-definition_kind">kind</a>, <a href="#string-type-definition_type">type</a>, <a href="#string-type-definition_someoldproperty">someOldProperty</a>, <a href="#string-type-definition_somenewproperty">someNewProperty</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="string-type-definition_kind">kind<br/><span className="mandatory">MANDATORY</span><a className="hash-link" href="#string-type-definition_kind" title="StringTypeDefinition.kind"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">The kind property is used when defining derived types. In this case Kind = "type".<hr/>**Constant Value**: \`type\`</div>|
+|<div className="interface-property-name anchor" id="string-type-definition_type">type<br/><span className="mandatory">MANDATORY</span><a className="hash-link" href="#string-type-definition_type" title="StringTypeDefinition.type"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">The modeling artefact is a \`cds.String\` type.<hr/>**Constant Value**: \`cds.String\`</div>|
+|<div className="interface-property-name anchor" id="string-type-definition_someoldproperty">someOldProperty<br/><span className="optional">OPTIONAL</span><br/><span className="deprecated" title="Descriptive text here explaining the deprecation reason. Use \`someNewProperty\` instead.">DEPRECATED</span><a className="hash-link" href="#string-type-definition_someoldproperty" title="StringTypeDefinition.someOldProperty"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description"><span class="deprecated">DEPRECATION-TEXT</span>: Descriptive text here explaining the deprecation reason. Use \`someNewProperty\` instead.<hr/>Some old property that is specific to the \`cds.String\` type.<br/><br/>This property is optional and can be used to define additional properties of the \`cds.String\` type.<br/>It is not part of the standard CDS types, but can be used in custom definitions.<br/><strong>Introduced in Version</strong>: 1.3.0<br/><strong>Deprecated in Version</strong>: 1.9.9</div>|
+|<div className="interface-property-name anchor" id="string-type-definition_somenewproperty">someNewProperty<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#string-type-definition_somenewproperty" title="StringTypeDefinition.someNewProperty"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Some new property that is specific to the \`cds.String\` type.<br/><br/>This property is optional and can be used to define additional properties of the \`cds.String\` type.<br/>It is not part of the standard CDS types, but can be used in custom definitions.<hr/><strong>Introduced in Version</strong>: 1.9.9</div>|
+| Additional Properties<br/><i><code className="regex">^(@\\|__).+$</code></i><br/><span className="optional">OPTIONAL</span> | string \\| number \\| boolean \\| array \\| object | Annotations or private properties MAY be added.<br/><br/>**Annotations** MUST start with \`@\`.<br/><br/>In CSN Interop Effective the annotations MUST follow the "flattened" form:<br/>Every record / object in an annotation will be flattened into a \`.\` (dot).<br/>Exception: Once there is an array, the flattening is stopped and the values inside the array are preserved as they are ("structured").<br/><br/>Correct annotations examples:<br/>- \`"@Common.bar": "foo"\`<br/>- \`"@Common.foo.bar": true\`<br/>- \`"@Common.array": [{ "foo": true }]\`<br/><br/>Or<br/><br/>**Private properties**, starting with \`__\`.<br/>MAY be ignored by the consumers, as they have no cross-aligned, standardized semantics.<br/><br/><i>Additional properties MUST follow key name regexp pattern</i>: <code className="regex">^(@\\|__).+$</code> |
+| <i>*</i> | | <i>Additional, unspecified properties MAY be added to the object</i>. |
+
+
+###### Example Values:
+
+
+\`\`\`js
+{
+  "kind": "type",
+  "type": "cds.String",
+  "length": 3
+}
+\`\`\`
+
+
+### Language texts
+
+Language Text contains translations for one specific languages.
+
+Key is the i18n key, value is the translation of the term.
+
+An i18n pointer is a string that starts with \`{i18n>\` and ends with \`}\`. In between is the key.
+
+Example: To link to the i18n key \`I_COSTCENTER@ENDUSERTEXT.LABEL\`, the i18n pointer is \`{i18n>I_COSTCENTER@ENDUSERTEXT.LABEL}\`.
+
+The i18n pointers within the document MUST be fully self contained:
+- An i18n resolved pointer MUST be used (referred to) within this CSN document at least once.
+- All i18n pointers in this CSN document MUST have a corresponding i18n dictionary entry.
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| Additional Properties<br/><i><code className="regex">^.+$</code></i><br/><span className="optional">OPTIONAL</span> | string | Translation of the term.<br/><br/><i>Additional properties MUST follow key name regexp pattern</i>: <code className="regex">^.+$</code> |
+| <i>*</i> | | <i>Additional, unspecified properties MAY be added to the object</i>. |
+
+
+###### Example Values:
+
+
+\`\`\`js
+{
+  "I_COSTCENTER@ENDUSERTEXT.LABEL": "Kostenstelle",
+  "I_COSTCENTER.CONTROLLINGAREA@ENDUSERTEXT.LABEL": "Kostenrechnungskreis"
+}
+\`\`\`
+
+
+### Element Reference
+
+Element reference to an element within the current entity.
+
+**Type:** string
+
+## My-spec Outro Text Goes here
+
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam"
+`;
+
+exports[`CLI End-to-End Tests test 4: successful run with valid configuration file and valid spec extension schema files 2`] = `
+"---
+title: "Interface Documentation for my-spec-extension-1"
+description: "Describes the technical interface / schema for my-spec-extension-1."
+---
+
+## My-spec-extenion-1 Intro Text Goes here
+
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+
+## Schema Definitions
+
+* This is an extension vocabulary for [CSN Interop Effective Document](../my-spec).
+* The interface is available as JSON Schema: [my-spec-extension-1.schema.json](https://sap.github.io/csn-interop-specification/spec-v1/aggregation.schema.json#).
+
+### Annotations Overview
+
+| Annotation | Scope | Description |
+| -------- | ---- | ----------- |
+| [@Aggregation.default](#aggregationdefault) | Type | The element shall per default be aggregated using the annotated SQL aggregate function.<br/><br/>The chosen value defines which aggregation semantics should be applied.<br/>The aggregation types SUM, MAX, MIN, NOP are only allowed for elements with numeric type<br/><br/>> ℹ️ Note: There is an semantically equivalent annotation \`@DefaultAggregation\`, which is now obsolete.<br/>> As consumers are not expected to interpret \`@DefaultAggregation\`, providers shall consistently adopt \`@Aggregation.default\` for interoperability. |
+
+### @Aggregation.default
+
+The element shall per default be aggregated using the annotated SQL aggregate function.
+
+The chosen value defines which aggregation semantics should be applied.
+The aggregation types SUM, MAX, MIN, NOP are only allowed for elements with numeric type
+
+> ℹ️ Note: There is an semantically equivalent annotation \`@DefaultAggregation\`, which is now obsolete.
+> As consumers are not expected to interpret \`@DefaultAggregation\`, providers shall consistently adopt \`@Aggregation.default\` for interoperability.
+
+**Scope:** Type<br/>
+**Extending:** [TypeDefinition](../my-spec#type-definition), [BooleanTypeDefinition](../my-spec#boolean-type-definition), [StringTypeDefinition](../my-spec#string-type-definition)<br/>
+**Type**: Object(<a href="#aggregationdefault_#">#</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="aggregationdefault_#">#<br/><span className="mandatory">MANDATORY</span><a className="hash-link" href="#aggregationdefault_#" title="@Aggregation.default.#"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Provide the value in \`{ "#": "<value>" }\` enum notation.<hr/>**Allowed Values**: <ul><li><p>\`"NONE"\`: Indicates that the element is not a measure.<br/>Usually these elements are used in filters and GROUP BY-statements. Should not be used explicit.<br/>It is the default for all elements which can be mapped to a dimension.</p></li><li><p>\`"SUM"\`: Correspond to the standard SQL aggregation type.</p></li><li><p>\`"MIN"\`: Correspond to the standard SQL aggregation type.</p></li><li><p>\`"MAX"\`: Correspond to the standard SQL aggregation type.</p></li><li><p>\`"AVG"\`: Correspond to the standard SQL aggregation type.</p></li><li><p>\`"COUNT_DISTINCT"\`: Counts the number of distinct values of the element specified with \`@Aggregation.referenceElement\`.<br/><br/>> TODO: \`@Aggregation.referenceElement\` is not yet documented here.</p></li><li><p>\`"NOP"\`: Returns a value, if it is unique; otherwise it returns a special error value. It is the default in views with Analytics.dataCategory CUBE, FACT, and DIMENSION, if the data type of the element is numeric.</p></li><li><p>\`"FORMULA"\`: The element is a formula which has to be calculated after the operands have been determined by aggregation or calculation. It should never be aggregated. If the element is not a formula, then this value must not be used. It is only supported in analytical queries. Example: Margin : = Revenue / Cost. If in a report Margin should be shown per OrgUnit, then first the aggregates of Revenue and Cost have to be de-termined per OrgUnit and then the Margin has to be calculated per OrgUn-it. The Margin for the company is not the aggregate of the Margin per Or-gUnit but has to be calculated separately by Revenue for all OrgUnits divided by the Costs for all OrgUnits.</p></li></ul></div>|
+
+
+###### Example Values:
+
+
+\`\`\`js
+{
+  "#": "SUM"
+}
+\`\`\`
+
+## My-spec-extenion-1 Outro Text Goes here
+
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et"
+`;
+
+exports[`CLI End-to-End Tests test 4: successful run with valid configuration file and valid spec extension schema files 3`] = `
+"---
+title: "Interface Documentation for my-spec-extension-1"
+description: "Describes the technical interface / schema for my-spec-extension-1."
+---
+
+## My-spec-extenion-1 Intro Text Goes here
+
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+
+## Schema Definitions
+
+* This is an extension vocabulary for [CSN Interop Effective Document](../my-spec).
+* The interface is available as JSON Schema: [my-spec-extension-1.schema.json](https://sap.github.io/csn-interop-specification/spec-v1/aggregation.schema.json#).
+
+### Annotations Overview
+
+| Annotation | Scope | Description |
+| -------- | ---- | ----------- |
+| [@Aggregation.default](#aggregationdefault) | Type | The element shall per default be aggregated using the annotated SQL aggregate function.<br/><br/>The chosen value defines which aggregation semantics should be applied.<br/>The aggregation types SUM, MAX, MIN, NOP are only allowed for elements with numeric type<br/><br/>> ℹ️ Note: There is an semantically equivalent annotation \`@DefaultAggregation\`, which is now obsolete.<br/>> As consumers are not expected to interpret \`@DefaultAggregation\`, providers shall consistently adopt \`@Aggregation.default\` for interoperability. |
+
+### @Aggregation.default
+
+The element shall per default be aggregated using the annotated SQL aggregate function.
+
+The chosen value defines which aggregation semantics should be applied.
+The aggregation types SUM, MAX, MIN, NOP are only allowed for elements with numeric type
+
+> ℹ️ Note: There is an semantically equivalent annotation \`@DefaultAggregation\`, which is now obsolete.
+> As consumers are not expected to interpret \`@DefaultAggregation\`, providers shall consistently adopt \`@Aggregation.default\` for interoperability.
+
+**Scope:** Type<br/>
+**Extending:** [TypeDefinition](../my-spec#type-definition), [BooleanTypeDefinition](../my-spec#boolean-type-definition), [StringTypeDefinition](../my-spec#string-type-definition)<br/>
+**Type**: Object(<a href="#aggregationdefault_#">#</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="aggregationdefault_#">#<br/><span className="mandatory">MANDATORY</span><a className="hash-link" href="#aggregationdefault_#" title="@Aggregation.default.#"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Provide the value in \`{ "#": "<value>" }\` enum notation.<hr/>**Allowed Values**: <ul><li><p>\`"NONE"\`: Indicates that the element is not a measure.<br/>Usually these elements are used in filters and GROUP BY-statements. Should not be used explicit.<br/>It is the default for all elements which can be mapped to a dimension.</p></li><li><p>\`"SUM"\`: Correspond to the standard SQL aggregation type.</p></li><li><p>\`"MIN"\`: Correspond to the standard SQL aggregation type.</p></li><li><p>\`"MAX"\`: Correspond to the standard SQL aggregation type.</p></li><li><p>\`"AVG"\`: Correspond to the standard SQL aggregation type.</p></li><li><p>\`"COUNT_DISTINCT"\`: Counts the number of distinct values of the element specified with \`@Aggregation.referenceElement\`.<br/><br/>> TODO: \`@Aggregation.referenceElement\` is not yet documented here.</p></li><li><p>\`"NOP"\`: Returns a value, if it is unique; otherwise it returns a special error value. It is the default in views with Analytics.dataCategory CUBE, FACT, and DIMENSION, if the data type of the element is numeric.</p></li><li><p>\`"FORMULA"\`: The element is a formula which has to be calculated after the operands have been determined by aggregation or calculation. It should never be aggregated. If the element is not a formula, then this value must not be used. It is only supported in analytical queries. Example: Margin : = Revenue / Cost. If in a report Margin should be shown per OrgUnit, then first the aggregates of Revenue and Cost have to be de-termined per OrgUnit and then the Margin has to be calculated per OrgUn-it. The Margin for the company is not the aggregate of the Margin per Or-gUnit but has to be calculated separately by Revenue for all OrgUnits divided by the Costs for all OrgUnits.</p></li></ul></div>|
+
+
+###### Example Values:
+
+
+\`\`\`js
+{
+  "#": "SUM"
+}
+\`\`\`
+
+## My-spec-extenion-1 Outro Text Goes here
+
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et"
+`;
+
+exports[`CLI End-to-End Tests test 4: successful run with valid configuration file and valid spec extension schema files 4`] = `
+"{
+  "description": "This is the interface description of CSN Interop Effective v1.\\nIts purpose is to be an aligned import / export format for CSN that works across tech-stacks in a wider SAP ecosystem.\\n\\nFor a more extensive documentation on CSN in general, consider the [CAP CSN](https://cap.cloud.sap/docs/cds/csn) documentation.",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://sap.github.io/csn-interop-specification/spec-v1/csn-interop-effective.schema.json#",
+  "title": "CSN Interop Effective Document",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "format": "uri-reference",
+      "description": "Link to JSON Schema for this CSN Interop Effective document.\\nAdding this helps with automatic validation and code intelligence in some editors / IDEs.\\n\\nSee https://tour.json-schema.org/content/06-Combining-Subschemas/02-id-and-schema\\n",
+      "anyOf": [
+        {
+          "const": "https://sap.github.io/csn-interop-specification/spec-v1/csn-interop-effective.schema.json#"
+        },
+        {
+          "type": "string",
+          "format": "uri-reference"
+        }
+      ]
+    },
+    "$id": {
+      "type": "string",
+      "format": "uri-reference",
+      "description": "Optional URI for this document, that can acts as an ID or as location to retrieve the document.\\n\\nSee https://tour.json-schema.org/content/06-Combining-Subschemas/02-id-and-schema\\n"
+    },
+    "csnInteropEffective": {
+      "type": "string",
+      "description": "Existence of this property indicated that the file is a CSN Interop Effective document.\\nThe value states the specification version it has been created against.",
+      "enum": [
+        "1.0"
+      ]
+    },
+    "$version": {
+      "type": "string",
+      "description": "The version of the CDS CSN. For this version of CSN Interop it is fixed to \`2.0\`.\\n\\nThis MUST be provided to ensure that CSN Interop is a valid subset of CDS CSN in general.",
+      "enum": [
+        "2.0"
+      ]
+    },
+    "meta": {
+      "type": "object",
+      "description": "Meta information that apply to the CSN document as a whole.",
+      "$ref": "#/definitions/Meta"
+    },
+    "definitions": {
+      "$ref": "#/definitions/Definitions",
+      "description": "Dictionary of CSN modeling artifacts.\\n"
+    },
+    "i18n": {
+      "$ref": "#/definitions/i18n",
+      "description": "Dictionary of translated texts.\\n"
+    }
+  },
+  "patternProperties": {
+    "^__.+$": {
+      "type": [
+        "string",
+        "number",
+        "boolean",
+        "array",
+        "object"
+      ],
+      "description": "Private properties, starting with \`__\`.\\n\\nMAY be ignored by the consumers, as they have no cross-aligned, standardized semantics.\\n",
+      "tsType": "unknown // replaceKeyType_{PrivatePropertyKey}"
+    }
+  },
+  "required": [
+    "csnInteropEffective",
+    "$version",
+    "definitions"
+  ],
+  "additionalProperties": false,
+  "definitions": {
+    "Meta": {
+      "title": "Meta",
+      "type": "object",
+      "description": "Meta information about the CSN document and its creator.",
+      "properties": {
+        "creator": {
+          "type": "string",
+          "description": "Informal description of the creator of this CSN Document.",
+          "examples": [
+            "CDS Compiler v4.5.0"
+          ]
+        },
+        "flavor": {
+          "type": "string",
+          "description": "Informal hint which CSN flavor is used. The values are currently NOT standardized.\\n\\nA CSN flavor can be understood as an alias to particular [feature set](#) of CSN overall.\\nIn CSN Interop we leave some features open and to be defined in the document itself, this is why we don't have a fixed flavor.",
+          "examples": [
+            "effective",
+            "inferred"
+          ]
+        },
+        "document": {
+          "$ref": "#/definitions/MetaDocument"
+        },
+        "features": {
+          "$ref": "#/definitions/MetaFeatures"
+        }
+      },
+      "patternProperties": {
+        "^__.+$": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "Private properties, starting with \`__\`.\\n\\nMAY be ignored by the consumers, as they have no cross-aligned, standardized semantics.\\n",
+          "tsType": "unknown // replaceKeyType_{PrivatePropertyKey}"
+        }
+      },
+      "examples": [
+        {
+          "creator": "CDS Compiler v4.5.0",
+          "flavor": "inferred",
+          "document": {
+            "version": "1.2.1"
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "MetaDocument": {
+      "title": "Document (Metadata)",
+      "type": "object",
+      "description": "Metadata that describes the document (and what it represents) itself.",
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "The version of the CSN document / the described model itself (not the specification).\\n\\nWe RECOMMEND to use the [SemVer](https://semver.org/) standard.",
+          "examples": [
+            "1.3.4"
+          ]
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 255,
+          "description": "Human readable title for the CSN document (plain-text).\\n\\nMUST NOT contain linebreaks."
+        },
+        "doc": {
+          "type": "string",
+          "description": "Human readable documentation that describes the overall CSN document.\\n\\nSHOULD be provided and interpreted as [CommonMark](https://spec.commonmark.org/) (Markdown)."
+        }
+      },
+      "additionalProperties": false
+    },
+    "MetaFeatures": {
+      "title": "Features (Metadata)",
+      "type": "object",
+      "description": "CSN feature-dimensions this document fulfills.\\n\\nIt is RECOMMENDED to explicitly state all feature dimensions of the document.\\nOtherwise the consumer cannot rely on the information and may have to figure this out on his own.",
+      "properties": {
+        "complete": {
+          "type": "boolean",
+          "description": "Whether this document is complete and self-contained.\\n\\nIt is RECOMMENDED to have complete CSN documents and set this to \`true\`.\\n\\nIf true references to other CDS elements (e.g. \`cds.Association\`) MUST be resolvable within the same document."
+        }
+      },
+      "x-recommended": [
+        "complete"
+      ],
+      "examples": [
+        {
+          "complete": true
+        }
+      ],
+      "additionalProperties": false
+    },
+    "Definitions": {
+      "title": "Definitions",
+      "type": "object",
+      "description": "Each entry in the definitions dictionary is a definition of a named modeling artefact.\\nThe \`name\` is the absolute, fully qualified name of the definition, and the value is a record with the definition details.\\n\\nDefinition names MUST:\\n- Not be an empty string.\\n- Not start with \`@\`, \`__\`, \`.\`, \`::\`.\\n- Not end with \`.\` or \`::\`.\\n- Not contain the substring \`..\` or \`:::\`.\\n- Not contain the substring \`::\` more than once.\\n\\nSee [Primer: Definitions](../primer.md#definitions).",
+      "patternProperties": {
+        "^(?![@]|__|\\\\.|::).+$": {
+          "$ref": "#/definitions/DefinitionEntry"
+        }
+      },
+      "minProperties": 1,
+      "additionalProperties": true,
+      "examples": [
+        {
+          "SomeEntity": {
+            "kind": "entity",
+            "elements": {
+              "SomeElement": {
+                "@SomeProperty.upperCase": true,
+                "type": "cds.String"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "DefinitionEntry": {
+      "type": "object",
+      "description": "Definition of a CDS modeling artifact, put into [Definitions](#definitions).",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "context",
+            "entity",
+            "service",
+            "type"
+          ],
+          "description": "The modeling artefact kind.\\nIt's value is been used as a _discriminator_ to distinguish the matching schema that should be further validated."
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "context"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "$ref": "#/definitions/ContextDefinition"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "entity"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "$ref": "#/definitions/EntityDefinition"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "service"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "$ref": "#/definitions/ServiceDefinition"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "type": "string",
+                "const": "type"
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "then": {
+            "$ref": "#/definitions/TypeDefinition"
+          }
+        }
+      ],
+      "title": "DefinitionEntry"
+    },
+    "EntityDefinition": {
+      "title": "Entity Definition",
+      "type": "object",
+      "description": "Entity definition refers to the structured description of an object or concept.\\n\\nIf it is exposed through a [Service](#service-definition), it describes a data model.\\nTo expose it through a Service, the service name MUST be prefixed to the Entity name, separated by a \`.\` (dot).\\nThe actual data serialization format is defined by the Service protocol and chosen data format [mapping](../mappings).\\n\\nIf the entity is not exposed via a service, it only describes a conceptual domain object.",
+      "x-extension-points": [
+        "Entity"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "entity",
+          "description": "The modeling artefact is an entity.",
+          "tsType": "EntityKind"
+        },
+        "elements": {
+          "$ref": "#/definitions/ElementDefinitions"
+        },
+        "doc": {
+          "type": "string",
+          "description": "Human readable documentation, usually for developer documentation.\\n\\nSHOULD be provided and interpreted as [CommonMark](https://spec.commonmark.org/) (Markdown).\\n\\nIf a human readable title is needed, use the [@EndUserText.label](./extensions/end-user-text#endusertextlabel) annotation."
+        },
+        "abstract": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "Proper syntax element in ABAP CDS producing Abstract CDS Entities"
+        },
+        "customEntity": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "Proper syntax element in ABAP CDS producing Custom CDS Entities"
+        },
+        "tableFunction": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "Proper syntax element in ABAP CDS producing CDS Table Functions."
+        },
+        "externalEntity": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "Proper syntax element in ABAP CDS producing CDS  External Entities"
+        },
+        "providerContract": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "ABAP CDS Projection have the additional information of a provider contract"
+        },
+        "rootEntity": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "ABAP CDS Root View Entities define a RAP Business Object."
+        },
+        "transient": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "Special kind of analytical ABAP CDS Projection view."
+        },
+        "literal": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "In the selection element list of a CDS view."
+        },
+        "toCompositionChild": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "When redirecting associations in ABAP CDS Projections with the additional keywords \\"to composition child\\", this indicates a Parent-Child-Composition an requires the redirection target to have a matching \\"to parent\\" association redefinition."
+        },
+        "toParent": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "When redirecting associations in ABAP CDS Projections with the additional keywords \\"to composition child\\", this indicates a Parent-Child-Composition an requires the redirection target to have a matching \\"to parent\\" association redefinition."
+        },
+        "hana_on_asString": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "Contains the SQL on condition as string"
+        },
+        "@Consumption.valueHelpDefinition": {
+          "$ref": "#/definitions/@Consumption.valueHelpDefinition"
+        }
+      },
+      "patternProperties": {
+        "^(@|__).+$": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "Annotations or private properties MAY be added.\\n\\n**Annotations** MUST start with \`@\`.\\n\\nIn CSN Interop Effective the annotations MUST follow the \\"flattened\\" form:\\nEvery record / object in an annotation will be flattened into a \`.\` (dot).\\nException: Once there is an array, the flattening is stopped and the values inside the array are preserved as they are (\\"structured\\").\\n\\nCorrect annotations examples:\\n- \`\\"@Common.bar\\": \\"foo\\"\`\\n- \`\\"@Common.foo.bar\\": true\`\\n- \`\\"@Common.array\\": [{ \\"foo\\": true }]\`\\n\\nOr\\n\\n**Private properties**, starting with \`__\`.\\nMAY be ignored by the consumers, as they have no cross-aligned, standardized semantics.",
+          "tsType": "unknown // replaceKeyType_{PrivatePropertyKey|AnnotationPropertyKey}"
+        }
+      },
+      "required": [
+        "kind",
+        "elements"
+      ],
+      "additionalProperties": true
+    },
+    "ServiceDefinition": {
+      "title": "Service Definition",
+      "type": "object",
+      "description": "A CDS Service indicates that [Entities](#entity-definition) are exposed to outside consumers via an API.\\n\\nTo assign Entities or Custom Types to a Service, their name MUST be prefixed with the service name, separated by a \`.\`.\\nPlease be aware that this will also change the \`target\` values of \`cds.Association\` and \`cds.Composition\`.\\nFor an example, see [airline-service.json](./examples/airline.md).\\n\\nA consumer MAY decide to shorten the names by only considering the Entities assigned to a particular Service and then removing the Service prefixes again.\\n\\nTo indicate which assigned Entities are root in a composition hierarchy, use the [\`@ObjectModel.compositionRoot\`](./extensions/object-model#objectmodelcompositionroot) annotation.\\n\\nSee [Primer: Service Definitions](../primer.md#service-definitions).",
+      "x-extension-points": [
+        "Service"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "service",
+          "description": "The modeling artefact is a service.",
+          "tsType": "ServiceKind"
+        },
+        "doc": {
+          "type": "string",
+          "description": "Human readable documentation, usually for developer documentation.\\n\\nSHOULD be provided and interpreted as [CommonMark](https://spec.commonmark.org/) (Markdown).\\n\\nIf a human readable title is needed, use the [@EndUserText.label](./extensions/end-user-text#endusertextlabel) annotation."
+        }
+      },
+      "patternProperties": {
+        "^(@|__).+$": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "Annotations or private properties MAY be added.\\n\\n**Annotations** MUST start with \`@\`.\\n\\nIn CSN Interop Effective the annotations MUST follow the \\"flattened\\" form:\\nEvery record / object in an annotation will be flattened into a \`.\` (dot).\\nException: Once there is an array, the flattening is stopped and the values inside the array are preserved as they are (\\"structured\\").\\n\\nCorrect annotations examples:\\n- \`\\"@Common.bar\\": \\"foo\\"\`\\n- \`\\"@Common.foo.bar\\": true\`\\n- \`\\"@Common.array\\": [{ \\"foo\\": true }]\`\\n\\nOr\\n\\n**Private properties**, starting with \`__\`.\\nMAY be ignored by the consumers, as they have no cross-aligned, standardized semantics.",
+          "tsType": "unknown // replaceKeyType_{PrivatePropertyKey|AnnotationPropertyKey}"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "additionalProperties": true
+    },
+    "ContextDefinition": {
+      "title": "Context Definition",
+      "type": "object",
+      "description": "A context corresponds to a CAP CSN Namespace.\\nIt is used to create a bounded context that bundles elements of different kinds together.\\n\\nTo assign Services, Entities or Custom Types to a context, their name MUST be prefixed with the context name, separated by a \`.\`.\\n\\nThe context can also be useful to avoid local or global name collisions.\\n\\nSee [Primer: Context](../primer.md#context-definitions).",
+      "x-extension-points": [
+        "Context"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "context",
+          "description": "The modeling artefact is a context.",
+          "tsType": "ContextKind"
+        },
+        "doc": {
+          "type": "string",
+          "description": "Human readable documentation, usually for developer documentation.\\n\\nSHOULD be provided and interpreted as [CommonMark](https://spec.commonmark.org/) (Markdown).\\n\\nIf a human readable title is needed, use the [@EndUserText.label](./extensions/end-user-text#endusertextlabel) annotation."
+        }
+      },
+      "patternProperties": {
+        "^(@|__).+$": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "Annotations or private properties MAY be added.\\n\\n**Annotations** MUST start with \`@\`.\\n\\nIn CSN Interop Effective the annotations MUST follow the \\"flattened\\" form:\\nEvery record / object in an annotation will be flattened into a \`.\` (dot).\\nException: Once there is an array, the flattening is stopped and the values inside the array are preserved as they are (\\"structured\\").\\n\\nCorrect annotations examples:\\n- \`\\"@Common.bar\\": \\"foo\\"\`\\n- \`\\"@Common.foo.bar\\": true\`\\n- \`\\"@Common.array\\": [{ \\"foo\\": true }]\`\\n\\nOr\\n\\n**Private properties**, starting with \`__\`.\\nMAY be ignored by the consumers, as they have no cross-aligned, standardized semantics.",
+          "tsType": "unknown // replaceKeyType_{PrivatePropertyKey|AnnotationPropertyKey}"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "additionalProperties": true
+    },
+    "EntityRelationshipPropertyType": {
+      "title": "EntityRelationshipPropertyType",
+      "type": "string",
+      "description": "Defines the logical Property Type of a property.\\nThe reason is to have an ID to relate to the property, especially to state that it can be used as an ID or is part of a composite ID.",
+      "pattern": "^([a-z0-9-]+(?:[.][a-z0-9-]+)*):([a-zA-Z0-9._\\\\-]+)(:v[1-9][0-9]*)?$",
+      "examples": [
+        "sap.vdm.gfn:BillOfMaterialUUID"
+      ]
+    },
+    "i18n": {
+      "title": "i18n",
+      "type": "object",
+      "description": "i18n contains translated texts for one or more languages.\\nThey are usually used in annotations like [\`@EnduserText\`](./extensions/end-user-text).\\n\\nKey is the language key, value is a dictionary of language text translations.\\n\\nThe language key MUST follow the standard of [RFC 1766](https://datatracker.ietf.org/doc/rfc1766/) (or IETF's [BCP 47](https://www.rfc-editor.org/rfc/bcp/bcp47.txt)).\\n\\nSee [Primer: Language-dependent annotation values](../primer.md#language-dependent-annotation-values).",
+      "patternProperties": {
+        "^[a-zA-Z]{2,8}(-[a-zA-Z0-9]{1,8}){0,2}$": {
+          "$ref": "#/definitions/LanguageText"
+        }
+      },
+      "additionalProperties": true,
+      "examples": [
+        {
+          "de": {
+            "I_COSTCENTER@ENDUSERTEXT.LABEL": "Kostenstelle",
+            "I_COSTCENTER.CONTROLLINGAREA@ENDUSERTEXT.LABEL": "Kostenrechnungskreis"
+          }
+        }
+      ]
+    },
+    "TypeDefinition": {
+      "title": "Type Definition",
+      "type": "object",
+      "description": "In CSN it is possible to define Custom Types.",
+      "x-extension-points": [
+        "Type"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "type",
+          "description": "The kind property is used when defining derived types.\\nIn this case \`Kind = \\"type\\"\` MUST be provided.",
+          "tsType": "TypeKind"
+        },
+        "type": {
+          "type": "string",
+          "description": "The CDS data type of the derived type.\\n\\nCustom types in CSN Interop Effective MUST always point to a \`cds.*\` type.",
+          "enum": [
+            "cds.Boolean",
+            "cds.String"
+          ]
+        },
+        "@Aggregation.default": {
+          "$ref": "#/definitions/@Aggregation.default"
+        },
+        "@Consumption.valueHelpDefinition": {
+          "$ref": "#/definitions/@Consumption.valueHelpDefinition"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "cds.Boolean"
+              }
+            },
+            "required": [
+              "kind",
+              "type"
+            ]
+          },
+          "then": {
+            "$ref": "#/definitions/BooleanTypeDefinition"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "cds.String"
+              }
+            },
+            "required": [
+              "kind",
+              "type"
+            ]
+          },
+          "then": {
+            "$ref": "#/definitions/StringTypeDefinition"
+          }
+        }
+      ],
+      "required": [
+        "kind",
+        "type"
+      ]
+    },
+    "BooleanTypeDefinition": {
+      "title": "Boolean Type Definition",
+      "type": "object",
+      "description": "A type definition of type \`cds.Boolean\`.",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "type",
+          "description": "The kind property is used when defining derived types. In this case Kind = \\"type\\"."
+        },
+        "type": {
+          "type": "string",
+          "const": "cds.Boolean",
+          "description": "The modeling artefact is a \`cds.Boolean\` type.",
+          "tsType": "BooleanCdsType"
+        },
+        "@Aggregation.default": {
+          "$ref": "#/definitions/@Aggregation.default"
+        },
+        "@Consumption.valueHelpDefinition": {
+          "$ref": "#/definitions/@Consumption.valueHelpDefinition"
+        }
+      },
+      "patternProperties": {
+        "^(@|__).+$": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "Annotations or private properties MAY be added.\\n\\n**Annotations** MUST start with \`@\`.\\n\\nIn CSN Interop Effective the annotations MUST follow the \\"flattened\\" form:\\nEvery record / object in an annotation will be flattened into a \`.\` (dot).\\nException: Once there is an array, the flattening is stopped and the values inside the array are preserved as they are (\\"structured\\").\\n\\nCorrect annotations examples:\\n- \`\\"@Common.bar\\": \\"foo\\"\`\\n- \`\\"@Common.foo.bar\\": true\`\\n- \`\\"@Common.array\\": [{ \\"foo\\": true }]\`\\n\\nOr\\n\\n**Private properties**, starting with \`__\`.\\nMAY be ignored by the consumers, as they have no cross-aligned, standardized semantics.",
+          "tsType": "unknown // replaceKeyType_{PrivatePropertyKey|AnnotationPropertyKey}"
+        }
+      },
+      "required": [
+        "kind",
+        "type"
+      ],
+      "additionalProperties": true,
+      "x-extension-points": [
+        "Type",
+        "BooleanType"
+      ],
+      "examples": [
+        {
+          "kind": "type",
+          "type": "cds.Boolean"
+        }
+      ]
+    },
+    "ElementDefinitions": {
+      "title": "Element Definitions",
+      "type": "object",
+      "description": "Dictionary of Element where the key is the name of the element and the value its definition.\\n\\nThe value can either be a standard [CDS Type](#cds-type) (\`cds.*\`) or a [Custom Type](#custom-type).\\n\\nElement names MUST:\\n- Not be an empty string.\\n- Not start with \`@\`, \`__\`, \`::\`.\\n- Not end with \`::\`.\\n- Not contain the substring \`.\` or \`:::\`.\\n- Not contain the substring \`::\` more than once.",
+      "minProperties": 1,
+      "patternProperties": {
+        "^(?![@]|__|\\\\.|::).+$": {
+          "$ref": "#/definitions/ElementEntry"
+        }
+      },
+      "additionalProperties": true
+    },
+    "ElementEntry": {
+      "type": "object",
+      "description": "Definition of an Element, as put into [Element Definitions](#element-definitions).\\n\\nAn element can be either of a standard [CDS Types](#cds-type) or a [Custom Type](#custom-type).\\n\\nPlease note that CSN Interop does not support arrays of scalar types or arrays of arrays, see [Primer: Cardinality](../primer.md#cardinality).",
+      "properties": {
+        "type": {
+          "type": "string"
+        }
+      },
+      "title": "ElementEntry"
+    },
+    "StringTypeDefinition": {
+      "title": "String Type Definition",
+      "type": "object",
+      "description": "A type definition of type \`cds.String\`.",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "type",
+          "description": "The kind property is used when defining derived types. In this case Kind = \\"type\\"."
+        },
+        "type": {
+          "type": "string",
+          "const": "cds.String",
+          "description": "The modeling artefact is a \`cds.String\` type.",
+          "tsType": "StringCdsType"
+        },
+        "someOldProperty": {
+          "type": "string",
+          "description": "Some old property that is specific to the \`cds.String\` type.\\n\\nThis property is optional and can be used to define additional properties of the \`cds.String\` type.\\nIt is not part of the standard CDS types, but can be used in custom definitions.",
+          "x-introduced-in-version": "1.3.0"
+        },
+        "someNewProperty": {
+          "type": "string",
+          "description": "Some new property that is specific to the \`cds.String\` type.\\n\\nThis property is optional and can be used to define additional properties of the \`cds.String\` type.\\nIt is not part of the standard CDS types, but can be used in custom definitions.",
+          "x-introduced-in-version": "1.9.9"
+        },
+        "@Aggregation.default": {
+          "$ref": "#/definitions/@Aggregation.default"
+        },
+        "@Consumption.valueHelpDefinition": {
+          "$ref": "#/definitions/@Consumption.valueHelpDefinition"
+        }
+      },
+      "patternProperties": {
+        "^(@|__).+$": {
+          "type": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ],
+          "description": "Annotations or private properties MAY be added.\\n\\n**Annotations** MUST start with \`@\`.\\n\\nIn CSN Interop Effective the annotations MUST follow the \\"flattened\\" form:\\nEvery record / object in an annotation will be flattened into a \`.\` (dot).\\nException: Once there is an array, the flattening is stopped and the values inside the array are preserved as they are (\\"structured\\").\\n\\nCorrect annotations examples:\\n- \`\\"@Common.bar\\": \\"foo\\"\`\\n- \`\\"@Common.foo.bar\\": true\`\\n- \`\\"@Common.array\\": [{ \\"foo\\": true }]\`\\n\\nOr\\n\\n**Private properties**, starting with \`__\`.\\nMAY be ignored by the consumers, as they have no cross-aligned, standardized semantics.",
+          "tsType": "unknown // replaceKeyType_{PrivatePropertyKey|AnnotationPropertyKey}"
+        }
+      },
+      "required": [
+        "type",
+        "kind"
+      ],
+      "additionalProperties": true,
+      "x-extension-points": [
+        "Type",
+        "StringType"
+      ],
+      "examples": [
+        {
+          "kind": "type",
+          "type": "cds.String",
+          "length": 3
+        }
+      ]
+    },
+    "LanguageText": {
+      "title": "Language texts",
+      "type": "object",
+      "description": "Language Text contains translations for one specific languages.\\n\\nKey is the i18n key, value is the translation of the term.\\n\\nAn i18n pointer is a string that starts with \`{i18n>\` and ends with \`}\`. In between is the key.\\n\\nExample: To link to the i18n key \`I_COSTCENTER@ENDUSERTEXT.LABEL\`, the i18n pointer is \`{i18n>I_COSTCENTER@ENDUSERTEXT.LABEL}\`.\\n\\nThe i18n pointers within the document MUST be fully self contained:\\n- An i18n resolved pointer MUST be used (referred to) within this CSN document at least once.\\n- All i18n pointers in this CSN document MUST have a corresponding i18n dictionary entry.",
+      "patternProperties": {
+        "^.+$": {
+          "type": "string",
+          "description": "Translation of the term."
+        }
+      },
+      "additionalProperties": true,
+      "examples": [
+        {
+          "I_COSTCENTER@ENDUSERTEXT.LABEL": "Kostenstelle",
+          "I_COSTCENTER.CONTROLLINGAREA@ENDUSERTEXT.LABEL": "Kostenrechnungskreis"
+        }
+      ]
+    },
+    "ElementReference": {
+      "title": "Element Reference",
+      "description": "Element reference to an element within the current entity.",
+      "type": "string"
+    },
+    "@Aggregation.default": {
+      "description": "The element shall per default be aggregated using the annotated SQL aggregate function.\\n\\nThe chosen value defines which aggregation semantics should be applied.\\nThe aggregation types SUM, MAX, MIN, NOP are only allowed for elements with numeric type\\n\\n> ℹ️ Note: There is an semantically equivalent annotation \`@DefaultAggregation\`, which is now obsolete.\\n> As consumers are not expected to interpret \`@DefaultAggregation\`, providers shall consistently adopt \`@Aggregation.default\` for interoperability.",
+      "type": "object",
+      "properties": {
+        "#": {
+          "type": "string",
+          "description": "Provide the value in \`{ \\"#\\": \\"<value>\\" }\` enum notation.",
+          "oneOf": [
+            {
+              "const": "NONE",
+              "description": "Indicates that the element is not a measure.\\nUsually these elements are used in filters and GROUP BY-statements. Should not be used explicit.\\nIt is the default for all elements which can be mapped to a dimension."
+            },
+            {
+              "const": "SUM",
+              "description": "Correspond to the standard SQL aggregation type."
+            },
+            {
+              "const": "MIN",
+              "description": "Correspond to the standard SQL aggregation type."
+            },
+            {
+              "const": "MAX",
+              "description": "Correspond to the standard SQL aggregation type."
+            },
+            {
+              "const": "AVG",
+              "description": "Correspond to the standard SQL aggregation type."
+            },
+            {
+              "const": "COUNT_DISTINCT",
+              "description": "Counts the number of distinct values of the element specified with \`@Aggregation.referenceElement\`.\\n\\n> TODO: \`@Aggregation.referenceElement\` is not yet documented here."
+            },
+            {
+              "const": "NOP",
+              "description": "Returns a value, if it is unique; otherwise it returns a special error value. It is the default in views with Analytics.dataCategory CUBE, FACT, and DIMENSION, if the data type of the element is numeric."
+            },
+            {
+              "const": "FORMULA",
+              "description": "The element is a formula which has to be calculated after the operands have been determined by aggregation or calculation. It should never be aggregated. If the element is not a formula, then this value must not be used. It is only supported in analytical queries. Example: Margin : = Revenue / Cost. If in a report Margin should be shown per OrgUnit, then first the aggregates of Revenue and Cost have to be de-termined per OrgUnit and then the Margin has to be calculated per OrgUn-it. The Margin for the company is not the aggregate of the Margin per Or-gUnit but has to be calculated separately by Revenue for all OrgUnits divided by the Costs for all OrgUnits."
+            }
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "#"
+      ],
+      "x-extension-targets": [
+        "Type"
+      ],
+      "examples": [
+        {
+          "#": "SUM"
+        }
+      ]
+    },
+    "@Consumption.valueHelpDefinition": {
+      "type": "array",
+      "description": "The property defines how value helps for this element shall be constructed.\\n\\nIt allows to associate a (set of) View/Entity that provides the \\"Value Help\\" for the annotated field or parameter.\\nThis is achieved by either referencing the target view/entity of a modelled association or by directly establishing a relationship to view/entity that shall act as a value help provider.",
+      "items": {
+        "$ref": "#/definitions/@Consumption.ConsumptionValueHelpDefinition"
+      },
+      "x-extension-targets": [
+        "Entity",
+        "Type"
+      ]
+    },
+    "@Consumption.ConsumptionValueHelpDefinition": {
+      "title": "Consumption Value Help Definition",
+      "type": "object",
+      "properties": {
+        "entity": {
+          "$ref": "#/definitions/@Consumption.ConsumptionValueHelpDefinition.Entity"
+        },
+        "additionalBinding": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/@Consumption.ConsumptionValueHelpDefinition.AdditionalBinding"
+          },
+          "description": "Additional bindings for filtering the value help result list."
+        },
+        "association": {
+          "$ref": "#/definitions/ElementReference"
+        },
+        "distinctValues": {
+          "type": "boolean",
+          "description": "Specifies whether the value help result list shall only contain distinct values for the annotated field or parameter.\\nIf set to true all mappings will be used for filtering, but only the value for the field/parameter which the value help was requested for will be returned by the value help.",
+          "default": true
+        }
+      },
+      "additionalProperties": false,
+      "examples": [
+        {
+          "entity": {
+            "name": "I_ControllingAreaStdVH",
+            "element": "ControllingArea"
+          }
+        },
+        {
+          "entity": {
+            "name": "I_CostCenterStdVH",
+            "element": "CostCenter"
+          },
+          "additionalBinding": [
+            {
+              "localElement": "ControllingArea",
+              "element": "ControllingArea"
+            }
+          ]
+        },
+        {
+          "association": {
+            "=": "to_Airline"
+          }
+        }
+      ]
+    },
+    "@Consumption.ConsumptionValueHelpDefinition.Entity": {
+      "title": "Consumption Value Help Definition",
+      "description": "Value help defining view or entity.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the value help providing view or entity"
+        },
+        "element": {
+          "type": "string",
+          "description": "Name of the field of the value help view or entity, which the annotated local field or parameter is bound to.\\n\\nMutually exclusive to the usage of \`valueHelpDefinition.association\`."
+        }
+      },
+      "additionalProperties": false
+    },
+    "@Consumption.ConsumptionValueHelpDefinition.AdditionalBinding": {
+      "title": "Additional Binding",
+      "description": "Allows to define additional bindings (besides the ones defined by \`valueHelpDefinition.association\` or \`valueHelpDefinition.entity\`) for filtering the value help result list and/or returning values from the selected value help record.",
+      "type": "object",
+      "properties": {
+        "localElement": {
+          "type": "string",
+          "description": "Field of the current view/entity; mutually exclusive to the usage of \`localParameter\`."
+        },
+        "element": {
+          "type": "string",
+          "description": "Name of the field of the value help view or entity, which the annotated local field or parameter is bound to."
+        },
+        "usage": {
+          "$ref": "#/definitions/@Consumption.ConsumptionValueHelpDefinition.AdditionalBinding.Usage"
+        }
+      },
+      "additionalProperties": false
+    },
+    "@Consumption.ConsumptionValueHelpDefinition.AdditionalBinding.Usage": {
+      "type": "object",
+      "description": "The binding may either specify an additional filter-criterion on the value help list (\`#FILTER\`), or an additional result mapping for the selected value help record (\`#RESULT\`) or a combination thereof (\`#FILTER_AND_RESULT\`).\\nIf not specified explicitly the usage is \`#FILTER_AND_RESULT\`.\\nIf distinctValues is set to true, additional bindings must specify the usage as \`#FILTER\`.",
+      "properties": {
+        "#": {
+          "type": "string",
+          "description": "Provide the value in \`{ \\"#\\": \\"<value>\\" }\` enum notation.",
+          "enum": [
+            "FILTER",
+            "RESULT",
+            "FILTER_AND_RESULT"
+          ],
+          "default": "FILTER_AND_RESULT"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "#"
+      ],
+      "examples": [
+        {
+          "#": "FILTER_AND_RESULT"
+        }
+      ]
+    }
+  }
+}"
+`;
+
+exports[`CLI End-to-End Tests test 4: successful run with valid configuration file and valid spec extension schema files 5`] = `
+"{
+  "description": "This is the interface description of @Annotation.",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://sap.github.io/csn-interop-specification/spec-v1/aggregation.schema.json#",
+  "title": "Aggregation Document",
+  "type": "object",
+  "definitions": {
+    "@Aggregation.default": {
+      "description": "The element shall per default be aggregated using the annotated SQL aggregate function.\\n\\nThe chosen value defines which aggregation semantics should be applied.\\nThe aggregation types SUM, MAX, MIN, NOP are only allowed for elements with numeric type\\n\\n> ℹ️ Note: There is an semantically equivalent annotation \`@DefaultAggregation\`, which is now obsolete.\\n> As consumers are not expected to interpret \`@DefaultAggregation\`, providers shall consistently adopt \`@Aggregation.default\` for interoperability.",
+      "type": "object",
+      "properties": {
+        "#": {
+          "type": "string",
+          "description": "Provide the value in \`{ \\"#\\": \\"<value>\\" }\` enum notation.",
+          "oneOf": [
+            {
+              "const": "NONE",
+              "description": "Indicates that the element is not a measure.\\nUsually these elements are used in filters and GROUP BY-statements. Should not be used explicit.\\nIt is the default for all elements which can be mapped to a dimension."
+            },
+            {
+              "const": "SUM",
+              "description": "Correspond to the standard SQL aggregation type."
+            },
+            {
+              "const": "MIN",
+              "description": "Correspond to the standard SQL aggregation type."
+            },
+            {
+              "const": "MAX",
+              "description": "Correspond to the standard SQL aggregation type."
+            },
+            {
+              "const": "AVG",
+              "description": "Correspond to the standard SQL aggregation type."
+            },
+            {
+              "const": "COUNT_DISTINCT",
+              "description": "Counts the number of distinct values of the element specified with \`@Aggregation.referenceElement\`.\\n\\n> TODO: \`@Aggregation.referenceElement\` is not yet documented here."
+            },
+            {
+              "const": "NOP",
+              "description": "Returns a value, if it is unique; otherwise it returns a special error value. It is the default in views with Analytics.dataCategory CUBE, FACT, and DIMENSION, if the data type of the element is numeric."
+            },
+            {
+              "const": "FORMULA",
+              "description": "The element is a formula which has to be calculated after the operands have been determined by aggregation or calculation. It should never be aggregated. If the element is not a formula, then this value must not be used. It is only supported in analytical queries. Example: Margin : = Revenue / Cost. If in a report Margin should be shown per OrgUnit, then first the aggregates of Revenue and Cost have to be de-termined per OrgUnit and then the Margin has to be calculated per OrgUn-it. The Margin for the company is not the aggregate of the Margin per Or-gUnit but has to be calculated separately by Revenue for all OrgUnits divided by the Costs for all OrgUnits."
+            }
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "#"
+      ],
+      "x-extension-targets": [
+        "Type"
+      ],
+      "examples": [
+        {
+          "#": "SUM"
+        }
+      ],
+      "title": "@Aggregation.default"
+    }
+  }
+}"
+`;
+
+exports[`CLI End-to-End Tests test 4: successful run with valid configuration file and valid spec extension schema files 6`] = `
+"{
+  "description": "This is the interface description of @Annotation.",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://sap.github.io/csn-interop-specification/spec-v1/aggregation.schema.json#",
+  "title": "Aggregation Document",
+  "type": "object",
+  "definitions": {
+    "@Aggregation.default": {
+      "description": "The element shall per default be aggregated using the annotated SQL aggregate function.\\n\\nThe chosen value defines which aggregation semantics should be applied.\\nThe aggregation types SUM, MAX, MIN, NOP are only allowed for elements with numeric type\\n\\n> ℹ️ Note: There is an semantically equivalent annotation \`@DefaultAggregation\`, which is now obsolete.\\n> As consumers are not expected to interpret \`@DefaultAggregation\`, providers shall consistently adopt \`@Aggregation.default\` for interoperability.",
+      "type": "object",
+      "properties": {
+        "#": {
+          "type": "string",
+          "description": "Provide the value in \`{ \\"#\\": \\"<value>\\" }\` enum notation.",
+          "oneOf": [
+            {
+              "const": "NONE",
+              "description": "Indicates that the element is not a measure.\\nUsually these elements are used in filters and GROUP BY-statements. Should not be used explicit.\\nIt is the default for all elements which can be mapped to a dimension."
+            },
+            {
+              "const": "SUM",
+              "description": "Correspond to the standard SQL aggregation type."
+            },
+            {
+              "const": "MIN",
+              "description": "Correspond to the standard SQL aggregation type."
+            },
+            {
+              "const": "MAX",
+              "description": "Correspond to the standard SQL aggregation type."
+            },
+            {
+              "const": "AVG",
+              "description": "Correspond to the standard SQL aggregation type."
+            },
+            {
+              "const": "COUNT_DISTINCT",
+              "description": "Counts the number of distinct values of the element specified with \`@Aggregation.referenceElement\`.\\n\\n> TODO: \`@Aggregation.referenceElement\` is not yet documented here."
+            },
+            {
+              "const": "NOP",
+              "description": "Returns a value, if it is unique; otherwise it returns a special error value. It is the default in views with Analytics.dataCategory CUBE, FACT, and DIMENSION, if the data type of the element is numeric."
+            },
+            {
+              "const": "FORMULA",
+              "description": "The element is a formula which has to be calculated after the operands have been determined by aggregation or calculation. It should never be aggregated. If the element is not a formula, then this value must not be used. It is only supported in analytical queries. Example: Margin : = Revenue / Cost. If in a report Margin should be shown per OrgUnit, then first the aggregates of Revenue and Cost have to be de-termined per OrgUnit and then the Margin has to be calculated per OrgUn-it. The Margin for the company is not the aggregate of the Margin per Or-gUnit but has to be calculated separately by Revenue for all OrgUnits divided by the Costs for all OrgUnits."
+            }
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "#"
+      ],
+      "x-extension-targets": [
+        "Type"
+      ],
+      "examples": [
+        {
+          "#": "SUM"
+        }
+      ],
+      "title": "@Aggregation.default"
+    }
+  }
+}"
+`;
+
+exports[`CLI End-to-End Tests test 4: successful run with valid configuration file and valid spec extension schema files 7`] = `
+"// AUTO-GENERATED definition files. Do not modify directly.
+
+/**
+ * Definition of a CDS modeling artifact, put into [Definitions](#definitions).
+ *
+ * This interface was referenced by \`Definitions\`'s JSON-Schema definition
+ * via the \`patternProperty\` "^(?![@]|__|\\.|::).+$".
+ */
+export type DefinitionEntry = ContextDefinition | EntityDefinition | ServiceDefinition | TypeDefinition;
+/**
+ * Element reference to an element within the current entity.
+ */
+export type ElementReference = string;
+/**
+ * The property defines how value helps for this element shall be constructed.
+ *
+ * It allows to associate a (set of) View/Entity that provides the "Value Help" for the annotated field or parameter.
+ * This is achieved by either referencing the target view/entity of a modelled association or by directly establishing a relationship to view/entity that shall act as a value help provider.
+ */
+export type Consumption = ConsumptionValueHelpDefinition[];
+/**
+ * In CSN it is possible to define Custom Types.
+ */
+export type TypeDefinition = BooleanTypeDefinition | StringTypeDefinition;
+
+/**
+ * This is the interface description of CSN Interop Effective v1.
+ * Its purpose is to be an aligned import / export format for CSN that works across tech-stacks in a wider SAP ecosystem.
+ *
+ * For a more extensive documentation on CSN in general, consider the [CAP CSN](https://cap.cloud.sap/docs/cds/csn) documentation.
+ */
+export interface CSNInteropEffectiveDocument {
+  /**
+   * Link to JSON Schema for this CSN Interop Effective document.
+   * Adding this helps with automatic validation and code intelligence in some editors / IDEs.
+   *
+   * See https://tour.json-schema.org/content/06-Combining-Subschemas/02-id-and-schema
+   *
+   */
+  $schema?: ("https://sap.github.io/csn-interop-specification/spec-v1/csn-interop-effective.schema.json#" | string) &
+    string;
+  /**
+   * Optional URI for this document, that can acts as an ID or as location to retrieve the document.
+   *
+   * See https://tour.json-schema.org/content/06-Combining-Subschemas/02-id-and-schema
+   *
+   */
+  $id?: string;
+  /**
+   * Existence of this property indicated that the file is a CSN Interop Effective document.
+   * The value states the specification version it has been created against.
+   */
+  csnInteropEffective: "1.0";
+  /**
+   * The version of the CDS CSN. For this version of CSN Interop it is fixed to \`2.0\`.
+   *
+   * This MUST be provided to ensure that CSN Interop is a valid subset of CDS CSN in general.
+   */
+  $version: "2.0";
+  meta?: Meta;
+  definitions: Definitions;
+  i18n?: I18N;
+  /**
+   * Private properties, starting with \`__\`.
+   *
+   * MAY be ignored by the consumers, as they have no cross-aligned, standardized semantics.
+   *
+   */
+  [k: PrivatePropertyKey]: unknown;
+}
+/**
+ * Meta information that apply to the CSN document as a whole.
+ */
+export interface Meta {
+  /**
+   * Informal description of the creator of this CSN Document.
+   */
+  creator?: string;
+  /**
+   * Informal hint which CSN flavor is used. The values are currently NOT standardized.
+   *
+   * A CSN flavor can be understood as an alias to particular [feature set](#) of CSN overall.
+   * In CSN Interop we leave some features open and to be defined in the document itself, this is why we don't have a fixed flavor.
+   */
+  flavor?: string;
+  document?: DocumentMetadata;
+  features?: FeaturesMetadata;
+  /**
+   * Private properties, starting with \`__\`.
+   *
+   * MAY be ignored by the consumers, as they have no cross-aligned, standardized semantics.
+   *
+   */
+  [k: PrivatePropertyKey]: unknown;
+}
+/**
+ * Metadata that describes the document (and what it represents) itself.
+ */
+export interface DocumentMetadata {
+  /**
+   * The version of the CSN document / the described model itself (not the specification).
+   *
+   * We RECOMMEND to use the [SemVer](https://semver.org/) standard.
+   */
+  version?: string;
+  /**
+   * Human readable title for the CSN document (plain-text).
+   *
+   * MUST NOT contain linebreaks.
+   */
+  title?: string;
+  /**
+   * Human readable documentation that describes the overall CSN document.
+   *
+   * SHOULD be provided and interpreted as [CommonMark](https://spec.commonmark.org/) (Markdown).
+   */
+  doc?: string;
+}
+/**
+ * CSN feature-dimensions this document fulfills.
+ *
+ * It is RECOMMENDED to explicitly state all feature dimensions of the document.
+ * Otherwise the consumer cannot rely on the information and may have to figure this out on his own.
+ */
+export interface FeaturesMetadata {
+  /**
+   * Whether this document is complete and self-contained.
+   *
+   * It is RECOMMENDED to have complete CSN documents and set this to \`true\`.
+   *
+   * If true references to other CDS elements (e.g. \`cds.Association\`) MUST be resolvable within the same document.
+   */
+  complete?: boolean;
+}
+/**
+ * Dictionary of CSN modeling artifacts.
+ *
+ */
+export interface Definitions {
+  [k: string]: unknown | undefined;
+}
+/**
+ * A context corresponds to a CAP CSN Namespace.
+ * It is used to create a bounded context that bundles elements of different kinds together.
+ *
+ * To assign Services, Entities or Custom Types to a context, their name MUST be prefixed with the context name, separated by a \`.\`.
+ *
+ * The context can also be useful to avoid local or global name collisions.
+ *
+ * See [Primer: Context](../primer.md#context-definitions).
+ */
+export interface ContextDefinition {
+  /**
+   * The modeling artefact is a context.
+   */
+  kind: ContextKind;
+  /**
+   * Human readable documentation, usually for developer documentation.
+   *
+   * SHOULD be provided and interpreted as [CommonMark](https://spec.commonmark.org/) (Markdown).
+   *
+   * If a human readable title is needed, use the [@EndUserText.label](./extensions/end-user-text#endusertextlabel) annotation.
+   */
+  doc?: string;
+  [k: string]: unknown | undefined;
+}
+/**
+ * Entity definition refers to the structured description of an object or concept.
+ *
+ * If it is exposed through a [Service](#service-definition), it describes a data model.
+ * To expose it through a Service, the service name MUST be prefixed to the Entity name, separated by a \`.\` (dot).
+ * The actual data serialization format is defined by the Service protocol and chosen data format [mapping](../mappings).
+ *
+ * If the entity is not exposed via a service, it only describes a conceptual domain object.
+ */
+export interface EntityDefinition {
+  /**
+   * The modeling artefact is an entity.
+   */
+  kind: EntityKind;
+  elements: ElementDefinitions;
+  /**
+   * Human readable documentation, usually for developer documentation.
+   *
+   * SHOULD be provided and interpreted as [CommonMark](https://spec.commonmark.org/) (Markdown).
+   *
+   * If a human readable title is needed, use the [@EndUserText.label](./extensions/end-user-text#endusertextlabel) annotation.
+   */
+  doc?: string;
+  /**
+   * Proper syntax element in ABAP CDS producing Abstract CDS Entities
+   */
+  abstract?:
+    | string
+    | number
+    | boolean
+    | unknown[]
+    | {
+        [k: string]: unknown | undefined;
+      };
+  /**
+   * Proper syntax element in ABAP CDS producing Custom CDS Entities
+   */
+  customEntity?:
+    | string
+    | number
+    | boolean
+    | unknown[]
+    | {
+        [k: string]: unknown | undefined;
+      };
+  /**
+   * Proper syntax element in ABAP CDS producing CDS Table Functions.
+   */
+  tableFunction?:
+    | string
+    | number
+    | boolean
+    | unknown[]
+    | {
+        [k: string]: unknown | undefined;
+      };
+  /**
+   * Proper syntax element in ABAP CDS producing CDS  External Entities
+   */
+  externalEntity?:
+    | string
+    | number
+    | boolean
+    | unknown[]
+    | {
+        [k: string]: unknown | undefined;
+      };
+  /**
+   * ABAP CDS Projection have the additional information of a provider contract
+   */
+  providerContract?:
+    | string
+    | number
+    | boolean
+    | unknown[]
+    | {
+        [k: string]: unknown | undefined;
+      };
+  /**
+   * ABAP CDS Root View Entities define a RAP Business Object.
+   */
+  rootEntity?:
+    | string
+    | number
+    | boolean
+    | unknown[]
+    | {
+        [k: string]: unknown | undefined;
+      };
+  /**
+   * Special kind of analytical ABAP CDS Projection view.
+   */
+  transient?:
+    | string
+    | number
+    | boolean
+    | unknown[]
+    | {
+        [k: string]: unknown | undefined;
+      };
+  /**
+   * In the selection element list of a CDS view.
+   */
+  literal?:
+    | string
+    | number
+    | boolean
+    | unknown[]
+    | {
+        [k: string]: unknown | undefined;
+      };
+  /**
+   * When redirecting associations in ABAP CDS Projections with the additional keywords "to composition child", this indicates a Parent-Child-Composition an requires the redirection target to have a matching "to parent" association redefinition.
+   */
+  toCompositionChild?:
+    | string
+    | number
+    | boolean
+    | unknown[]
+    | {
+        [k: string]: unknown | undefined;
+      };
+  /**
+   * When redirecting associations in ABAP CDS Projections with the additional keywords "to composition child", this indicates a Parent-Child-Composition an requires the redirection target to have a matching "to parent" association redefinition.
+   */
+  toParent?:
+    | string
+    | number
+    | boolean
+    | unknown[]
+    | {
+        [k: string]: unknown | undefined;
+      };
+  /**
+   * Contains the SQL on condition as string
+   */
+  hana_on_asString?:
+    | string
+    | number
+    | boolean
+    | unknown[]
+    | {
+        [k: string]: unknown | undefined;
+      };
+  "@Consumption.valueHelpDefinition"?: Consumption;
+  [k: string]: unknown | undefined;
+}
+/**
+ * Dictionary of Element where the key is the name of the element and the value its definition.
+ *
+ * The value can either be a standard [CDS Type](#cds-type) (\`cds.*\`) or a [Custom Type](#custom-type).
+ *
+ * Element names MUST:
+ * - Not be an empty string.
+ * - Not start with \`@\`, \`__\`, \`::\`.
+ * - Not end with \`::\`.
+ * - Not contain the substring \`.\` or \`:::\`.
+ * - Not contain the substring \`::\` more than once.
+ */
+export interface ElementDefinitions {
+  [k: string]: unknown | undefined;
+}
+/**
+ * Definition of an Element, as put into [Element Definitions](#element-definitions).
+ *
+ * An element can be either of a standard [CDS Types](#cds-type) or a [Custom Type](#custom-type).
+ *
+ * Please note that CSN Interop does not support arrays of scalar types or arrays of arrays, see [Primer: Cardinality](../primer.md#cardinality).
+ *
+ * This interface was referenced by \`ElementDefinitions\`'s JSON-Schema definition
+ * via the \`patternProperty\` "^(?![@]|__|\\.|::).+$".
+ */
+export interface ElementEntry {
+  type?: string;
+  [k: string]: unknown | undefined;
+}
+export interface ConsumptionValueHelpDefinition {
+  entity?: ConsumptionValueHelpDefinition1;
+  /**
+   * Additional bindings for filtering the value help result list.
+   */
+  additionalBinding?: AdditionalBinding[];
+  association?: ElementReference;
+  /**
+   * Specifies whether the value help result list shall only contain distinct values for the annotated field or parameter.
+   * If set to true all mappings will be used for filtering, but only the value for the field/parameter which the value help was requested for will be returned by the value help.
+   */
+  distinctValues?: boolean;
+}
+/**
+ * Value help defining view or entity.
+ */
+export interface ConsumptionValueHelpDefinition1 {
+  /**
+   * Name of the value help providing view or entity
+   */
+  name?: string;
+  /**
+   * Name of the field of the value help view or entity, which the annotated local field or parameter is bound to.
+   *
+   * Mutually exclusive to the usage of \`valueHelpDefinition.association\`.
+   */
+  element?: string;
+}
+/**
+ * Allows to define additional bindings (besides the ones defined by \`valueHelpDefinition.association\` or \`valueHelpDefinition.entity\`) for filtering the value help result list and/or returning values from the selected value help record.
+ */
+export interface AdditionalBinding {
+  /**
+   * Field of the current view/entity; mutually exclusive to the usage of \`localParameter\`.
+   */
+  localElement?: string;
+  /**
+   * Name of the field of the value help view or entity, which the annotated local field or parameter is bound to.
+   */
+  element?: string;
+  usage?: ConsumptionConsumptionValueHelpDefinitionAdditionalBinding;
+}
+/**
+ * The binding may either specify an additional filter-criterion on the value help list (\`#FILTER\`), or an additional result mapping for the selected value help record (\`#RESULT\`) or a combination thereof (\`#FILTER_AND_RESULT\`).
+ * If not specified explicitly the usage is \`#FILTER_AND_RESULT\`.
+ * If distinctValues is set to true, additional bindings must specify the usage as \`#FILTER\`.
+ */
+export interface ConsumptionConsumptionValueHelpDefinitionAdditionalBinding {
+  /**
+   * Provide the value in \`{ "#": "<value>" }\` enum notation.
+   */
+  "#": "FILTER" | "RESULT" | "FILTER_AND_RESULT";
+}
+/**
+ * A CDS Service indicates that [Entities](#entity-definition) are exposed to outside consumers via an API.
+ *
+ * To assign Entities or Custom Types to a Service, their name MUST be prefixed with the service name, separated by a \`.\`.
+ * Please be aware that this will also change the \`target\` values of \`cds.Association\` and \`cds.Composition\`.
+ * For an example, see [airline-service.json](./examples/airline.md).
+ *
+ * A consumer MAY decide to shorten the names by only considering the Entities assigned to a particular Service and then removing the Service prefixes again.
+ *
+ * To indicate which assigned Entities are root in a composition hierarchy, use the [\`@ObjectModel.compositionRoot\`](./extensions/object-model#objectmodelcompositionroot) annotation.
+ *
+ * See [Primer: Service Definitions](../primer.md#service-definitions).
+ */
+export interface ServiceDefinition {
+  /**
+   * The modeling artefact is a service.
+   */
+  kind: ServiceKind;
+  /**
+   * Human readable documentation, usually for developer documentation.
+   *
+   * SHOULD be provided and interpreted as [CommonMark](https://spec.commonmark.org/) (Markdown).
+   *
+   * If a human readable title is needed, use the [@EndUserText.label](./extensions/end-user-text#endusertextlabel) annotation.
+   */
+  doc?: string;
+  [k: string]: unknown | undefined;
+}
+/**
+ * A type definition of type \`cds.Boolean\`.
+ */
+export interface BooleanTypeDefinition {
+  /**
+   * The kind property is used when defining derived types. In this case Kind = "type".
+   */
+  kind: "type";
+  /**
+   * The modeling artefact is a \`cds.Boolean\` type.
+   */
+  type: BooleanCdsType;
+  "@Aggregation.default"?: Aggregation;
+  "@Consumption.valueHelpDefinition"?: Consumption;
+  [k: string]: unknown | undefined;
+}
+/**
+ * The element shall per default be aggregated using the annotated SQL aggregate function.
+ *
+ * The chosen value defines which aggregation semantics should be applied.
+ * The aggregation types SUM, MAX, MIN, NOP are only allowed for elements with numeric type
+ *
+ * > ℹ️ Note: There is an semantically equivalent annotation \`@DefaultAggregation\`, which is now obsolete.
+ * > As consumers are not expected to interpret \`@DefaultAggregation\`, providers shall consistently adopt \`@Aggregation.default\` for interoperability.
+ */
+export interface Aggregation {
+  /**
+   * Provide the value in \`{ "#": "<value>" }\` enum notation.
+   */
+  "#": "NONE" | "SUM" | "MIN" | "MAX" | "AVG" | "COUNT_DISTINCT" | "NOP" | "FORMULA";
+}
+/**
+ * A type definition of type \`cds.String\`.
+ */
+export interface StringTypeDefinition {
+  /**
+   * The kind property is used when defining derived types. In this case Kind = "type".
+   */
+  kind: "type";
+  /**
+   * The modeling artefact is a \`cds.String\` type.
+   */
+  type: StringCdsType;
+  /**
+   * Some old property that is specific to the \`cds.String\` type.
+   *
+   * This property is optional and can be used to define additional properties of the \`cds.String\` type.
+   * It is not part of the standard CDS types, but can be used in custom definitions.
+   */
+  someOldProperty?: string;
+  /**
+   * Some new property that is specific to the \`cds.String\` type.
+   *
+   * This property is optional and can be used to define additional properties of the \`cds.String\` type.
+   * It is not part of the standard CDS types, but can be used in custom definitions.
+   */
+  someNewProperty?: string;
+  "@Aggregation.default"?: Aggregation;
+  "@Consumption.valueHelpDefinition"?: Consumption;
+  [k: string]: unknown | undefined;
+}
+/**
+ * Dictionary of translated texts.
+ *
+ */
+export interface I18N {
+  [k: string]: unknown | undefined;
+}
+/**
+ * Language Text contains translations for one specific languages.
+ *
+ * Key is the i18n key, value is the translation of the term.
+ *
+ * An i18n pointer is a string that starts with \`{i18n>\` and ends with \`}\`. In between is the key.
+ *
+ * Example: To link to the i18n key \`I_COSTCENTER@ENDUSERTEXT.LABEL\`, the i18n pointer is \`{i18n>I_COSTCENTER@ENDUSERTEXT.LABEL}\`.
+ *
+ * The i18n pointers within the document MUST be fully self contained:
+ * - An i18n resolved pointer MUST be used (referred to) within this CSN document at least once.
+ * - All i18n pointers in this CSN document MUST have a corresponding i18n dictionary entry.
+ *
+ * This interface was referenced by \`I18N\`'s JSON-Schema definition
+ * via the \`patternProperty\` "^[a-zA-Z]{2,8}(-[a-zA-Z0-9]{1,8}){0,2}$".
+ */
+export interface LanguageTexts {
+  [k: string]: unknown | undefined;
+}
+
+export type PrivatePropertyKey = \`__\${string}\`;
+
+export type AnnotationPropertyKey = \`@\${string}\`;
+
+export type EntityKind = "entity";
+
+export type ContextKind = "context";
+
+export type ServiceKind = "service";
+
+export type TypeKind = "type";
+
+export type BooleanCdsType = "cds.Boolean";
+
+export type StringCdsType = "cds.String";
+"
+`;

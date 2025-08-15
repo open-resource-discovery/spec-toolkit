@@ -1,20 +1,23 @@
 [![REUSE status](https://api.reuse.software/badge/github.com/open-resource-discovery/spec-toolkit)](https://api.reuse.software/info/github.com/open-resource-discovery/spec-toolkit)
 
-# spec-toolkit
+# Json Schema Specification Toolkit
 
 ## About this project
 
 CLI tool to create JSON Schema specifications and automatically generate documentation (in markdown) out of the JSON Schema specifications.
 
+🌎 DOCUMENTATION: <https://sap.github.io/open-resource-discovery/spec-toolkit/index>
+
 ## Requirements and Setup
 
-*Insert a short description what is required to get your project running...*
+🌎 Getting Started: <https://sap.github.io/open-resource-discovery/spec-toolkit/docs/getting-started>
 
 ## Support, Feedback, Contributing
 
 This project is open to feature requests/suggestions, bug reports etc. via [GitHub issues](https://github.com/open-resource-discovery/spec-toolkit/issues). Contribution and feedback are encouraged and always welcome. For more information about how to contribute, the project structure, as well as additional contribution information, see our [Contribution Guidelines](CONTRIBUTING.md).
 
 ## Security / Disclosure
+
 If you find any bug that may be a security problem, please follow our instructions at [in our security policy](https://github.com/open-resource-discovery/spec-toolkit/security/policy) on how to report it. Please do not create GitHub issues for security-related doubts or problems.
 
 ## Code of Conduct

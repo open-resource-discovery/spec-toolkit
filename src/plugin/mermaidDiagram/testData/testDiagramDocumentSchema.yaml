@@ -1,0 +1,60 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+$id: https://open-resource-discovery.github.io/specification/spec-v1/interfaces/Document.schema.json
+description: generate diagram document schema
+$ref: "#/definitions/Document"
+definitions:
+  DefinitionA:
+    title: Definition A
+    type: object
+    description: Definition A description
+    properties:
+      propertyA1:
+        type: string
+        description: DefinitionA propertyA1 with relation compositions
+        items:
+          $ref: "#/definitions/DefinitionB"
+        examples:
+          - "valueA1"
+      propertyA2:
+        type: string
+        description: DefinitionA propertyA2 with relation compositions
+        $ref: "#/definitions/DefinitionB"
+        examples:
+          - "valueA1"
+      propertyA3:
+        type: string
+        description: resource and target are same
+        $ref: "#/definitions/DefinitionA"
+        examples:
+          - "valueA1"
+    additionalProperties: false
+    required:
+      - propertyA1
+    x-recommended:
+      - policyLevel
+
+  DefinitionB:
+    type: object
+    title: Definition B
+    description: Definition B description
+    properties:
+      propertyB1:
+        type: string
+        description: DefinitionB propertyB1 with relation association
+        items:
+          type: string
+          x-association-target:
+            - "#/definitions/DefinitionA"
+        examples:
+          - "valueA1"
+      propertyB2:
+        type: string
+        description: DefinitionB propertyB1 with relation association
+        x-association-target:
+          - "#/definitions/DefinitionB"
+        examples:
+          - "valueA1"
+    required:
+      - title
+      - description
+    additionalProperties: false

@@ -1,0 +1,14 @@
+generalConfig:
+  sortProperties: false
+outputPath: "src/generated/spec-v1"
+docsConfig:
+  - type: "spec"
+    id: "my-spec"
+    sourceFilePath: "./spec/v1/my-spec.schema.yaml"
+    sourceIntroFilePath: "./spec/v1/my-spec-intro.schema.md"
+    examplesFolderPath: "./spec/v1/examples"
+    mdFrontmatter:
+      title: "Interface Documentation for my-spec"
+      sidebar_position: "1"
+      description: "Describes the technical interface / schema for my-spec."
+      toc_max_heading_level: "4"

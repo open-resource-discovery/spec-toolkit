@@ -1,0 +1,24 @@
+# Logs
+logs/
+tmp/
+reports/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Dependency directories
+node_modules/
+
+# Cache
+.cache
+.docusaurus/
+tmp/
+
+# Build
+dist/
+build/
+
+# generated filed during unit test execution
+src/__tests__/generated/

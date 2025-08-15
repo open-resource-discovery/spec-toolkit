@@ -1,0 +1,33 @@
+name: Publish Package to NPMJS.org
+on:
+  workflow_dispatch:
+jobs:
+  publish-to-npmjs:
+    permissions:
+      contents: read
+      id-token: write
+    runs-on: ubuntu-latest
+    environment: npmjs:@open-resource-discovery/spec-toolkit
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          # registry-url is required for releasing packages
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install latest npm cli
+        run: npm install -g npm@latest
+
+      - name: npm install
+        run: npm ci
+
+      - name: build
+        run: npm run build
+
+      - name: Publish package
+        # --provenance enables the automatic generation of provenance statements (when using trusted publisher, this is automatically enabled and therefore optional)
+        # --access public is only hard required for the initial release, but it doesn't hurt having it setup
+        # npm version >=11.5.1 required for trusted publisher
+        run: npm publish --provenance --access public

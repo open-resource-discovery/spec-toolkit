@@ -1,0 +1,20 @@
+{
+  "generalConfig": {
+    "sortProperties": false
+  },
+  "outputPath": "src/generated/spec-extension/spec-v1",
+  "docsConfig": [
+    {
+      "type": "spec",
+      "id": "spec-extension",
+      "sourceFilePath": "./spec/v1/spec-extension.schema.yaml",
+      "sourceIntroFilePath": "./spec/v1/spec-extension.intro.md",
+      "examplesFolderPath": "./spec/v1/examples/specExtensionJsonSchema",
+      "mdFrontmatter": {
+        "title": "JSON Schema Specification Extension",
+        "sidebar_position": "3",
+        "description": "Describes the technical interface / schema for the spec extension."
+      }
+    }
+  ]
+}

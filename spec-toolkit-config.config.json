@@ -1,0 +1,20 @@
+{
+  "generalConfig": {
+    "sortProperties": false
+  },
+  "outputPath": "src/generated/spec-toolkit-config/spec-v1",
+  "docsConfig": [
+    {
+      "type": "spec",
+      "id": "spec-toolkit-config",
+      "sourceFilePath": "./spec/v1/spec-toolkit-config.schema.yaml",
+      "sourceIntroFilePath": "./spec/v1/spec-toolkit-config.intro.md",
+      "sourceOutroFilePath": "./spec/v1/spec-toolkit-config.outro.md",
+      "mdFrontmatter": {
+        "title": "Spec-Toolkit CLI",
+        "sidebar_position": "5",
+        "description": "Describes the technical interface / schema for the Spec-Toolkit CLI configuration."
+      }
+    }
+  ]
+}

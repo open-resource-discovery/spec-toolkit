@@ -1,0 +1,119 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`generateAnnotations writes annotation file and matches snapshot 1`] = `
+"package com.example.annotations;
+
+import java.lang.annotation.*;
+
+public interface ComplexAnnotated {
+  @Target(ElementType.TYPE)
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface Other {
+    String[] requiredFields() default {};
+
+    OtherEntry[] value() default {};
+  }
+
+  @Target(ElementType.TYPE)
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface RefTest {
+    String[] requiredFields() default {};
+    Other r() default @ComplexAnnotated.Other();
+  }
+
+  @Target(ElementType.TYPE)
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface AnyOfArr {
+    String[] requiredFields() default {};
+    Other[] a() default { @ComplexAnnotated.Other() };
+  }
+
+  @Target(ElementType.TYPE)
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface RefArr {
+    String[] requiredFields() default {};
+    Other[] b() default { @ComplexAnnotated.Other() };
+  }
+
+  @Target(ElementType.TYPE)
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface NestedArr {
+    String[] requiredFields() default {};
+    boolean[] c() default {};
+  }
+
+  @Target(ElementType.TYPE)
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface ObjTest {
+    String[] requiredFields() default {};
+
+  }
+
+  @Target(ElementType.TYPE)
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface StrTest {
+    String[] requiredFields() default {};
+    String s() default "";
+  }
+
+  @Target(ElementType.TYPE)
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface BoolTest {
+    String[] requiredFields() default {};
+    boolean t() default false;
+  }
+
+  @Target(ElementType.TYPE)
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface NumTest {
+    String[] requiredFields() default {};
+    double n() default 0;
+  }
+
+  @Target(ElementType.TYPE)
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface IntTest {
+    String[] requiredFields() default {};
+    double i() default 0;
+  }
+
+  @Target(ElementType.TYPE)
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface DefaultTest {
+    String[] requiredFields() default {};
+    String x() default "";
+  }
+
+}"
+`;
+
+exports[`generateAnnotations writes annotation file with default‐value cases and matches snapshot 1`] = `
+"package com.example.annotations;
+
+import java.lang.annotation.*;
+
+public interface DefaultsAnnotated {
+  @Target(ElementType.TYPE)
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface NestedAnn {
+    String[] requiredFields() default { "foo" };
+    String foo() default "nested";
+  }
+
+  @Target(ElementType.TYPE)
+  @Retention(RetentionPolicy.SOURCE)
+  public @interface DefaultCases {
+    String[] requiredFields() default { "str", "bool", "dbl", "arr", "nested" };
+    String str() default "hi";
+
+    boolean bool() default true;
+
+    double dbl() default 3.14;
+
+    double[] arr() default {};
+
+    NestedAnn nested() default @DefaultsAnnotated.NestedAnn(foo = "nested");
+  }
+
+}"
+`;

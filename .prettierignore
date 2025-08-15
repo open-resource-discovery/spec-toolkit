@@ -1,0 +1,9 @@
+dist/
+reports/
+node_modules/
+package-lock.json
+
+# ignore spec-toolkit generated files that were copied to the website folder
+website/docs/docs/*.md
+website/static/spec-v1/*
+src/generated/*

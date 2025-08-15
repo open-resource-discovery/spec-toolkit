@@ -1,0 +1,270 @@
+{
+  "description": "This is the interface description of spec-toolkit configuration v1.\nIts purpose is to describe all properties allowed to be maintained in a configuration document.",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/open-resource-discovery/spec-toolkit/spec-v1/spec-toolkit-config.schema.json#",
+  "title": "Spec-Toolkit Configuration Document",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "format": "uri-reference",
+      "description": "Link to JSON Schema for this spec-toolkit configuration document.\nAdding this helps with automatic validation and code intelligence in some editors / IDEs.\n\nSee https://tour.json-schema.org/content/06-Combining-Subschemas/02-id-and-schema\n",
+      "anyOf": [
+        {
+          "const": "https://github.com/open-resource-discovery/spec-toolkit/spec-v1/spec-toolkit.schema.json#"
+        },
+        {
+          "type": "string",
+          "format": "uri-reference"
+        }
+      ]
+    },
+    "$id": {
+      "type": "string",
+      "format": "uri-reference",
+      "description": "Optional URI for this document, that can acts as an ID or as location to retrieve the document.\n\nSee https://tour.json-schema.org/content/06-Combining-Subschemas/02-id-and-schema\n"
+    },
+    "generalConfig": {
+      "type": "object",
+      "description": "General configuration for the spec-toolkit.\nThis is optional and can be omitted if no general configuration is needed.",
+      "$ref": "#/definitions/GeneralConfig"
+    },
+    "outputPath": {
+      "type": "string",
+      "description": "The output path where the generated files will be written to.\n\nThis is relative to the location of the configuration document."
+    },
+    "docsConfig": {
+      "type": "array",
+      "description": "Configuration for the documentation generation.",
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/SpecConfig"
+          },
+          {
+            "$ref": "#/definitions/SpecExtensionConfig"
+          }
+        ]
+      },
+      "minItems": 1
+    },
+    "plugins": {
+      "type": "array",
+      "description": "Array of optional plugins to be used for the generation.\nEach configured plugin will generate additional output files depending on his specific scope.",
+      "items": {
+        "$ref": "#/definitions/PluginConfigData"
+      }
+    }
+  },
+  "required": [
+    "outputPath",
+    "docsConfig"
+  ],
+  "additionalProperties": false,
+  "definitions": {
+    "GeneralConfig": {
+      "type": "object",
+      "description": "This is the general configuration for the spec-toolkit.\nThis is optional and can be omitted if no general configuration is needed.",
+      "properties": {
+        "sortProperties": {
+          "type": "boolean",
+          "description": "If set to `true`, the properties of the generated JSON Schema will be sorted alphabetically.\nThis is useful for better readability and easier comparison of different versions of the schema."
+        }
+      },
+      "additionalProperties": false,
+      "title": "GeneralConfig"
+    },
+    "DocsConfigItem": {
+      "type": "object",
+      "description": "Definition of a docsConfig item.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "spec",
+            "specExtension"
+          ],
+          "description": "The docsConfig item type.\nIt's value is been used as a _discriminator_ to distinguish the matching schema that should be further validated."
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "spec"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "$ref": "#/definitions/SpecConfig"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "type": "string",
+                "const": "specExtension"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "$ref": "#/definitions/SpecExtensionConfig"
+          }
+        }
+      ],
+      "title": "DocsConfigItem"
+    },
+    "SpecConfig": {
+      "type": "object",
+      "description": "This is the configuration for a JSON Schema specification.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "spec",
+          "description": "Type is used to identify the type of the configuration.\n"
+        },
+        "id": {
+          "type": "string",
+          "description": "The ID of the specification.\nThis is used to identify the specification in the generated documentation.\n"
+        },
+        "sourceFilePath": {
+          "type": "string",
+          "description": "The path to the source file of the JSON Schema specification.\nThis is used to generate the documentation for the specification.\n\nIt can be a `.yaml` or `.json` file.\n\nThe JSON Schema specification MUST NOT contain objects nested in objects.\nExample:\n  <code>type: object\n    properties:\n     &nbsp;&nbsp;fullName:\n        &nbsp;&nbsp;&nbsp;&nbsp;type: object\n        &nbsp;&nbsp;&nbsp;&nbsp;properties:\n          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;firstName:\n            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type: string\n          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lastName:\n            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;type: string\n      &nbsp;&nbsp;age:\n        &nbsp;&nbsp;&nbsp;&nbsp;type: integer\n  </code>\nMUST be replaced by:\n  <code>type: object\n    properties:\n     &nbsp;&nbsp;fullName:\n        &nbsp;&nbsp;&nbsp;&nbsp;$ref: \"#/definitions/FullName\"\n      &nbsp;&nbsp;age:\n        &nbsp;&nbsp;&nbsp;&nbsp;type: integer\n  </code>\n"
+        },
+        "sourceIntroFilePath": {
+          "type": "string",
+          "description": "The path to the source intro file of the specification.\nThis is used to generate the documentation for the specification and will be appended at the beginning.\n"
+        },
+        "sourceOutroFilePath": {
+          "type": "string",
+          "description": "The path to the source outro file of the specification.\nThis is used to generate the documentation for the specification and will be appended at the end.\n"
+        },
+        "examplesFolderPath": {
+          "type": "string",
+          "description": "The path to the folder containing the examples for the specification.\nThis is used to generate the documentation for the specification.\n"
+        },
+        "mdFrontmatter": {
+          "$ref": "#/definitions/MdFrontmatter"
+        }
+      },
+      "required": [
+        "type",
+        "id",
+        "sourceFilePath"
+      ],
+      "additionalProperties": false,
+      "title": "SpecConfig"
+    },
+    "SpecExtensionConfig": {
+      "type": "object",
+      "description": "This is the configuration for a JSON Schema extension specification.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "specExtension",
+          "description": "Type is used to identify the type of the configuration.\n"
+        },
+        "id": {
+          "type": "string",
+          "description": "The ID of the specification.\nThis is used to identify the specification in the generated documentation.\n"
+        },
+        "sourceFilePath": {
+          "type": "string",
+          "description": "The path to the source file of the specification.\nThis is used to generate the documentation for the specification.\n"
+        },
+        "sourceIntroFilePath": {
+          "type": "string",
+          "description": "The path to the source intro file of the specification.\nThis is used to generate the documentation for the specification and will be appended at the beginning.\n"
+        },
+        "sourceOutroFilePath": {
+          "type": "string",
+          "description": "The path to the source outro file of the specification.\nThis is used to generate the documentation for the specification and will be appended at the end.\n"
+        },
+        "targetDocumentId": {
+          "type": "string",
+          "description": "The ID of the target document.\nThis is used to identify the target document in the generated documentation.\n"
+        },
+        "mdFrontmatter": {
+          "$ref": "#/definitions/MdFrontmatter"
+        }
+      },
+      "required": [
+        "type",
+        "id",
+        "sourceFilePath",
+        "targetDocumentId"
+      ],
+      "additionalProperties": false,
+      "title": "SpecExtensionConfig"
+    },
+    "MdFrontmatter": {
+      "type": "object",
+      "description": "Frontmatter for the generated documentation.\nThis is used to generate the markdown frontmatter for the documentation page.",
+      "patternProperties": {
+        "^[a-zA-Z0-9_]+$": {
+          "type": "string",
+          "description": "The key of the frontmatter.\nThis is used to generate the frontmatter for the documentation.\n"
+        }
+      },
+      "title": "MdFrontmatter"
+    },
+    "PluginConfigData": {
+      "type": "object",
+      "description": "Configuration for a plugin to be used in the generation.",
+      "properties": {
+        "packageName": {
+          "type": "string",
+          "description": "The package name or path to the plugin implementation.\n\nPlugins are implemented as Node.js modules and can be specified by their package name or by a relative path to the spec-toolkit CLI tool when the plugins are maintained in the core spec-toolkit repository."
+        },
+        "options": {
+          "$ref": "#/definitions/PluginOptions"
+        }
+      },
+      "required": [
+        "packageName"
+      ],
+      "additionalProperties": false,
+      "examples": [
+        {
+          "packageName": "./node_modules/@open-resource-discovery/spec-toolkit/dist/plugin/tabular/index.js"
+        },
+        {
+          "packageName": "./node_modules/@open-resource-discovery/spec-toolkit/dist/plugin/mermaidDiagram/index.js"
+        },
+        {
+          "packageName": "./node_modules/@open-resource-discovery/spec-toolkit/dist/plugin/ums/index.js",
+          "options": {
+            "metadataPath": "/sap/core/ucl/metadata/ord/v1",
+            "overrides": [
+              "./document.ums.yaml"
+            ]
+          }
+        },
+        {
+          "packageName": "@yourNamespace/yourNpmSpecToolkitPluginPackageName"
+        }
+      ],
+      "title": "PluginConfigData"
+    },
+    "PluginOptions": {
+      "type": "object",
+      "description": "Optional configuration for the plugin.\nThis is used to pass additional options to the plugin.",
+      "additionalProperties": true,
+      "properties": {},
+      "required": [],
+      "title": "PluginOptions"
+    }
+  }
+}
