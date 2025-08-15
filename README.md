@@ -6,11 +6,11 @@
 
 CLI tool to create JSON Schema specifications and automatically generate documentation (in markdown) out of the JSON Schema specifications.
 
-🌎 DOCUMENTATION: <https://sap.github.io/open-resource-discovery/spec-toolkit/index>
+🌎 DOCUMENTATION: <https://open-resource-discovery.github.io/spec-toolkit/index>
 
 ## Requirements and Setup
 
-🌎 Getting Started: <https://sap.github.io/open-resource-discovery/spec-toolkit/docs/getting-started>
+🌎 Getting Started: <https://open-resource-discovery.github.io/spec-toolkit/docs/getting-started>
 
 ## Support, Feedback, Contributing
 
