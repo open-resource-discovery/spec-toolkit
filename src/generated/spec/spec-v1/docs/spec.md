@@ -9,7 +9,7 @@ description: "Describes the technical interface / schema for the spec."
 ## Schema Definitions
 
 * The root schema of the document is [Spec Json Schema Root](#spec-json-schema-root)
-* The interface is available as JSON Schema: [spec.schema.json](https://github.com/open-resource-discovery/spec-toolkit/spec-v1/spec.schema.json#).
+* The interface is available as JSON Schema: [spec.schema.json](https://open-resource-discovery.github.io/spec-toolkit/spec-v1/spec.schema.json#).
 
 
 ### Spec Json Schema Root

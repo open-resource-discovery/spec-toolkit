@@ -1,5 +1,5 @@
 $schema: "http://json-schema.org/draft-07/schema#"
-$id: "https://github.com/open-resource-discovery/spec-toolkit/spec-v1/spec.schema.json#"
+$id: "https://open-resource-discovery.github.io/spec-toolkit/spec-v1/spec.schema.json#"
 title: Spec Json Schema Root
 description: |-
   This is the interface description of Spec v1.

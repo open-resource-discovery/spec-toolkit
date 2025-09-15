@@ -51,7 +51,7 @@ Spec-Toolkit CLI root level configuration document (`spec-toolkit.config.json`),
 ## Schema Definitions
 
 * The root schema of the document is [Spec-Toolkit Configuration Document](#spec-toolkit-configuration-document)
-* The interface is available as JSON Schema: [spec-toolkit-config.schema.json](https://github.com/open-resource-discovery/spec-toolkit/spec-v1/spec-toolkit-config.schema.json#).
+* The interface is available as JSON Schema: [spec-toolkit-config.schema.json](https://open-resource-discovery.github.io/spec-toolkit/spec-v1/spec-toolkit-config.schema.json#).
 
 
 ### Spec-Toolkit Configuration Document
