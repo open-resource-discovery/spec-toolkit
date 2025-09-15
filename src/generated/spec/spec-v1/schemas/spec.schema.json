@@ -1,7 +1,7 @@
 {
   "description": "This is the interface description of Spec v1.\nIts purpose is to describe all properties allowed to be maintained in a specification document.",
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://github.com/open-resource-discovery/spec-toolkit/spec-v1/spec.schema.json#",
+  "$id": "https://open-resource-discovery.github.io/spec-toolkit/spec-v1/spec.schema.json#",
   "title": "Spec Json Schema Root",
   "type": "object",
   "x-custom-typescript-types": [
