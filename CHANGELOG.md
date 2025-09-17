@@ -9,3 +9,8 @@ but omits the **patch** level in the spec version number.
 For a roadmap including expected timeline, please refer to [ROADMAP.md](./ROADMAP.md)
 
 ## [unreleased]
+
+## [0.3.1]
+
+- added support for `jsonc` as example file format
+- added support for `intro` and `outro` files for examples
