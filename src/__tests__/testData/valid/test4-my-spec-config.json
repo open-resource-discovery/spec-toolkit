@@ -1,4 +1,5 @@
 {
+  "$schema": "https://open-resource-discovery.github.io/spec-toolkit/spec-v1/spec-toolkit-config.schema.json#",
   "generalConfig": {
     "sortProperties": false
   },

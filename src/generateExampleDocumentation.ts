@@ -12,22 +12,38 @@ interface ExampleDocumentsDict {
 export function generateExampleDocumentation(configData: SpecToolkitConfigurationDocument): void {
   for (const docConfig of configData.docsConfig) {
     if (docConfig.type === "spec" && docConfig.examplesFolderPath) {
-      const jsonExampleFilePaths = fg.sync(`${docConfig.examplesFolderPath}/*.json`, { ignore: ["_*"] });
+      const jsonExampleFilePaths = fg.sync(`${docConfig.examplesFolderPath}/*.{json,jsonc}`, { ignore: ["_*"] });
 
       const mdExamplePages: ExampleDocumentsDict = {};
 
-      // for each .json example generate a documentation .md site
+      // for each json,jsonc example generate a documentation .md site
       for (const filePath of jsonExampleFilePaths) {
         let text = "";
         const exampleFileContent = fs.readFileSync(filePath).toString();
         const fileName = path.parse(filePath).name + ".md";
+
+        const exampleFileIntroPath = filePath.replace(/.(json?|jsonc?)$/, ".intro.md");
+        let exampleFileIntroContent = undefined;
+        try {
+          exampleFileIntroContent = fs.readFileSync(exampleFileIntroPath).toString();
+        } catch (_) {
+          // Ignore
+        }
+
+        const exampleFileOutroPath = filePath.replace(/.(json?|jsonc?)$/, ".outro.md");
+        let exampleFileOutroContent = undefined;
+        try {
+          exampleFileOutroContent = fs.readFileSync(exampleFileOutroPath).toString();
+        } catch (_) {
+          // Ignore
+        }
 
         const title = path.parse(filePath).name;
         const description = `Example documents for ${docConfig.id}.`;
 
         let prefix = "";
         try {
-          prefix = fs.readFileSync(filePath.replace(".json", ".md")).toString() + "\n\n";
+          prefix = fs.readFileSync(filePath.replace(".json|.jsonc", ".md")).toString() + "\n\n";
         } catch (_) {
           // Ignore
         }
@@ -44,10 +60,16 @@ export function generateExampleDocumentation(configData: SpecToolkitConfiguratio
         }
 
         log.info(`Found ${docConfig.id} example file: ${filePath}`);
+        if (exampleFileIntroContent) {
+          text += exampleFileIntroContent + "\n";
+        }
         text += `## Example File\n\n`;
         text += "```js\n";
         text += exampleFileContent;
         text += "\n```\n";
+        if (exampleFileOutroContent) {
+          text += "\n" + exampleFileOutroContent;
+        }
 
         mdExamplePages[fileName] = text;
       }
