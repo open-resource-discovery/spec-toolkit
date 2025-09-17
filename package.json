@@ -34,7 +34,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/open-resource-discovery//spec-toolkit.git"
+    "url": "git+https://github.com/open-resource-discovery/spec-toolkit.git"
   },
   "homepage": "https://open-resource-discovery.github.io/spec-toolkit/index",
   "dependencies": {
