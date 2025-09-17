@@ -153,7 +153,7 @@
         },
         "examplesFolderPath": {
           "type": "string",
-          "description": "The path to the folder containing the examples for the specification.\nThis is used to generate the documentation for the specification.\n"
+          "description": "The path to the folder containing the examples for the specification.\nThis is used to generate the documentation for the specification.\n\nSHOULD contain specification compliant instance example files with extension `.json` or `.jsonc`.\n"
         },
         "mdFrontmatter": {
           "$ref": "#/definitions/MdFrontmatter"

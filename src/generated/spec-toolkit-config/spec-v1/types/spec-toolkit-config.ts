@@ -113,6 +113,8 @@ export interface SpecConfig {
    * The path to the folder containing the examples for the specification.
    * This is used to generate the documentation for the specification.
    *
+   * SHOULD contain specification compliant instance example files with extension `.json` or `.jsonc`.
+   *
    */
   examplesFolderPath?: string;
   mdFrontmatter?: MdFrontmatter;
