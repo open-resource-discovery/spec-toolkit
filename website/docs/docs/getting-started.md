@@ -19,7 +19,7 @@ Such a specification writing process will be described below:
 1. Start by writing a JSON Schema yaml file defining your interface. Example:
 
    ```yaml
-   $schema: "http://json-schema.org/draft-07/schema#"
+   $schema: "https://open-resource-discovery.github.io/spec-toolkit/spec-v1/spec.schema.json#"
    title: Bookstore Document
    description: |-
      This is the interface description of a Bookstore v1.
@@ -109,6 +109,7 @@ Such a specification writing process will be described below:
 
    ```jsonc
    {
+    "$schema": "https://open-resource-discovery.github.io/spec-toolkit/spec-v1/spec-toolkit-config.schema.json#",
      "generalConfig": {
        "sortProperties": false
      },
