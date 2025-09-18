@@ -10,6 +10,10 @@ For a roadmap including expected timeline, please refer to [ROADMAP.md](./ROADMA
 
 ## [unreleased]
 
+## [0.3.2]
+
+- fix json examples should be represented as json in generated markdown files and jsonc examples as jsonc
+
 ## [0.3.1]
 
 - added support for `jsonc` as example file format
