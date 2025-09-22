@@ -10,6 +10,10 @@ For a roadmap including expected timeline, please refer to [ROADMAP.md](./ROADMA
 
 ## [unreleased]
 
+## [0.3.3]
+
+- fix table pattern properties cannot be of type `<string>` because html tag characters are not escaped
+
 ## [0.3.2]
 
 - fix json examples should be represented as json in generated markdown files and jsonc examples as jsonc
