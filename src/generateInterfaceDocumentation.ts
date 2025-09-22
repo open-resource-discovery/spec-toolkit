@@ -534,7 +534,7 @@ function getPatternPropertiesTableEntryText(
         valueType = value.type.join(" \\| ");
       }
       if (valueItems && valueItems.type) {
-        valueType = `${valueType}<${valueItems.type}>`;
+        valueType = escapeHtmlChars(`${valueType}<${valueItems.type}>`);
       }
 
       // Support direct (singular) $ref
