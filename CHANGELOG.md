@@ -10,6 +10,8 @@ For a roadmap including expected timeline, please refer to [ROADMAP.md](./ROADMA
 
 ## [unreleased]
 
+## [0.4.0]
+
 - added general config parameter `tsTypeExportExcludeJsFileExtension` for suppressing the `.js` file ending for typescript types exports
 - remove general config parameter `sortProperties` which had no concrete implementation or effect when configured
 
