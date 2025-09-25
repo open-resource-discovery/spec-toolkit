@@ -46,10 +46,10 @@ export interface SpecToolkitConfigurationDocument {
  */
 export interface GeneralConfig {
   /**
-   * If set to `true`, the properties of the generated JSON Schema will be sorted alphabetically.
-   * This is useful for better readability and easier comparison of different versions of the schema.
+   * If set to `true`, the generated TypeScript types will exclude the `.js` file extension in the export statements.
+   * The '.js' file extension is useful for compatibility with Node.js ESM modules but in Node.js commonjs modules it is not needed.
    */
-  sortProperties?: boolean;
+  tsTypeExportExcludeJsFileExtension?: boolean;
 }
 /**
  * This is the configuration for a JSON Schema specification.

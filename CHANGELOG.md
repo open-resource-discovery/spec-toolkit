@@ -10,6 +10,9 @@ For a roadmap including expected timeline, please refer to [ROADMAP.md](./ROADMA
 
 ## [unreleased]
 
+- added general config parameter `tsTypeExportExcludeJsFileExtension` for suppressing the `.js` file ending for typescript types exports
+- remove general config parameter `sortProperties` which had no concrete implementation or effect when configured
+
 ## [0.3.3]
 
 - fix table pattern properties cannot be of type `<string>` because html tag characters are not escaped

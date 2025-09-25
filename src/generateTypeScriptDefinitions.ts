@@ -89,7 +89,11 @@ export async function generateTypeScriptDefinitions(configData: SpecToolkitConfi
       const typesFile = `${process.cwd()}/${configData.outputPath}/${typesOutputFolderName}/${docConfig.id}.ts`;
       await fs.outputFile(typesFile, definitions);
       log.info(`Result: ${typesFile}`);
-      indexExportStatements += `export * from "./${docConfig.id}.js";\n`;
+      if (configData.generalConfig?.tsTypeExportExcludeJsFileExtension) {
+        indexExportStatements += `export * from "./${docConfig.id}";\n`;
+      } else {
+        indexExportStatements += `export * from "./${docConfig.id}.js";\n`;
+      }
     }
   }
 

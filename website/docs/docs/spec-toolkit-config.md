@@ -73,11 +73,11 @@ Spec-Toolkit CLI root level configuration document (`spec-toolkit.config.json`),
 This is the general configuration for the spec-toolkit.
 This is optional and can be omitted if no general configuration is needed.
 
-**Type**: Object(<a href="#generalconfig_sortproperties">sortProperties</a>)
+**Type**: Object(<a href="#generalconfig_tstypeexportexcludejsfileextension">tsTypeExportExcludeJsFileExtension</a>)
 
 | Property | Type | Description |
 | -------- | ---- | ----------- |
-|<div className="interface-property-name anchor" id="generalconfig_sortproperties">sortProperties<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#generalconfig_sortproperties" title="GeneralConfig.sortProperties"></a></div>|<div className="interface-property-type">boolean</div>|<div className="interface-property-description">If set to `true`, the properties of the generated JSON Schema will be sorted alphabetically.<br/>This is useful for better readability and easier comparison of different versions of the schema.</div>|
+|<div className="interface-property-name anchor" id="generalconfig_tstypeexportexcludejsfileextension">tsTypeExportExcludeJsFileExtension<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#generalconfig_tstypeexportexcludejsfileextension" title="GeneralConfig.tsTypeExportExcludeJsFileExtension"></a></div>|<div className="interface-property-type">boolean</div>|<div className="interface-property-description">If set to `true`, the generated TypeScript types will exclude the `.js` file extension in the export statements.<br/>The '.js' file extension is useful for compatibility with Node.js ESM modules but in Node.js commonjs modules it is not needed.<hr/>**Default Value**: `true`</div>|
 
 
 ### DocsConfigItem
@@ -201,9 +201,6 @@ This is used to pass additional options to the plugin.
 
 ```json
 {
-  "generalConfig": {
-    "sortProperties": false
-  },
   "outputPath": "src/generated/spec-v1",
   "docsConfig": [
     {

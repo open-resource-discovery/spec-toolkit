@@ -2,9 +2,6 @@
 
 ```json
 {
-  "generalConfig": {
-    "sortProperties": false
-  },
   "outputPath": "src/generated/spec-v1",
   "docsConfig": [
     {
