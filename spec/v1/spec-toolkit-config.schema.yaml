@@ -73,11 +73,12 @@ definitions:
       This is the general configuration for the spec-toolkit.
       This is optional and can be omitted if no general configuration is needed.
     properties:
-      sortProperties:
+      tsTypeExportExcludeJsFileExtension:
         type: boolean
+        default: true
         description: |-
-          If set to `true`, the properties of the generated JSON Schema will be sorted alphabetically.
-          This is useful for better readability and easier comparison of different versions of the schema.
+          If set to `true`, the generated TypeScript types will exclude the `.js` file extension in the export statements.
+          The '.js' file extension is useful for compatibility with Node.js ESM modules but in Node.js commonjs modules it is not needed.
     additionalProperties: false
   DocsConfigItem:
     type: "object"
