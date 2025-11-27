@@ -51,4 +51,4 @@ jobs:
           preview-branch: main
           umbrella-dir: spec-toolkit
           pages-base-url: open-resource-discovery.github.io/pr-preview
-          token: ${{ secrets.NPM_TOKEN }}
+          token: ${{ secrets.PR_PREVIEW_DEPLOY_TOKEN }}
