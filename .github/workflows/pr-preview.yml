@@ -30,15 +30,14 @@ jobs:
         working-directory: website
         run: |
           set -euo pipefail
-          PR_PATH="/spec-toolkit/pr-previews/pr-${{ github.event.pull_request.number }}/"
+          PR_PATH="/pr-preview/spec-toolkit/pr-${{ github.event.pull_request.number }}/"
           CFG="docusaurus.config.js"
 
           cp "$CFG" "$CFG.bak"
           trap 'mv -f "$CFG.bak" "$CFG"' EXIT
 
-          # baseUrl: "/spec-toolkit/",
-          sed -i "s#baseUrl: \"/spec-toolkit/\",#baseUrl: \"$PR_PATH\",#g" "$CFG"
-          grep -q "$PR_PATH\"," "$CFG"
+          sed -i 's#baseUrl: "/spec-toolkit/",#baseUrl: "'"$PR_PATH"'",#' "$CFG"
+          grep -q "baseUrl: \"$PR_PATH\"" "$CFG"
 
           npm ci
           npm run build
