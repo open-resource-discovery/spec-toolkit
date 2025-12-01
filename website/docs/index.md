@@ -14,7 +14,7 @@ title: "Overview"
 :::
 
 ### Summary
-
+To remove
 If you're reading this page, you likely already understand the importance of formal interface contracts and specifications for integration and interoperability.
 
 But writing good interface contracts and specifications is hard:
