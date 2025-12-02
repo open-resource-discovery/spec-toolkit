@@ -91,12 +91,12 @@ const config = {
         logo: {
           alt: "Spec-toolkit Site Logo",
           src: "img/logo.svg",
-          href: "/index",
+          href: "/",
         },
         items: [
           {
             label: "Overview",
-            to: "/index",
+            to: "/",
           },
           {
             label: "Documentation",
