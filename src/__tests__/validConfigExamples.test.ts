@@ -1,13 +1,11 @@
 import fg from "fast-glob";
 import fs from "fs-extra";
 import * as yaml from "js-yaml";
-import jsonSchemaLib from "json-schema-library";
+import { compileSchema, JsonError, JsonSchema, ErrorConfig } from "json-schema-library";
 
 describe("Valid Config Example Files", (): void => {
-  const testSchema = yaml.load(
-    fs.readFileSync(`./spec/v1/spec-toolkit-config.schema.yaml`).toString(),
-  ) as jsonSchemaLib.JsonSchema;
-  const testSchemaValidator = jsonSchemaLib.compileSchema(testSchema);
+  const testSchema = yaml.load(fs.readFileSync(`./spec/v1/spec-toolkit-config.schema.yaml`).toString()) as JsonSchema;
+  const testSchemaValidator = compileSchema(testSchema);
 
   const jsonDocumentFilePaths = fg.sync("./examples/*.json", {});
   const yamlDocumentFilePaths = fg.sync("./examples/*.yaml", {});
@@ -40,11 +38,11 @@ describe("Valid Config Example Files", (): void => {
 });
 
 export type JsonSchemaValidationError = {
-  code: jsonSchemaLib.ErrorConfig | string;
+  code: ErrorConfig | string;
   pointer: string;
   message: string;
 };
-export function simplifyValidationErrors(errors: jsonSchemaLib.JsonError[]): JsonSchemaValidationError[] {
+export function simplifyValidationErrors(errors: JsonError[]): JsonSchemaValidationError[] {
   return errors.map((el) => {
     return {
       code: el.code,

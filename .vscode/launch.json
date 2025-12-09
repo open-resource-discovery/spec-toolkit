@@ -19,6 +19,7 @@
       "name": "Debug current unit-test file",
       "program": "${workspaceRoot}/node_modules/.bin/jest",
       "cwd": "${workspaceRoot}",
+      "runtimeArgs": ["--experimental-vm-modules", "--no-warnings=ExperimentalWarning"],
       "args": ["${fileBasename}", "--runInBand", "--verbose", "--forceExit"],
       "windows": {
         "program": "${workspaceFolder}/node_modules/jest/bin/jest"

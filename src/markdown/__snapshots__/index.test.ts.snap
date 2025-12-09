@@ -1,0 +1,629 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`test generateMarkdown test **Type** should include correct type information - **Type: boolean** and All of 1`] = `
+"
+
+## Schema Definitions
+
+* The root schema of the document is [Test Schema](#test-schema)
+* The interface is available as JSON Schema: [test-spec.schema.json](http://example.com/schemas/test-schema).
+
+
+### Test Schema
+
+**Type**: Object(<a href="#test-schema_property1">property1</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="test-schema_property1">property1<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#test-schema_property1" title="#test-schema_property1"></a></div>|<div className="interface-property-type">[Property 1 title](#property-1-title)</div>|<div className="interface-property-description">Property 1 ref description</div>|
+
+
+### Property 1 title
+
+Property 1 description
+
+**Type:** boolean
+
+
+### Type A title
+
+Type A description
+
+**Type:** string
+
+
+### Type B title
+
+Type B description
+
+**Type:** number
+
+
+### Type C title
+
+Type C description
+
+**Type**: Object(<a href="#type-c-title_detail">detail</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="type-c-title_detail">detail<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#type-c-title_detail" title="#type-c-title_detail"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Detail<br/><br/>Detail description</div>|
+
+"
+`;
+
+exports[`test generateMarkdown test **Type** should include correct type information - **Type: boolean** and Any of 1`] = `
+"
+
+## Schema Definitions
+
+* The root schema of the document is [Test Schema](#test-schema)
+* The interface is available as JSON Schema: [test-spec.schema.json](http://example.com/schemas/test-schema).
+
+
+### Test Schema
+
+**Type**: Object(<a href="#test-schema_property1">property1</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="test-schema_property1">property1<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#test-schema_property1" title="#test-schema_property1"></a></div>|<div className="interface-property-type">[Property 1 title](#property-1-title)</div>|<div className="interface-property-description">Property 1 ref description</div>|
+
+
+### Property 1 title
+
+Property 1 description
+
+**Type:** boolean
+
+
+### Type A title
+
+Type A description
+
+**Type:** string
+
+
+### Type B title
+
+Type B description
+
+**Type:** number
+
+
+### Type C title
+
+Type C description
+
+**Type**: Object(<a href="#type-c-title_detail">detail</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="type-c-title_detail">detail<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#type-c-title_detail" title="#type-c-title_detail"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Detail<br/><br/>Detail description</div>|
+
+"
+`;
+
+exports[`test generateMarkdown test **Type** should include correct type information - **Type: boolean** and One of (oneOf values as list) 1`] = `
+"
+
+## Schema Definitions
+
+* The root schema of the document is [Test Schema](#test-schema)
+* The interface is available as JSON Schema: [test-spec.schema.json](http://example.com/schemas/test-schema).
+
+
+### Test Schema
+
+**Type**: Object(<a href="#test-schema_property1">property1</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="test-schema_property1">property1<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#test-schema_property1" title="#test-schema_property1"></a></div>|<div className="interface-property-type">[Property 1 title](#property-1-title)</div>|<div className="interface-property-description">Property 1 ref description</div>|
+
+
+### Property 1 title
+
+Property 1 description
+
+**Type:** boolean<br/>
+**One of**: <ul><li><p>[Type A title](#type-a-title)</p></li><li><p>[Type B title](#type-b-title)</p></li><li><p>[Type C title](#type-c-title)</p></li></ul>
+
+
+### Type A title
+
+Type A description
+
+**Type:** string
+
+
+### Type B title
+
+Type B description
+
+**Type:** number
+
+
+### Type C title
+
+Type C description
+
+**Type**: Object(<a href="#type-c-title_detail">detail</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="type-c-title_detail">detail<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#type-c-title_detail" title="#type-c-title_detail"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Detail<br/><br/>Detail description</div>|
+
+"
+`;
+
+exports[`test generateMarkdown test **Type** should include correct type information - **Type: integer** and All of 1`] = `
+"
+
+## Schema Definitions
+
+* The root schema of the document is [Test Schema](#test-schema)
+* The interface is available as JSON Schema: [test-spec.schema.json](http://example.com/schemas/test-schema).
+
+
+### Test Schema
+
+**Type**: Object(<a href="#test-schema_property1">property1</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="test-schema_property1">property1<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#test-schema_property1" title="#test-schema_property1"></a></div>|<div className="interface-property-type">[Property 1 title](#property-1-title)</div>|<div className="interface-property-description">Property 1 ref description</div>|
+
+
+### Property 1 title
+
+Property 1 description
+
+**Type:** integer
+
+
+### Type A title
+
+Type A description
+
+**Type:** string
+
+
+### Type B title
+
+Type B description
+
+**Type:** number
+
+
+### Type C title
+
+Type C description
+
+**Type**: Object(<a href="#type-c-title_detail">detail</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="type-c-title_detail">detail<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#type-c-title_detail" title="#type-c-title_detail"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Detail<br/><br/>Detail description</div>|
+
+"
+`;
+
+exports[`test generateMarkdown test **Type** should include correct type information - **Type: integer** and Any of 1`] = `
+"
+
+## Schema Definitions
+
+* The root schema of the document is [Test Schema](#test-schema)
+* The interface is available as JSON Schema: [test-spec.schema.json](http://example.com/schemas/test-schema).
+
+
+### Test Schema
+
+**Type**: Object(<a href="#test-schema_property1">property1</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="test-schema_property1">property1<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#test-schema_property1" title="#test-schema_property1"></a></div>|<div className="interface-property-type">[Property 1 title](#property-1-title)</div>|<div className="interface-property-description">Property 1 ref description</div>|
+
+
+### Property 1 title
+
+Property 1 description
+
+**Type:** integer
+
+
+### Type A title
+
+Type A description
+
+**Type:** string
+
+
+### Type B title
+
+Type B description
+
+**Type:** number
+
+
+### Type C title
+
+Type C description
+
+**Type**: Object(<a href="#type-c-title_detail">detail</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="type-c-title_detail">detail<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#type-c-title_detail" title="#type-c-title_detail"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Detail<br/><br/>Detail description</div>|
+
+"
+`;
+
+exports[`test generateMarkdown test **Type** should include correct type information - **Type: integer** and One of (oneOf values as list) 1`] = `
+"
+
+## Schema Definitions
+
+* The root schema of the document is [Test Schema](#test-schema)
+* The interface is available as JSON Schema: [test-spec.schema.json](http://example.com/schemas/test-schema).
+
+
+### Test Schema
+
+**Type**: Object(<a href="#test-schema_property1">property1</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="test-schema_property1">property1<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#test-schema_property1" title="#test-schema_property1"></a></div>|<div className="interface-property-type">[Property 1 title](#property-1-title)</div>|<div className="interface-property-description">Property 1 ref description</div>|
+
+
+### Property 1 title
+
+Property 1 description
+
+**Type:** integer<br/>
+**One of**: <ul><li><p>[Type A title](#type-a-title)</p></li><li><p>[Type B title](#type-b-title)</p></li><li><p>[Type C title](#type-c-title)</p></li></ul>
+
+
+### Type A title
+
+Type A description
+
+**Type:** string
+
+
+### Type B title
+
+Type B description
+
+**Type:** number
+
+
+### Type C title
+
+Type C description
+
+**Type**: Object(<a href="#type-c-title_detail">detail</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="type-c-title_detail">detail<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#type-c-title_detail" title="#type-c-title_detail"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Detail<br/><br/>Detail description</div>|
+
+"
+`;
+
+exports[`test generateMarkdown test **Type** should include correct type information - **Type: number** and All of 1`] = `
+"
+
+## Schema Definitions
+
+* The root schema of the document is [Test Schema](#test-schema)
+* The interface is available as JSON Schema: [test-spec.schema.json](http://example.com/schemas/test-schema).
+
+
+### Test Schema
+
+**Type**: Object(<a href="#test-schema_property1">property1</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="test-schema_property1">property1<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#test-schema_property1" title="#test-schema_property1"></a></div>|<div className="interface-property-type">[Property 1 title](#property-1-title)</div>|<div className="interface-property-description">Property 1 ref description</div>|
+
+
+### Property 1 title
+
+Property 1 description
+
+**Type:** number
+
+
+### Type A title
+
+Type A description
+
+**Type:** string
+
+
+### Type B title
+
+Type B description
+
+**Type:** number
+
+
+### Type C title
+
+Type C description
+
+**Type**: Object(<a href="#type-c-title_detail">detail</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="type-c-title_detail">detail<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#type-c-title_detail" title="#type-c-title_detail"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Detail<br/><br/>Detail description</div>|
+
+"
+`;
+
+exports[`test generateMarkdown test **Type** should include correct type information - **Type: number** and Any of 1`] = `
+"
+
+## Schema Definitions
+
+* The root schema of the document is [Test Schema](#test-schema)
+* The interface is available as JSON Schema: [test-spec.schema.json](http://example.com/schemas/test-schema).
+
+
+### Test Schema
+
+**Type**: Object(<a href="#test-schema_property1">property1</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="test-schema_property1">property1<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#test-schema_property1" title="#test-schema_property1"></a></div>|<div className="interface-property-type">[Property 1 title](#property-1-title)</div>|<div className="interface-property-description">Property 1 ref description</div>|
+
+
+### Property 1 title
+
+Property 1 description
+
+**Type:** number
+
+
+### Type A title
+
+Type A description
+
+**Type:** string
+
+
+### Type B title
+
+Type B description
+
+**Type:** number
+
+
+### Type C title
+
+Type C description
+
+**Type**: Object(<a href="#type-c-title_detail">detail</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="type-c-title_detail">detail<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#type-c-title_detail" title="#type-c-title_detail"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Detail<br/><br/>Detail description</div>|
+
+"
+`;
+
+exports[`test generateMarkdown test **Type** should include correct type information - **Type: number** and One of (oneOf values as list) 1`] = `
+"
+
+## Schema Definitions
+
+* The root schema of the document is [Test Schema](#test-schema)
+* The interface is available as JSON Schema: [test-spec.schema.json](http://example.com/schemas/test-schema).
+
+
+### Test Schema
+
+**Type**: Object(<a href="#test-schema_property1">property1</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="test-schema_property1">property1<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#test-schema_property1" title="#test-schema_property1"></a></div>|<div className="interface-property-type">[Property 1 title](#property-1-title)</div>|<div className="interface-property-description">Property 1 ref description</div>|
+
+
+### Property 1 title
+
+Property 1 description
+
+**Type:** number<br/>
+**One of**: <ul><li><p>[Type A title](#type-a-title)</p></li><li><p>[Type B title](#type-b-title)</p></li><li><p>[Type C title](#type-c-title)</p></li></ul>
+
+
+### Type A title
+
+Type A description
+
+**Type:** string
+
+
+### Type B title
+
+Type B description
+
+**Type:** number
+
+
+### Type C title
+
+Type C description
+
+**Type**: Object(<a href="#type-c-title_detail">detail</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="type-c-title_detail">detail<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#type-c-title_detail" title="#type-c-title_detail"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Detail<br/><br/>Detail description</div>|
+
+"
+`;
+
+exports[`test generateMarkdown test **Type** should include correct type information - **Type: string** and All of 1`] = `
+"
+
+## Schema Definitions
+
+* The root schema of the document is [Test Schema](#test-schema)
+* The interface is available as JSON Schema: [test-spec.schema.json](http://example.com/schemas/test-schema).
+
+
+### Test Schema
+
+**Type**: Object(<a href="#test-schema_property1">property1</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="test-schema_property1">property1<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#test-schema_property1" title="#test-schema_property1"></a></div>|<div className="interface-property-type">[Property 1 title](#property-1-title)</div>|<div className="interface-property-description">Property 1 ref description</div>|
+
+
+### Property 1 title
+
+Property 1 description
+
+**Type:** string
+
+
+### Type A title
+
+Type A description
+
+**Type:** string
+
+
+### Type B title
+
+Type B description
+
+**Type:** number
+
+
+### Type C title
+
+Type C description
+
+**Type**: Object(<a href="#type-c-title_detail">detail</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="type-c-title_detail">detail<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#type-c-title_detail" title="#type-c-title_detail"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Detail<br/><br/>Detail description</div>|
+
+"
+`;
+
+exports[`test generateMarkdown test **Type** should include correct type information - **Type: string** and Any of 2`] = `
+"
+
+## Schema Definitions
+
+* The root schema of the document is [Test Schema](#test-schema)
+* The interface is available as JSON Schema: [test-spec.schema.json](http://example.com/schemas/test-schema).
+
+
+### Test Schema
+
+**Type**: Object(<a href="#test-schema_property1">property1</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="test-schema_property1">property1<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#test-schema_property1" title="#test-schema_property1"></a></div>|<div className="interface-property-type">[Property 1 title](#property-1-title)</div>|<div className="interface-property-description">Property 1 ref description</div>|
+
+
+### Property 1 title
+
+Property 1 description
+
+**Type:** string
+
+
+### Type A title
+
+Type A description
+
+**Type:** string
+
+
+### Type B title
+
+Type B description
+
+**Type:** number
+
+
+### Type C title
+
+Type C description
+
+**Type**: Object(<a href="#type-c-title_detail">detail</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="type-c-title_detail">detail<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#type-c-title_detail" title="#type-c-title_detail"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Detail<br/><br/>Detail description</div>|
+
+"
+`;
+
+exports[`test generateMarkdown test **Type** should include correct type information - **Type: string** and One of (oneOf values as list) 1`] = `
+"
+
+## Schema Definitions
+
+* The root schema of the document is [Test Schema](#test-schema)
+* The interface is available as JSON Schema: [test-spec.schema.json](http://example.com/schemas/test-schema).
+
+
+### Test Schema
+
+**Type**: Object(<a href="#test-schema_property1">property1</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="test-schema_property1">property1<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#test-schema_property1" title="#test-schema_property1"></a></div>|<div className="interface-property-type">[Property 1 title](#property-1-title)</div>|<div className="interface-property-description">Property 1 ref description</div>|
+
+
+### Property 1 title
+
+Property 1 description
+
+**Type:** string<br/>
+**One of**: <ul><li><p>[Type A title](#type-a-title)</p></li><li><p>[Type B title](#type-b-title)</p></li><li><p>[Type C title](#type-c-title)</p></li></ul>
+
+
+### Type A title
+
+Type A description
+
+**Type:** string
+
+
+### Type B title
+
+Type B description
+
+**Type:** number
+
+
+### Type C title
+
+Type C description
+
+**Type**: Object(<a href="#type-c-title_detail">detail</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="type-c-title_detail">detail<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#type-c-title_detail" title="#type-c-title_detail"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Detail<br/><br/>Detail description</div>|
+
+"
+`;

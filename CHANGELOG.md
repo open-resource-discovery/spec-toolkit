@@ -10,6 +10,12 @@ For a roadmap including expected timeline, please refer to [ROADMAP.md](./ROADMA
 
 ## [unreleased]
 
+## [0.5.0]
+
+- added extensible enum documentation support
+- code refactoring to allow better unit testing besides e2e testing
+- update dependencies
+
 ## [0.4.0]
 
 - added general config parameter `tsTypeExportExcludeJsFileExtension` for suppressing the `.js` file ending for typescript types exports

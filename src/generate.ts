@@ -19,10 +19,18 @@ export const typesOutputFolderName = "types";
 export const schemasOutputFolderName = "schemas";
 export const extensionFolderDiffToOutputFolderName = `../`; // to get from "docs/extensions" to "docs" folder, step one folder path out
 
+// global variable to hold the output path
+let outputPath = "";
+export function getOutputPath(): string {
+  return outputPath;
+}
+
 export async function generate(
   configData: SpecToolkitConfigurationDocument,
   pluginManager: PluginManager,
 ): Promise<void> {
+  outputPath = configData.outputPath;
+
   log.info(" ");
   log.info("==========================================================================");
   log.info("GENERATE Spec (GitHub) Page");
