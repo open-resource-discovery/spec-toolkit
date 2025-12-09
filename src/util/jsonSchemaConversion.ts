@@ -1,7 +1,7 @@
 import _ from "lodash";
 
 import { SpecJsonSchema, SpecJsonSchemaRoot } from "../generated/spec/spec-v1/types/index.js";
-import { detectAnyOfEnum, detectOneOfEnum } from "../markdown/generateMarkdownUtils.js";
+import { detectExtensibleEnum, detectOneOfEnum } from "../markdown/generateMarkdownUtils.js";
 
 /**
  * Prepare a Spec JSON Schema file, so it is easier to work with.
@@ -121,14 +121,14 @@ export function convertAnyOfEnum(documentSchema: SpecJsonSchemaRoot): SpecJsonSc
         const property = jsonSchemaObject.properties[propertyName];
         const propertyItems = property.items;
 
-        if (property.anyOf && detectAnyOfEnum(property)) {
+        if (property.anyOf && detectExtensibleEnum(property)) {
           for (const anyOfItem of property.anyOf) {
             if (anyOfItem.const) {
               anyOfItem.enum = [anyOfItem.const];
               delete anyOfItem.const;
             }
           }
-        } else if (propertyItems && propertyItems.anyOf && detectAnyOfEnum(propertyItems)) {
+        } else if (propertyItems && propertyItems.anyOf && detectExtensibleEnum(propertyItems)) {
           // Do the same for .items
           for (const anyOfItem of propertyItems.anyOf) {
             if (anyOfItem.const) {

@@ -4,6 +4,7 @@ import { log } from "../util/log.js";
 import { SpecTarget } from "./index.js";
 import { checkRequiredPropertiesExist, getJsonSchemaValidator } from "../util/validation.js";
 import { documentationOutputFolderName, extensionFolderDiffToOutputFolderName, getOutputPath } from "../generate.js";
+import assert from "assert";
 import GfmEscape from "gfm-escape";
 const escaper = new GfmEscape({ table: true });
 
@@ -647,8 +648,8 @@ function generatePrimitiveTypeDescription(
 
   // Support extensible enums defined as anyOf[] const
   // See https://github.com/json-schema-org/json-schema-spec/issues/57#issuecomment-247861695
-  if (detectAnyOfEnum(jsonSchemaObject)) {
-    text += getAnyOfDescription(jsonSchemaObject) + "\n";
+  if (detectExtensibleEnum(jsonSchemaObject)) {
+    text += getAnyOfDescription(jsonSchemaObject, jsonSchemaRoot, targetDocumentId) + "\n";
   }
 
   if (jsonSchemaObject["x-introduced-in-version"]) {
@@ -800,9 +801,9 @@ function getDescriptionWithinTable(jsonSchemaObject: SpecJsonSchema, jsonSchemaR
       result += getOneOfEnumDescription(jsonSchemaObject.items, "Array Item Allowed Values");
     }
 
-    if (detectAnyOfEnum(jsonSchemaObject.items)) {
+    if (detectExtensibleEnum(jsonSchemaObject.items)) {
       result = addVerticalSeparator(result);
-      result += getAnyOfDescription(jsonSchemaObject.items, "Array Item Recommended Values");
+      result += getAnyOfDescription(jsonSchemaObject.items, jsonSchemaRoot, undefined, "Array Item Allowed Values");
     }
   }
 
@@ -838,9 +839,9 @@ function getDescriptionWithinTable(jsonSchemaObject: SpecJsonSchema, jsonSchemaR
 
   // Support extensible enums defined as anyOf[] const
   // See https://github.com/json-schema-org/json-schema-spec/issues/57#issuecomment-247861695
-  if (detectAnyOfEnum(jsonSchemaObject)) {
+  if (detectExtensibleEnum(jsonSchemaObject)) {
     result = addVerticalSeparator(result);
-    result += getAnyOfDescription(jsonSchemaObject);
+    result += getAnyOfDescription(jsonSchemaObject, jsonSchemaRoot, undefined, "Array Item Allowed Values");
   }
 
   if (jsonSchemaObject["x-introduced-in-version"]) {
@@ -957,13 +958,13 @@ export function detectOneOfRef(jsonSchemaObject: SpecJsonSchema): boolean {
 }
 
 /**
- * Detects whether the oneOf is used to
+ * Detects whether the anyOf is used to
  * * describe an extensible enum
- * * or is used in other, more generic ways
+ * * or is used in other, more generic ways (like anyOf $ref links)
  *
  * @see https://github.com/zalando/restful-api-guidelines/issues/412
  */
-export function detectAnyOfEnum(jsonSchemaObject: SpecJsonSchema): boolean {
+export function detectExtensibleEnum(jsonSchemaObject: SpecJsonSchema): boolean {
   if (!jsonSchemaObject.anyOf) {
     return false;
   }
@@ -971,21 +972,22 @@ export function detectAnyOfEnum(jsonSchemaObject: SpecJsonSchema): boolean {
   let anyOfWithStringType = 0;
 
   // Count how often const was used in the oneOf items
-  for (const oneOfItem of jsonSchemaObject.anyOf) {
-    if (oneOfItem.const) {
+  for (const anyOfItem of jsonSchemaObject.anyOf) {
+    if (anyOfItem.const) {
       anyOfWithConst++;
-    } else if (oneOfItem.type === "string") {
+    } else if (anyOfItem.type === "string") {
       anyOfWithStringType++;
     }
   }
 
-  if (anyOfWithConst === jsonSchemaObject.anyOf.length - 1 && anyOfWithStringType === 1) {
-    // If all but one anyOf items have a const value and the other one is a generic type: string
-    // we assume that we have an extensible enum
-    // FIXME: This detection is not foolproof, but it'll work for the scope of what we have ATM
+  if (anyOfWithConst && anyOfWithStringType) {
+    // If there is at least one const value entry (enum) and at least one that has a string type, we treat it as extensible enum
     return true;
+  } else {
+    // FIXME: Here we forgot about anyOf where all the entries are a $ref
+    // This function needs to be refactored to either also care about this or change its scope
+    return false;
   }
-  return false;
 }
 
 export function getReferencedSchema(
@@ -1104,27 +1106,43 @@ export function getAllOfRefDescription(jsonSchemaObject: SpecJsonSchema, jsonSch
   return result;
 }
 
-export function getAnyOfDescription(jsonSchemaObject: SpecJsonSchema, title = "Recommended Values"): string {
+export function getAnyOfDescription(
+  jsonSchemaObject: SpecJsonSchema,
+  jsonSchemaRoot: SpecJsonSchemaRoot,
+  targetDocumentId: string | undefined,
+  title = "Allowed Values",
+): string {
   let result = "";
 
-  const anyOfEnum = detectAnyOfEnum(jsonSchemaObject);
+  const anyOfEnum = detectExtensibleEnum(jsonSchemaObject);
   if (anyOfEnum) {
-    result += `**${title}**: <ul>`;
+    result += `**${title} (extensible)**: <ul>`;
     for (const anyOfItem of jsonSchemaObject.anyOf!) {
       if (anyOfItem.const) {
+        // Const for fixed enum values
         if (anyOfItem.description) {
           result += `<li>${escapeTextInTable(anyOfItem.const)}: ${escapeMdInTable(anyOfItem.description)}</li>`;
         } else {
           result += `<li>${escapeTextInTable(anyOfItem.const)}</li>`;
+        }
+      } else {
+        // Fallback type(s), for extensible enums
+        assert(anyOfItem.type, "anyOf that has no const MUST have a type at least");
+
+        const type = getTypeColumnText(anyOfItem, jsonSchemaRoot, targetDocumentId);
+        const format = anyOfItem.format ? ` of format \`${anyOfItem.format}\`` : "";
+        if (anyOfItem.description) {
+          result += `<li><em>Any</em> ${type}${format}: ${escapeMdInTable(anyOfItem.description)}</li>`;
+        } else {
+          result += `<li><em>Any</em> ${type}${format}</li>`;
         }
       }
     }
     result += "</ul>";
   } else {
     log.error(
-      "Currently the documentation generator only supports anyOf for const values (documented extensible enums)",
+      `Currently the documentation generator only supports anyOf for const values (documented extensible enums) ${jsonSchemaObject.title || jsonSchemaObject.$id}`,
     );
-    log.warn(`Ignoring ${JSON.stringify(jsonSchemaObject, null, 2)}`);
   }
 
   return result;

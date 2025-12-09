@@ -10,7 +10,8 @@ For a roadmap including expected timeline, please refer to [ROADMAP.md](./ROADMA
 
 ## [unreleased]
 
-- code refactoring to make allow better unit testing besides e2e testing
+- added extensible enum documentation support
+- code refactoring to allow better unit testing besides e2e testing
 
 ## [0.4.0]
 
