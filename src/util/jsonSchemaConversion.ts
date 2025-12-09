@@ -1,7 +1,7 @@
 import _ from "lodash";
 
 import { SpecJsonSchema, SpecJsonSchemaRoot } from "../generated/spec/spec-v1/types/index.js";
-import { detectAnyOfEnum, detectOneOfEnum } from "../generateInterfaceDocumentation.js";
+import { detectAnyOfEnum, detectOneOfEnum } from "../markdown/generateMarkdownUtils.js";
 
 /**
  * Prepare a Spec JSON Schema file, so it is easier to work with.
