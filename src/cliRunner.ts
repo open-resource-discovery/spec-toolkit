@@ -63,13 +63,14 @@ async function run(argv: CliOptions): Promise<void> {
 
     const ajvInstance = new Ajv({ allErrors: true, allowUnionTypes: true, allowMatchingProperties: true });
     addFormats.default(ajvInstance);
-    const validate = ajvInstance.compile<SpecToolkitConfigurationDocument>(configJsonSchema);
-    if (validate(configData)) {
+    const validateSpecToolkitConfig = ajvInstance.compile<SpecToolkitConfigurationDocument>(configJsonSchema);
+    if (validateSpecToolkitConfig(configData)) {
       const pluginManager = await registerPlugins(configData);
+
       await generate(configData, pluginManager);
     } else {
       throw new Error(
-        `Validation of Config JSON Schema file "${configFilePath}" failed with errors:\n ${JSON.stringify(validate.errors, null, 2)}`,
+        `Validation of Config JSON Schema file "${configFilePath}" failed with errors:\n ${JSON.stringify(validateSpecToolkitConfig.errors, null, 2)}`,
       );
     }
   } catch (error) {

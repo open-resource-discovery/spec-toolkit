@@ -154,7 +154,7 @@
         },
         "examplesFolderPath": {
           "type": "string",
-          "description": "The path to the folder containing the examples for the specification.\nThis is used to generate the documentation for the specification.\n\nSHOULD contain specification compliant instance example files with extension `.json` or `.jsonc`.\n"
+          "description": "The path to the folder containing the examples for the specification.\nThis is used to generate the documentation for the specification.\n\nThis folder MUST contain specification compliant instance example files with extension `.json` or `.jsonc`.\nThe instance example files will be validated against the specification during generation.\n\nIf omitted, no examples will be included in the generated documentation.\n\nIf provided, the folder MAY also contain for each instance example file e.g. `myExample.json` or `myExample.jsonc` optional *intro* and *outro* markdown files.\nThis *intro/outro* content will be included in the generated documentation before and after the `myExample.json` or `myExample.jsonc` content.\n\nIf an *intro* file is provided, it MUST be named `myExample.intro.md`.\nIf an *outro* file is provided, it MUST be named `myExample.outro.md`.\nOtherwise the *intro/outro* content will be omitted for the specific example.\n\nIf an *intro* file is provided it SHOULD contain the markdown frontmatter with at least `title` and `description` for the example.\n"
         },
         "mdFrontmatter": {
           "$ref": "#/definitions/MdFrontmatter"

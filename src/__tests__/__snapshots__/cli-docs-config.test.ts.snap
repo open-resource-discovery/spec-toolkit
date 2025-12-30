@@ -1,0 +1,123 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`CLI docsConfig tests Test the docsConfig Test the SpecConfig examplesFolderPath should successfully generate md examples when examplesFolderPath is configured and contains .json and .jsonc files 1`] = `
+"---
+title: example1
+description: Example documents for my-spec.
+---
+
+## Example File:  example1
+
+\`\`\`jsonc
+{
+            // this is a comment in jsonc
+            "firstName": "John",
+            "lastName": "Doe",
+          }
+\`\`\`
+"
+`;
+
+exports[`CLI docsConfig tests Test the docsConfig Test the SpecConfig examplesFolderPath should successfully generate md examples when examplesFolderPath is configured and contains .json and .jsonc files 2`] = `
+"---
+title: example2
+description: Example documents for my-spec.
+---
+
+## Example File:  example2
+
+\`\`\`json
+{"firstName":"Jane","lastName":"Smith"}
+\`\`\`
+"
+`;
+
+exports[`CLI docsConfig tests Test the docsConfig Test the SpecConfig examplesFolderPath should successfully generate md examples when examplesFolderPath is configured and contains .json and .jsonc files with intro and outro 1`] = `
+"This is an example introduction for example1.
+## Example File:  example1
+
+\`\`\`jsonc
+{
+            // this is a comment in jsonc
+            "firstName": "John",
+            "lastName": "Doe",
+          }
+\`\`\`
+
+This is an example outro for example1."
+`;
+
+exports[`CLI docsConfig tests Test the docsConfig Test the SpecConfig examplesFolderPath should successfully generate md examples when examplesFolderPath is configured and contains .json and .jsonc files with intro and outro 2`] = `
+"This is an example introduction for example2.
+## Example File:  example2
+
+\`\`\`json
+{"firstName":"Jane","lastName":"Smith"}
+\`\`\`
+
+This is an example outro for example2."
+`;
+
+exports[`CLI docsConfig tests Test the docsConfig Test the SpecConfig examplesFolderPath should successfully generate md examples when examplesFolderPath is configured and contains .json files 1`] = `
+"---
+title: example1
+description: Example documents for my-spec.
+---
+
+## Example File:  example1
+
+\`\`\`json
+{"firstName":"John","lastName":"Doe"}
+\`\`\`
+"
+`;
+
+exports[`CLI docsConfig tests Test the docsConfig Test the SpecConfig examplesFolderPath should successfully generate md examples when examplesFolderPath is configured and contains .json files 2`] = `
+"---
+title: example2
+description: Example documents for my-spec.
+---
+
+## Example File:  example2
+
+\`\`\`json
+{"firstName":"Jane","lastName":"Smith"}
+\`\`\`
+"
+`;
+
+exports[`CLI docsConfig tests Test the docsConfig Test the SpecConfig examplesFolderPath should successfully generate md examples when examplesFolderPath is configured and contains .jsonc files 1`] = `
+"---
+title: example1
+description: Example documents for my-spec.
+---
+
+## Example File:  example1
+
+\`\`\`jsonc
+{
+            // this is a comment in jsonc
+            "firstName": "John",
+            "lastName": "Doe",
+          }
+\`\`\`
+"
+`;
+
+exports[`CLI docsConfig tests Test the docsConfig Test the SpecConfig examplesFolderPath should successfully generate md examples when examplesFolderPath is configured and contains .jsonc files 2`] = `
+"---
+title: example2
+description: Example documents for my-spec.
+---
+
+## Example File:  example2
+
+\`\`\`jsonc
+{
+            // this is a second comment in jsonc
+            "firstName": "Jane",
+            "lastName": "Smith",
+          }
+\`\`\`
+"
+`;

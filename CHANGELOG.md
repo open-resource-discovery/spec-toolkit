@@ -10,6 +10,8 @@ For a roadmap including expected timeline, please refer to [ROADMAP.md](./ROADMA
 
 ## [unreleased]
 
+- new feature: provided examples fom examples folder are validated against current generated JSON schema
+
 ## [0.5.0]
 
 - added extensible enum documentation support
