@@ -113,7 +113,19 @@ export interface SpecConfig {
    * The path to the folder containing the examples for the specification.
    * This is used to generate the documentation for the specification.
    *
-   * SHOULD contain specification compliant instance example files with extension `.json` or `.jsonc`.
+   * This folder MUST contain specification compliant instance example files with extension `.json` or `.jsonc`.
+   * The instance example files will be validated against the specification during generation.
+   *
+   * If omitted, no examples will be included in the generated documentation.
+   *
+   * If provided, the folder MAY also contain for each instance example file e.g. `myExample.json` or `myExample.jsonc` optional *intro* and *outro* markdown files.
+   * This *intro/outro* content will be included in the generated documentation before and after the `myExample.json` or `myExample.jsonc` content.
+   *
+   * If an *intro* file is provided, it MUST be named `myExample.intro.md`.
+   * If an *outro* file is provided, it MUST be named `myExample.outro.md`.
+   * Otherwise the *intro/outro* content will be omitted for the specific example.
+   *
+   * If an *intro* file is provided it SHOULD contain the markdown frontmatter with at least `title` and `description` for the example.
    *
    */
   examplesFolderPath?: string;

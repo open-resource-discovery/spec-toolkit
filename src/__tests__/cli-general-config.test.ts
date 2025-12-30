@@ -4,11 +4,13 @@ import spawnAsync from "@expo/spawn-async";
 import yaml from "js-yaml";
 import { SpecToolkitConfigurationDocument } from "../generated/spec-toolkit-config/spec-v1/types/spec-toolkit-config.js";
 
-describe("CLI general config tests", () => {
+describe("CLI generalConfig tests", () => {
   const cliBin = "node";
   const cliScriptPath = "./dist/cli.js";
-  const tmpTestData = path.join(process.cwd(), "src", "__tests__", "tmpTestData");
-  const tmpTestOutput = path.join(process.cwd(), "src", "__tests__", "tmpTestOutput");
+  const tmpTestDataName = "tmpTestData-cli-general-config";
+  const tmpTestOutputName = "tmpTestOutput-cli-general-config";
+  const tmpTestData = path.join(process.cwd(), "src", "__tests__", tmpTestDataName);
+  const tmpTestOutput = path.join(process.cwd(), "src", "__tests__", tmpTestOutputName);
 
   beforeAll(() => {
     // Create test directories and write a valid JSON schema for Person
@@ -33,39 +35,41 @@ describe("CLI general config tests", () => {
     fs.removeSync(tmpTestData);
   });
 
-  describe("Test the general config options", () => {
-    describe("Test for tsTypeExportExcludeJsFileExtension", () => {
+  describe("Test the generalConfig", () => {
+    describe("tsTypeExportExcludeJsFileExtension", () => {
       test("should successfully omit js file extension when tsTypeExportExcludeJsFileExtension is set to true", async () => {
         const config: SpecToolkitConfigurationDocument = {
           $schema: "https://open-resource-discovery.github.io/spec-toolkit/spec-v1/spec-toolkit-config.schema.json#",
           generalConfig: {
             tsTypeExportExcludeJsFileExtension: true, // set to true
           },
-          outputPath: "src/__tests__/tmpTestOutput",
+          outputPath: `src/__tests__/${tmpTestOutputName}`,
           docsConfig: [
             {
               type: "spec",
               id: "my-spec",
-              sourceFilePath: "./src/__tests__/tmpTestData/person.schema.yaml",
+              sourceFilePath: `./src/__tests__/${tmpTestDataName}/person.schema.yaml`,
             },
           ],
         };
         const configFilePath = tmpTestData.concat("/config.json");
         fs.writeFileSync(configFilePath, JSON.stringify(config), "utf8");
 
-        const cliArguments = [cliScriptPath, "-c", "./src/__tests__/tmpTestData/config.json"];
+        const cliArguments = [cliScriptPath, "-c", `./src/__tests__/${tmpTestDataName}/config.json`];
 
         const resultPromise = spawnAsync(cliBin, cliArguments);
 
         try {
           const { stdout, stderr } = await resultPromise;
 
-          expect(stdout).toContain("SUCCESS: Documentation successfully generated to src/__tests__/tmpTestOutput");
+          expect(stdout).toContain(
+            `SUCCESS: Documentation successfully generated to src/__tests__/${tmpTestOutputName}`,
+          );
           // Check that stderr is empty
           expect(stderr).toEqual("");
 
           // Read output files and check their content
-          const indexTypesFileContent = fs.readFileSync("src/__tests__/tmpTestOutput/types/index.ts").toString();
+          const indexTypesFileContent = fs.readFileSync(`src/__tests__/${tmpTestOutputName}/types/index.ts`).toString();
 
           expect(indexTypesFileContent).toMatchSnapshot();
         } catch (e) {
@@ -78,31 +82,33 @@ describe("CLI general config tests", () => {
           generalConfig: {
             tsTypeExportExcludeJsFileExtension: false, // set to false
           },
-          outputPath: "src/__tests__/tmpTestOutput",
+          outputPath: `src/__tests__/${tmpTestOutputName}`,
           docsConfig: [
             {
               type: "spec",
               id: "my-spec",
-              sourceFilePath: "./src/__tests__/tmpTestData/person.schema.yaml",
+              sourceFilePath: `./src/__tests__/${tmpTestDataName}/person.schema.yaml`,
             },
           ],
         };
         const configFilePath = tmpTestData.concat("/config.json");
         fs.writeFileSync(configFilePath, JSON.stringify(config), "utf8");
 
-        const cliArguments = [cliScriptPath, "-c", "./src/__tests__/tmpTestData/config.json"];
+        const cliArguments = [cliScriptPath, "-c", `./src/__tests__/${tmpTestDataName}/config.json`];
 
         const resultPromise = spawnAsync(cliBin, cliArguments);
 
         try {
           const { stdout, stderr } = await resultPromise;
 
-          expect(stdout).toContain("SUCCESS: Documentation successfully generated to src/__tests__/tmpTestOutput");
+          expect(stdout).toContain(
+            `SUCCESS: Documentation successfully generated to src/__tests__/${tmpTestOutputName}`,
+          );
           // Check that stderr is empty
           expect(stderr).toEqual("");
 
           // Read output files and check their content
-          const indexTypesFileContent = fs.readFileSync("src/__tests__/tmpTestOutput/types/index.ts").toString();
+          const indexTypesFileContent = fs.readFileSync(`src/__tests__/${tmpTestOutputName}/types/index.ts`).toString();
 
           expect(indexTypesFileContent).toMatchSnapshot();
         } catch (e) {
@@ -113,31 +119,33 @@ describe("CLI general config tests", () => {
       test("should append js file extension when generalConfig is missing at all", async () => {
         const config: SpecToolkitConfigurationDocument = {
           $schema: "https://open-resource-discovery.github.io/spec-toolkit/spec-v1/spec-toolkit-config.schema.json#",
-          outputPath: "src/__tests__/tmpTestOutput",
+          outputPath: `src/__tests__/${tmpTestOutputName}`,
           docsConfig: [
             {
               type: "spec",
               id: "my-spec",
-              sourceFilePath: "./src/__tests__/tmpTestData/person.schema.yaml",
+              sourceFilePath: `./src/__tests__/${tmpTestDataName}/person.schema.yaml`,
             },
           ],
         };
         const configFilePath = tmpTestData.concat("/config.json");
         fs.writeFileSync(configFilePath, JSON.stringify(config), "utf8");
 
-        const cliArguments = [cliScriptPath, "-c", "./src/__tests__/tmpTestData/config.json"];
+        const cliArguments = [cliScriptPath, "-c", `./src/__tests__/${tmpTestDataName}/config.json`];
 
         const resultPromise = spawnAsync(cliBin, cliArguments);
 
         try {
           const { stdout, stderr } = await resultPromise;
 
-          expect(stdout).toContain("SUCCESS: Documentation successfully generated to src/__tests__/tmpTestOutput");
+          expect(stdout).toContain(
+            `SUCCESS: Documentation successfully generated to src/__tests__/${tmpTestOutputName}`,
+          );
           // Check that stderr is empty
           expect(stderr).toEqual("");
 
           // Read output files and check their content
-          const indexTypesFileContent = fs.readFileSync("src/__tests__/tmpTestOutput/types/index.ts").toString();
+          const indexTypesFileContent = fs.readFileSync(`src/__tests__/${tmpTestOutputName}/types/index.ts`).toString();
 
           expect(indexTypesFileContent).toMatchSnapshot();
         } catch (e) {

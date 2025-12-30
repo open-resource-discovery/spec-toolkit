@@ -36,11 +36,12 @@
     "type": "git",
     "url": "git+https://github.com/open-resource-discovery/spec-toolkit.git"
   },
-  "homepage": "https://open-resource-discovery.github.io/spec-toolkit/index",
+  "homepage": "https://open-resource-discovery.github.io/spec-toolkit/",
   "dependencies": {
     "ajv": "8.17.1",
     "ajv-formats": "3.0.1",
     "commander": "14.0.2",
+    "comment-json": "4.5.1",
     "exceljs": "4.4.0",
     "fast-glob": "3.3.3",
     "fs-extra": "11.3.2",

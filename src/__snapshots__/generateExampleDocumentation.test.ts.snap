@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`test generateExampleDocumentation should generate md files for .json and .jsonc examples including intro/outro 1`] = `
+"This is an example introduction for example1.
+## Example File:  example1
+
+\`\`\`jsonc
+{
+            // this is a comment in jsonc
+            "firstName": "John",
+            "lastName": "Doe",
+          }
+\`\`\`
+
+This is an example outro for example1."
+`;
+
+exports[`test generateExampleDocumentation should generate md files for .json and .jsonc examples including intro/outro 2`] = `
+"This is an example introduction for example2.
+## Example File:  example2
+
+\`\`\`json
+{"firstName":"Jane","lastName":"Smith"}
+\`\`\`
+
+This is an example outro for example2."
+`;
+
+exports[`test generateExampleDocumentation should generate md files for .json and .jsonc examples including intro/outro 3`] = `
+"---
+title: example3
+description: Example documents for person.
+---
+
+## Example File:  example3
+
+\`\`\`json
+{"firstName":"Mary","lastName":"Poppins"}
+\`\`\`
+"
+`;

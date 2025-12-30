@@ -1,16 +1,16 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`CLI general config tests Test the general config options Test for tsTypeExportExcludeJsFileExtension should append js file extension when generalConfig is missing at all 1`] = `
+exports[`CLI generalConfig tests Test the generalConfig tsTypeExportExcludeJsFileExtension should append js file extension when generalConfig is missing at all 1`] = `
 "export * from "./my-spec.js";
 "
 `;
 
-exports[`CLI general config tests Test the general config options Test for tsTypeExportExcludeJsFileExtension should append js file extension when tsTypeExportExcludeJsFileExtension is set to false 1`] = `
+exports[`CLI generalConfig tests Test the generalConfig tsTypeExportExcludeJsFileExtension should append js file extension when tsTypeExportExcludeJsFileExtension is set to false 1`] = `
 "export * from "./my-spec.js";
 "
 `;
 
-exports[`CLI general config tests Test the general config options Test for tsTypeExportExcludeJsFileExtension should successfully omit js file extension when tsTypeExportExcludeJsFileExtension is set to true 1`] = `
+exports[`CLI generalConfig tests Test the generalConfig tsTypeExportExcludeJsFileExtension should successfully omit js file extension when tsTypeExportExcludeJsFileExtension is set to true 1`] = `
 "export * from "./my-spec";
 "
 `;

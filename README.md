@@ -6,7 +6,7 @@
 
 CLI tool to create JSON Schema specifications and automatically generate documentation (in markdown) out of the JSON Schema specifications.
 
-🌎 DOCUMENTATION: <https://open-resource-discovery.github.io/spec-toolkit/index>
+🌎 DOCUMENTATION: <https://open-resource-discovery.github.io/spec-toolkit/>
 
 ## Requirements and Setup
 
