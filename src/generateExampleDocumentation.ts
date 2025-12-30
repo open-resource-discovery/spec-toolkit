@@ -93,7 +93,7 @@ export function generateExampleDocumentation(configData: SpecToolkitConfiguratio
           text += `---\n\n`;
         }
         text += `## Example File:  ${title}\n\n`;
-        text += filePath.includes(".jsonc") ? "```jsonc\n" : "```json\n";
+        text += "```json\n";
         text += exampleFileContent;
         text += "\n```\n";
         if (exampleFileOutroContent) {
