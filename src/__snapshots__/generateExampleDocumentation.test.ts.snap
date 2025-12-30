@@ -4,7 +4,7 @@ exports[`test generateExampleDocumentation should generate md files for .json an
 "This is an example introduction for example1.
 ## Example File:  example1
 
-\`\`\`jsonc
+\`\`\`json
 {
             // this is a comment in jsonc
             "firstName": "John",

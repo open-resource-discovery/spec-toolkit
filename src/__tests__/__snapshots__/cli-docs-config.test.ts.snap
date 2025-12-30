@@ -8,7 +8,7 @@ description: Example documents for my-spec.
 
 ## Example File:  example1
 
-\`\`\`jsonc
+\`\`\`json
 {
             // this is a comment in jsonc
             "firstName": "John",
@@ -36,7 +36,7 @@ exports[`CLI docsConfig tests Test the docsConfig Test the SpecConfig examplesFo
 "This is an example introduction for example1.
 ## Example File:  example1
 
-\`\`\`jsonc
+\`\`\`json
 {
             // this is a comment in jsonc
             "firstName": "John",
@@ -94,7 +94,7 @@ description: Example documents for my-spec.
 
 ## Example File:  example1
 
-\`\`\`jsonc
+\`\`\`json
 {
             // this is a comment in jsonc
             "firstName": "John",
@@ -112,7 +112,7 @@ description: Example documents for my-spec.
 
 ## Example File:  example2
 
-\`\`\`jsonc
+\`\`\`json
 {
             // this is a second comment in jsonc
             "firstName": "Jane",
