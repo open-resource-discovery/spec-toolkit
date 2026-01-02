@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`CLI plugin config tests Test the plugin config plugin packageName should successfully preserve plugin specific x- properties in the output JSON schema if configured 1`] = `
+"{
+  "description": "JSON Schema with custom (x-) properties",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Person",
+  "type": "object",
+  "x-ums-type": "root",
+  "properties": {
+    "firstName": {
+      "type": "string"
+    },
+    "lastName": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "firstName",
+    "lastName"
+  ],
+  "definitions": {}
+}"
+`;

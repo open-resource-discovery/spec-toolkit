@@ -36,7 +36,7 @@ import {
 import { validateUmsMetadata } from "./validateUmsMetadata.js";
 import _ from "lodash";
 import { log } from "../../util/log.js";
-import { SpecJsonSchemaRootWithUmsSupport, SpecJsonSchemaWithUmsSupport } from "./types.js";
+import { SpecJsonSchemaRootWithUmsSupport, SpecJsonSchemaWithUmsSupport, supportedUmsTypes } from "./types.js";
 import yaml from "js-yaml";
 import fs from "fs-extra";
 
@@ -667,7 +667,7 @@ export function validatePreconditions(document: SpecJsonSchemaRootWithUmsSupport
         `${getPath(entityContext)}: To convert to UMS model, all JSON Schema Objects MUST have "x-ums-type" defined`,
       );
     }
-    const supportedUmsTypes = ["root", "embedded", "custom", "ignore"];
+
     if (entity["x-ums-type"] && !supportedUmsTypes.includes(entity["x-ums-type"])) {
       throw new Error(
         `${getPath(entityContext)}: Unknown "x-ums-type"="${entity["x-ums-type"]}". Must be one of ${supportedUmsTypes.join(", ")}.`,

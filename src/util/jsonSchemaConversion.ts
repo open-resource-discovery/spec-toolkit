@@ -207,7 +207,7 @@ export function removeDescriptionsFromRefPointers(jsonSchema: SpecJsonSchemaRoot
 }
 
 /**
- * Clean up all x-properties from schema
+ * Clean up all x- properties from schema
  *
  */
 export function removeAllExtensionProperties(jsonSchema: SpecJsonSchemaRoot): SpecJsonSchemaRoot {
@@ -218,27 +218,27 @@ export function removeAllExtensionProperties(jsonSchema: SpecJsonSchemaRoot): Sp
   );
 }
 
+// list of "x-" properties that are considered relevant for end spec consumers and should not be cleaned
+export const allowedListProperties = [
+  "x-extension-targets",
+  "x-extension-points",
+  "x-recommended",
+  "x-introduced-in-version",
+  "x-feature-status",
+  "x-pattern-properties-description",
+  "x-association-target",
+  "x-root-entity",
+];
+
 /**
- * Clean up x-properties from schema
+ * Clean up x- properties from schema
  *
  */
 export function removeSomeExtensionProperties(jsonSchema: SpecJsonSchemaRoot): SpecJsonSchemaRoot {
-  // If this is the case when spec-toolkit self documents it's own spec schema, we want to keep all x-properties as part of the generated documentation
+  // If this is the case when spec-toolkit self documents it's own spec schema, we want to keep all x- properties as part of the generated documentation
   if (jsonSchema.$id?.includes("spec.schema.json") && jsonSchema.title?.includes("Spec Json Schema Root")) {
     return jsonSchema;
   }
-
-  // list of "x-" properties that are considered relevant for end spec consumers and should not be cleaned
-  const allowedListProperties = [
-    "x-extension-targets",
-    "x-extension-points",
-    "x-recommended",
-    "x-introduced-in-version",
-    "x-feature-status",
-    "x-pattern-properties-description",
-    "x-association-target",
-    "x-root-entity",
-  ];
 
   return JSON.parse(
     JSON.stringify(jsonSchema, (key, val) => {
@@ -248,7 +248,7 @@ export function removeSomeExtensionProperties(jsonSchema: SpecJsonSchemaRoot): S
 }
 
 /**
- * Clean up x-properties which should not appear in final schema
+ * Clean up x- properties which should not appear in final schema
  *
  * Done in a very generic manner
  */

@@ -14,9 +14,12 @@ export interface PropertiesWithUmsSupport {
   [k: string]: SpecJsonSchemaWithUmsSupport;
 }
 
+export const supportedUmsTypes = ["root", "custom", "ignore", "embedded"] as const;
+export type UmsType = (typeof supportedUmsTypes)[number];
+
 export interface SpecJsonSchemaWithUmsSupport extends SpecJsonSchema {
   "properties"?: PropertiesWithUmsSupport;
-  "x-ums-type"?: string;
+  "x-ums-type"?: UmsType;
 
   /**
    * Sets the visibility of the entity
