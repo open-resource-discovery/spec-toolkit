@@ -312,7 +312,7 @@ describe("CLI docsConfig tests", () => {
           } catch (e) {
             expect((e as Error).message).toContain("exited with non-zero code: 1");
             expect((e as spawnAsync.SpawnResult).output[0]).toContain(
-              "Example ./src/__tests__/tmpTestData-cli-docs-config/examples5/example1.json is not valid",
+              "Example ./src/__tests__/tmpTestData-cli-e2e-docs-config/examples5/example1.json is not valid",
             );
           }
         });
