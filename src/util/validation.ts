@@ -189,3 +189,25 @@ export function validateExamples(jsonSchemaObject: SpecJsonSchema, jsonSchemaRoo
     }
   }
 }
+
+export function validateDefault(jsonSchemaObject: SpecJsonSchema, jsonSchemaRoot: SpecJsonSchemaRoot): void {
+  if (jsonSchemaObject.default !== undefined) {
+    const validate = getJsonSchemaValidator({
+      ...jsonSchemaObject,
+      // Add definitions so that $ref works
+      definitions: jsonSchemaRoot.definitions,
+    });
+
+    // Validate default value if it complies to the JSON Schema
+    const valid = validate(jsonSchemaObject.default);
+    if (!valid) {
+      log.error("--------------------------------------------------------------------------");
+      log.error(
+        `Default value "${jsonSchemaObject.default}" is invalid: \n ${JSON.stringify(jsonSchemaObject, null, 2)}`,
+      );
+      log.error(validate.errors![0].message);
+      log.error("--------------------------------------------------------------------------");
+      process.exit(1);
+    }
+  }
+}

@@ -2,7 +2,7 @@ import _ from "lodash";
 import { SpecExtensionJsonSchema, SpecJsonSchema, SpecJsonSchemaRoot } from "../generated/spec/spec-v1/types/index.js";
 import { log } from "../util/log.js";
 import { SpecTarget } from "./index.js";
-import { checkRequiredPropertiesExist, validateExamples } from "../util/validation.js";
+import { checkRequiredPropertiesExist, validateDefault, validateExamples } from "../util/validation.js";
 import { documentationOutputFolderName, extensionFolderDiffToOutputFolderName, getOutputPath } from "../generate.js";
 import assert from "assert";
 import GfmEscape from "gfm-escape";
@@ -397,6 +397,25 @@ function getPatternPropertiesTableEntryText(
 }
 
 /**
+ * Adds default value
+ * Will also validate that the default value matches the jsonSchemaObject type
+ */
+export function getJsonSchemaObjectDefault(
+  jsonSchemaObject: SpecJsonSchema,
+  jsonSchemaRoot: SpecJsonSchemaRoot,
+): string {
+  if (jsonSchemaObject.default !== undefined) {
+    // Validate default before adding it
+    validateDefault(jsonSchemaObject, jsonSchemaRoot);
+    if (jsonSchemaObject["x-extension-targets"]) {
+      log.info("empty title");
+    }
+    return `**Default Value**: ${escapeTextInTable(jsonSchemaObject.default, false)}`;
+  }
+  return "";
+}
+
+/**
  * Adds example values
  * Will also validate that the examples match the jsonSchemaObject type
  */
@@ -566,7 +585,8 @@ function generatePrimitiveTypeDescription(
   }
 
   if (jsonSchemaObject.default !== undefined) {
-    text += `**Default Value**: \`${jsonSchemaObject.default}\`<br/>\n`;
+    text += getJsonSchemaObjectDefault(jsonSchemaObject, jsonSchemaRoot);
+    text += "<br/>\n";
   }
 
   if (jsonSchemaObject.const !== undefined) {
@@ -704,7 +724,7 @@ function getDescriptionWithinTable(jsonSchemaObject: SpecJsonSchema, jsonSchemaR
 
   if (jsonSchemaObject.default !== undefined) {
     result = addVerticalSeparator(result);
-    result += `**Default Value**: ${escapeTextInTable(jsonSchemaObject.default, false)}`;
+    result += getJsonSchemaObjectDefault(jsonSchemaObject, jsonSchemaRoot);
   }
 
   if (jsonSchemaObject.const !== undefined) {
