@@ -167,3 +167,25 @@ export function checkRequiredPropertiesExist(jsonSchemaObject: SpecJsonSchema): 
     }
   }
 }
+
+export function validateExamples(jsonSchemaObject: SpecJsonSchema, jsonSchemaRoot: SpecJsonSchemaRoot): void {
+  if (jsonSchemaObject.examples) {
+    const validate = getJsonSchemaValidator({
+      ...jsonSchemaObject,
+      // Add definitions so that $ref works
+      definitions: jsonSchemaRoot.definitions,
+    });
+
+    for (const example of jsonSchemaObject.examples) {
+      // Validate example if it complies to the JSON Schema
+      const valid = validate(example);
+      if (!valid) {
+        log.error("--------------------------------------------------------------------------");
+        log.error(`Example value "${example}" is invalid: \n ${JSON.stringify(jsonSchemaObject, null, 2)}`);
+        log.error(validate.errors![0].message);
+        log.error("--------------------------------------------------------------------------");
+        process.exit(1);
+      }
+    }
+  }
+}
