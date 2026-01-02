@@ -201,6 +201,13 @@ export interface PluginConfigData {
  * This is used to pass additional options to the plugin.
  */
 export interface PluginOptions {
+  /**
+   * Array of x- property names that the plugin adds to the output JSON Schema.
+   * This is used to include the plugin specific x- properties in the generated JSON Schema.
+   *
+   * If not provided, all plugin specific x- properties will be removed from the generated output JSON Schema.
+   */
+  preservedPluginSpecificXProperties?: string[];
   [k: string]: unknown | undefined;
 }
 

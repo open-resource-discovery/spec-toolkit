@@ -7,8 +7,8 @@ import { SpecToolkitConfigurationDocument } from "../generated/spec-toolkit-conf
 describe("CLI docsConfig tests", () => {
   const cliBin = "node";
   const cliScriptPath = "./dist/cli.js";
-  const tmpTestDataName = "tmpTestData-cli-docs-config";
-  const tmpTestOutputName = "tmpTestOutput-cli-docs-config";
+  const tmpTestDataName = "tmpTestData-cli-e2e-docs-config";
+  const tmpTestOutputName = "tmpTestOutput-cli-e2e-docs-config";
   const tmpTestData = path.join(process.cwd(), "src", "__tests__", tmpTestDataName);
   const tmpTestOutput = path.join(process.cwd(), "src", "__tests__", tmpTestOutputName);
 
@@ -312,7 +312,7 @@ describe("CLI docsConfig tests", () => {
           } catch (e) {
             expect((e as Error).message).toContain("exited with non-zero code: 1");
             expect((e as spawnAsync.SpawnResult).output[0]).toContain(
-              "Example ./src/__tests__/tmpTestData-cli-docs-config/examples5/example1.json is not valid",
+              "Example ./src/__tests__/tmpTestData-cli-e2e-docs-config/examples5/example1.json is not valid",
             );
           }
         });

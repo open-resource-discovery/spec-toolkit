@@ -11,6 +11,7 @@ For a roadmap including expected timeline, please refer to [ROADMAP.md](./ROADMA
 ## [unreleased]
 
 - new feature: provided examples fom examples folder are validated against current generated JSON schema
+- new feature: added configuration option to preserve plugins specific x-properties in the generated output JSON schema
 - fix: jsonc code block in markdown does not have syntax highlighting, replaced by json code block instead
 
 ## [0.5.0]

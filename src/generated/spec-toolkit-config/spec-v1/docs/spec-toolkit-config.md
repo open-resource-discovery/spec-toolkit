@@ -191,10 +191,11 @@ Configuration for a plugin to be used in the generation.
 Optional configuration for the plugin.
 This is used to pass additional options to the plugin.
 
-**Type**: Object()
+**Type**: Object(<a href="#pluginoptions_preservedpluginspecificxproperties">preservedPluginSpecificXProperties</a>)
 
 | Property | Type | Description |
 | -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="pluginoptions_preservedpluginspecificxproperties">preservedPluginSpecificXProperties<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#pluginoptions_preservedpluginspecificxproperties" title="#pluginoptions_preservedpluginspecificxproperties"></a></div>|<div className="interface-property-type">Array&lt;string&gt;</div>|<div className="interface-property-description">Array of x- property names that the plugin adds to the output JSON Schema.<br/>This is used to include the plugin specific x- properties in the generated JSON Schema.<br/><br/>If not provided, all plugin specific x- properties will be removed from the generated output JSON Schema.</div>|
 | <i>*</i> | | <i>Additional, unspecified properties MAY be added to the object</i>. |
 
 # Spec-Toolkit CLI configuration example

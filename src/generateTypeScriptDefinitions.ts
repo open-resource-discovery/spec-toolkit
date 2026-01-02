@@ -37,9 +37,9 @@ export async function generateTypeScriptDefinitions(configData: SpecToolkitConfi
       schema = removeDescriptionsFromRefPointers(schema);
       const allCustomPropertiesTypescriptTypes = schema["x-custom-typescript-types"];
 
-      // Remove x-properties that are not relevant for end spec consumers
+      // Remove x- properties that are not relevant for end spec consumers
       // But if this is the case when spec-toolkit self documents it's own spec schema,
-      // we want to keep all x-properties as part of the generated documentation
+      // we want to keep all x- properties as part of the generated documentation
       if (!schema.$id?.includes("spec.schema.json") && !schema.title?.includes("Spec Json Schema Root")) {
         schema = removeAllExtensionProperties(schema);
       }

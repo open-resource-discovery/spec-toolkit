@@ -53,10 +53,10 @@ class PluginManager {
 
       const xProperties = packageContents.default?.prototype?.xProperties;
       if (xProperties && Array.isArray(xProperties)) {
-        log.info(`Plugin ${pluginConfigData.packageName} has the following x-properties: ${xProperties.join(", ")}`);
+        log.info(`Plugin ${pluginConfigData.packageName} has the following x- properties: ${xProperties.join(", ")}`);
         return xProperties;
       }
-      log.info(`Plugin ${pluginConfigData.packageName} does not have any x-properties.`);
+      log.info(`Plugin ${pluginConfigData.packageName} does not have any x- properties.`);
       return undefined;
     } catch (error) {
       log.error(`Cannot register "${pluginConfigData.packageName}" plugin because it could not be imported.`);
