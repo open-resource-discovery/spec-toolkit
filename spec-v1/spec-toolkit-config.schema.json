@@ -263,7 +263,15 @@
       "type": "object",
       "description": "Optional configuration for the plugin.\nThis is used to pass additional options to the plugin.",
       "additionalProperties": true,
-      "properties": {},
+      "properties": {
+        "preservedPluginSpecificXProperties": {
+          "type": "array",
+          "description": "Array of x- property names that the plugin adds to the output JSON Schema.\nThis is used to include the plugin specific x- properties in the generated JSON Schema.\n\nIf not provided, all plugin specific x- properties will be removed from the generated output JSON Schema.",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
       "required": [],
       "title": "PluginOptions"
     }
