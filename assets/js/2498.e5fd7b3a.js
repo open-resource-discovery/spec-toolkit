@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunk_open_resource_discovery_spec_toolkit_website=self.webpackChunk_open_resource_discovery_spec_toolkit_website||[]).push([[2498],{2498:(e,s,c)=>{c.d(s,{createArchitectureServices:()=>r.S});var r=c(3009);c(8198)}}]);

@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunk_open_resource_discovery_spec_toolkit_website=self.webpackChunk_open_resource_discovery_spec_toolkit_website||[]).push([[4921],{1597:e=>{e.exports=JSON.parse('{"name":"@easyops-cn/docusaurus-search-local","id":"default"}')}}]);
