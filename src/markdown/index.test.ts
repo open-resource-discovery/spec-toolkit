@@ -1,5 +1,7 @@
+import { jest } from "@jest/globals";
 import { SpecJsonSchemaRoot, SpecJsonSchemaTypeName } from "../generated/spec/spec-v1/types/index.js";
 import { generateMarkdown } from "./index.js";
+import { log } from "../util/log.js";
 
 describe("test generateMarkdown", () => {
   const specId = "test-spec";
@@ -1115,6 +1117,41 @@ describe("test generateMarkdown", () => {
         // TODO: should throw the same error as for test "should throw when 'allOf' reference cannot be resolved"
         `"Expected object with title "Property 1 title" to have either "properties" or "patternProperties" defined."`,
       );
+    });
+  });
+
+  describe("test validation", () => {
+    it("should end process on wrong example provided", () => {
+      const testSchema: SpecJsonSchemaRoot = {
+        $id: "http://example.com/schemas/test-schema",
+        title: "Test Schema",
+        type: "object",
+        description: "A sample schema for testing purposes.",
+        properties: {
+          property1: {
+            $ref: "#/definitions/Property1",
+            description: "Property 1 ref description",
+          },
+        },
+        definitions: {
+          Property1: {
+            type: "string",
+            title: "Property 1 title",
+            description: "Property 1 description",
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            //@ts-ignore
+            examples: [12345], // invalid example, should be string
+          },
+        },
+      };
+
+      const spyOnLogError = jest.spyOn(log, "error");
+      const spyOnProcessExit = jest.spyOn(process, "exit").mockImplementation(() => undefined as never);
+
+      generateMarkdown(testSchema, specId, "spec", undefined);
+
+      expect(spyOnLogError).toHaveBeenCalledWith(expect.stringContaining(`Example value "12345" is invalid:`));
+      expect(spyOnProcessExit).toHaveBeenCalledWith(1);
     });
   });
 });
