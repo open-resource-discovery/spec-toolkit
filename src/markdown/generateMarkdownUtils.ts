@@ -400,7 +400,7 @@ function getPatternPropertiesTableEntryText(
  * Adds default value
  * Will also validate that the default value matches the jsonSchemaObject type
  */
-export function getJsonSchemaObjectDefault(
+export function getJsonSchemaDefaultValue(
   jsonSchemaObject: SpecJsonSchema,
   jsonSchemaRoot: SpecJsonSchemaRoot,
 ): string {
@@ -419,7 +419,7 @@ export function getJsonSchemaObjectDefault(
  * Adds example values
  * Will also validate that the examples match the jsonSchemaObject type
  */
-export function getJsonSchemaObjectExamples(
+export function getJsonSchemaExamples(
   jsonSchemaObject: SpecJsonSchema,
   jsonSchemaRoot: SpecJsonSchemaRoot,
   resultAs: "htmlListTag" | "jsCodeBlock",
@@ -528,7 +528,7 @@ export function getObjectDescriptionTable(
 
   if (jsonSchemaObject.examples && Array.isArray(jsonSchemaObject.examples)) {
     text += `\n###### Example Values:\n`;
-    text += getJsonSchemaObjectExamples(jsonSchemaObject, jsonSchemaRoot, "jsCodeBlock");
+    text += getJsonSchemaExamples(jsonSchemaObject, jsonSchemaRoot, "jsCodeBlock");
     text += "\n";
   }
 
@@ -585,7 +585,7 @@ function generatePrimitiveTypeDescription(
   }
 
   if (jsonSchemaObject.default !== undefined) {
-    text += getJsonSchemaObjectDefault(jsonSchemaObject, jsonSchemaRoot);
+    text += getJsonSchemaDefaultValue(jsonSchemaObject, jsonSchemaRoot);
     text += "<br/>\n";
   }
 
@@ -671,7 +671,7 @@ function generatePrimitiveTypeDescription(
 
   if (jsonSchemaObject.examples && Array.isArray(jsonSchemaObject.examples)) {
     text += `\n###### Example Values:\n`;
-    text += getJsonSchemaObjectExamples(jsonSchemaObject, jsonSchemaRoot, "jsCodeBlock");
+    text += getJsonSchemaExamples(jsonSchemaObject, jsonSchemaRoot, "jsCodeBlock");
     text += "\n";
   }
 
@@ -724,7 +724,7 @@ function getDescriptionWithinTable(jsonSchemaObject: SpecJsonSchema, jsonSchemaR
 
   if (jsonSchemaObject.default !== undefined) {
     result = addVerticalSeparator(result);
-    result += getJsonSchemaObjectDefault(jsonSchemaObject, jsonSchemaRoot);
+    result += getJsonSchemaDefaultValue(jsonSchemaObject, jsonSchemaRoot);
   }
 
   if (jsonSchemaObject.const !== undefined) {
@@ -861,7 +861,7 @@ function getDescriptionWithinTable(jsonSchemaObject: SpecJsonSchema, jsonSchemaR
   if (jsonSchemaObject.examples && Array.isArray(jsonSchemaObject.examples)) {
     result = addVerticalSeparator(result);
     result += '**Example Values**: <ul className="examples">';
-    result += getJsonSchemaObjectExamples(jsonSchemaObject, jsonSchemaRoot, "htmlListTag");
+    result += getJsonSchemaExamples(jsonSchemaObject, jsonSchemaRoot, "htmlListTag");
     result += "</ul>";
   }
 

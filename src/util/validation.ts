@@ -169,7 +169,7 @@ export function checkRequiredPropertiesExist(jsonSchemaObject: SpecJsonSchema): 
 }
 
 export function validateExamples(jsonSchemaObject: SpecJsonSchema, jsonSchemaRoot: SpecJsonSchemaRoot): void {
-  if (jsonSchemaObject.examples) {
+  if (jsonSchemaObject.examples && Array.isArray(jsonSchemaObject.examples)) {
     const validate = getJsonSchemaValidator({
       ...jsonSchemaObject,
       // Add definitions so that $ref works

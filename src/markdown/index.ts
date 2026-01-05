@@ -5,7 +5,7 @@ import {
   getAnchorLinkFromTitle,
   getExtensionOverviewTable,
   getObjectDescriptionTable,
-  getJsonSchemaObjectExamples,
+  getJsonSchemaExamples,
   jsonSchemaToMd,
 } from "./generateMarkdownUtils.js";
 
@@ -96,7 +96,7 @@ export function generateMarkdown(
 
   if (jsonSchemaRoot.examples && Array.isArray(jsonSchemaRoot.examples)) {
     text += "\n## Complete Examples\n";
-    text += getJsonSchemaObjectExamples(jsonSchemaRoot, jsonSchemaRoot, "jsCodeBlock");
+    text += getJsonSchemaExamples(jsonSchemaRoot, jsonSchemaRoot, "jsCodeBlock");
     text += "\n";
   }
 
