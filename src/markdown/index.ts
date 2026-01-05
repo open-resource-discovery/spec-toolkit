@@ -5,7 +5,7 @@ import {
   getAnchorLinkFromTitle,
   getExtensionOverviewTable,
   getObjectDescriptionTable,
-  getObjectExampleText,
+  getJsonSchemaExamples,
   jsonSchemaToMd,
 } from "./generateMarkdownUtils.js";
 
@@ -94,9 +94,10 @@ export function generateMarkdown(
     }
   }
 
-  if (jsonSchemaRoot.examples) {
+  if (jsonSchemaRoot.examples && Array.isArray(jsonSchemaRoot.examples)) {
     text += "\n## Complete Examples\n";
-    text += getObjectExampleText(jsonSchemaRoot, jsonSchemaRoot, true);
+    text += getJsonSchemaExamples(jsonSchemaRoot, jsonSchemaRoot, "jsCodeBlock");
+    text += "\n";
   }
 
   // Write Outro Text

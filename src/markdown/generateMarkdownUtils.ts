@@ -2,7 +2,7 @@ import _ from "lodash";
 import { SpecExtensionJsonSchema, SpecJsonSchema, SpecJsonSchemaRoot } from "../generated/spec/spec-v1/types/index.js";
 import { log } from "../util/log.js";
 import { SpecTarget } from "./index.js";
-import { checkRequiredPropertiesExist, getJsonSchemaValidator } from "../util/validation.js";
+import { checkRequiredPropertiesExist, validateDefault, validateExamples } from "../util/validation.js";
 import { documentationOutputFolderName, extensionFolderDiffToOutputFolderName, getOutputPath } from "../generate.js";
 import assert from "assert";
 import GfmEscape from "gfm-escape";
@@ -397,56 +397,51 @@ function getPatternPropertiesTableEntryText(
 }
 
 /**
- * Adds example values to a JSON Object
- *
- * Will also validate that the examples match the schema
+ * Adds default value
+ * Will also validate that the default value matches the jsonSchemaObject type
  */
-export function getObjectExampleText(
+export function getJsonSchemaDefaultValue(
   jsonSchemaObject: SpecJsonSchema,
   jsonSchemaRoot: SpecJsonSchemaRoot,
-  skipHeader: boolean = false,
+): string {
+  if (jsonSchemaObject.default !== undefined) {
+    // Validate default before adding it
+    validateDefault(jsonSchemaObject, jsonSchemaRoot);
+    if (jsonSchemaObject["x-extension-targets"]) {
+      log.info("empty title");
+    }
+    return `**Default Value**: ${escapeTextInTable(jsonSchemaObject.default, false)}`;
+  }
+  return "";
+}
+
+/**
+ * Adds example values
+ * Will also validate that the examples match the jsonSchemaObject type
+ */
+export function getJsonSchemaExamples(
+  jsonSchemaObject: SpecJsonSchema,
+  jsonSchemaRoot: SpecJsonSchemaRoot,
+  resultAs: "htmlListTag" | "jsCodeBlock",
 ): string {
   let text = "";
 
-  if (jsonSchemaObject.examples) {
-    if (!skipHeader) {
-      text += `\n###### Example Values:\n`;
-    }
+  if (jsonSchemaObject.examples && Array.isArray(jsonSchemaObject.examples)) {
+    // Validate Examples before adding them
+    validateExamples(jsonSchemaObject, jsonSchemaRoot);
 
-    try {
-      // Validate Examples
-      const validate = getJsonSchemaValidator({
-        ...jsonSchemaObject,
-        definitions: jsonSchemaRoot.definitions,
-      });
-
-      // Add all Examples to Text
-      for (const example of jsonSchemaObject.examples) {
+    // Add all Examples to Text
+    for (const example of jsonSchemaObject.examples) {
+      if (resultAs === "htmlListTag") {
+        text += `<li>${escapeTextInTable(example)}</li>`;
+      } else {
         text += "\n\n```js\n";
         text += JSON.stringify(example, null, 2);
         text += "\n```\n";
-
-        // Validate example if it complies to the JSON Schema
-        // TODO: refactor duplicated code section for validating examples
-        const valid = validate(example);
-
-        if (!valid) {
-          log.error("--------------------------------------------------------------------------");
-          log.error(
-            `Invalid example for ${
-              jsonSchemaObject.title || jsonSchemaObject.description || JSON.stringify(jsonSchemaObject, null, 2)
-            }`,
-          );
-          log.error(validate.errors);
-          log.error("--------------------------------------------------------------------------");
-          process.exit(1);
-        }
       }
-    } catch (err) {
-      log.error(err);
-      throw err;
     }
-    return text + "\n";
+
+    return text;
   }
   return "";
 }
@@ -531,8 +526,11 @@ export function getObjectDescriptionTable(
     text += "<br/>\n";
   }
 
-  //Add Example
-  text += getObjectExampleText(jsonSchemaObject, jsonSchemaRoot);
+  if (jsonSchemaObject.examples && Array.isArray(jsonSchemaObject.examples)) {
+    text += `\n###### Example Values:\n`;
+    text += getJsonSchemaExamples(jsonSchemaObject, jsonSchemaRoot, "jsCodeBlock");
+    text += "\n";
+  }
 
   return text;
 }
@@ -587,7 +585,8 @@ function generatePrimitiveTypeDescription(
   }
 
   if (jsonSchemaObject.default !== undefined) {
-    text += `**Default Value**: \`${jsonSchemaObject.default}\`<br/>\n`;
+    text += getJsonSchemaDefaultValue(jsonSchemaObject, jsonSchemaRoot);
+    text += "<br/>\n";
   }
 
   if (jsonSchemaObject.const !== undefined) {
@@ -670,7 +669,11 @@ function generatePrimitiveTypeDescription(
     text = text.substring(0, text.length - 6) + "\n";
   }
 
-  text += getObjectExampleText(jsonSchemaObject, jsonSchemaRoot);
+  if (jsonSchemaObject.examples && Array.isArray(jsonSchemaObject.examples)) {
+    text += `\n###### Example Values:\n`;
+    text += getJsonSchemaExamples(jsonSchemaObject, jsonSchemaRoot, "jsCodeBlock");
+    text += "\n";
+  }
 
   text += "\n";
 
@@ -721,7 +724,7 @@ function getDescriptionWithinTable(jsonSchemaObject: SpecJsonSchema, jsonSchemaR
 
   if (jsonSchemaObject.default !== undefined) {
     result = addVerticalSeparator(result);
-    result += `**Default Value**: ${escapeTextInTable(jsonSchemaObject.default, false)}`;
+    result += getJsonSchemaDefaultValue(jsonSchemaObject, jsonSchemaRoot);
   }
 
   if (jsonSchemaObject.const !== undefined) {
@@ -858,47 +861,7 @@ function getDescriptionWithinTable(jsonSchemaObject: SpecJsonSchema, jsonSchemaR
   if (jsonSchemaObject.examples && Array.isArray(jsonSchemaObject.examples)) {
     result = addVerticalSeparator(result);
     result += '**Example Values**: <ul className="examples">';
-
-    // Validate examples before adding them
-    // TODO: Move this (or reuse) util/validation.ts
-    let validate;
-    try {
-      validate = getJsonSchemaValidator({
-        ...jsonSchemaObject,
-        // Add definitions so that $ref works
-        definitions: jsonSchemaRoot.definitions,
-      });
-    } catch (err: unknown) {
-      log.error(`Could not compile JSON schema to AJV validator.`);
-      if (err && err instanceof Error) {
-        log.error(`Validation ${err.message || ""}`);
-        log.error(err.stack);
-      }
-      throw err;
-    }
-
-    for (const example of jsonSchemaObject.examples) {
-      result += `<li>${escapeTextInTable(example)}</li>`;
-
-      // Validate example if it complies to the JSON Schema
-      try {
-        // TODO: refactor duplicated code section for validating examples
-        const valid = validate(example);
-        if (!valid) {
-          log.error("--------------------------------------------------------------------------");
-          log.error(
-            `Invalid example for "${
-              jsonSchemaObject.title || jsonSchemaObject.description || JSON.stringify(jsonSchemaObject, null, 2)
-            }"`,
-          );
-          log.error(validate.errors);
-          log.error("--------------------------------------------------------------------------");
-          process.exit(1);
-        }
-      } catch (err) {
-        log.error(err);
-      }
-    }
+    result += getJsonSchemaExamples(jsonSchemaObject, jsonSchemaRoot, "htmlListTag");
     result += "</ul>";
   }
 
