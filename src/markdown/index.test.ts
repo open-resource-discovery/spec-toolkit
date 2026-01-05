@@ -1153,5 +1153,36 @@ describe("test generateMarkdown", () => {
       expect(spyOnLogError).toHaveBeenCalledWith(expect.stringContaining(`Example value "12345" is invalid:`));
       expect(spyOnProcessExit).toHaveBeenCalledWith(1);
     });
+
+    it("should end process on wrong default value provided", () => {
+      const testSchema: SpecJsonSchemaRoot = {
+        $id: "http://example.com/schemas/test-schema",
+        title: "Test Schema",
+        type: "object",
+        description: "A sample schema for testing purposes.",
+        properties: {
+          property1: {
+            $ref: "#/definitions/Property1",
+            description: "Property 1 ref description",
+          },
+        },
+        definitions: {
+          Property1: {
+            type: "string",
+            title: "Property 1 title",
+            description: "Property 1 description",
+            default: 12345, // invalid default value, should be string
+          },
+        },
+      };
+
+      const spyOnLogError = jest.spyOn(log, "error");
+      const spyOnProcessExit = jest.spyOn(process, "exit").mockImplementation(() => undefined as never);
+
+      generateMarkdown(testSchema, specId, "spec", undefined);
+
+      expect(spyOnLogError).toHaveBeenCalledWith(expect.stringContaining(`Default value "12345" is invalid:`));
+      expect(spyOnProcessExit).toHaveBeenCalledWith(1);
+    });
   });
 });

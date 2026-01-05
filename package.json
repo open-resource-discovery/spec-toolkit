@@ -1,7 +1,7 @@
 {
   "$schema": "http://json.schemastore.org/package",
   "name": "@open-resource-discovery/spec-toolkit",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "JSON Schema Toolkit CLI to create schema based interface documentation",
   "author": "SAP SE",
   "license": "Apache-2.0",
