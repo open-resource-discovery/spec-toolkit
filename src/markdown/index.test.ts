@@ -524,9 +524,7 @@ describe("test generateMarkdown", () => {
       `);
     });
 
-    // TODO: allOf value is not yet added as list in the output, need to adjust code first
-    // TODO: re-enable object type testing when fixed
-    it.each([/*"object"*/ "integer", "number", "boolean", "string"])(
+    it.each(["object", "integer", "number", "boolean", "string"])(
       "should include correct type information - **Type: %s** and All of",
       (testType) => {
         const testSchema: SpecJsonSchemaRoot = {
@@ -817,10 +815,7 @@ describe("test generateMarkdown", () => {
 
         Property 1 description
 
-        **Type**: 
-        [TypeA](#typea) \\| [TypeB](#typeb) \\| [TypeC](#typec)<br/>
-        **Type**: Object(<a href="#property-1-title_type">type</a>)
-
+        **Type**: Object([TypeA](#typea) \\| [TypeB](#typeb) \\| [TypeC](#typec)) <br/>
         | Property | Type | Description |
         | -------- | ---- | ----------- |
         |<div className="interface-property-name anchor" id="property-1-title_type">type<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#property-1-title_type" title="#property-1-title_type"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">Type<br/><br/>Type description<hr/>**Allowed Values**: <ul><li>\`"A"\`</li><li>\`"B"\`</li><li>\`"C"\`</li></ul></div>|
@@ -1021,10 +1016,22 @@ describe("test generateMarkdown", () => {
           // This should cause an error when trying to resolve the $ref in oneOf
         },
       };
-      expect(() => generateMarkdown(testSchema, specId, "spec", undefined)).toThrowErrorMatchingInlineSnapshot(
-        // TODO: should throw the same error as for test "should throw when 'allOf' reference cannot be resolved"
-        `"Expected object with title "Property 1 title" to have either "properties" or "patternProperties" defined."`,
-      );
+      expect(() => generateMarkdown(testSchema, specId, "spec", undefined)).toThrowErrorMatchingInlineSnapshot(`
+        "Could not resolve $ref "#/definitions/TypeB" for 
+         {
+          "title": "Property 1 title",
+          "description": "Property 1 description",
+          "type": "object",
+          "oneOf": [
+            {
+              "$ref": "#/definitions/TypeA"
+            },
+            {
+              "$ref": "#/definitions/TypeB"
+            }
+          ]
+        }"
+      `);
     });
 
     it("should throw when 'allOf' reference cannot be resolved", () => {
@@ -1113,10 +1120,22 @@ describe("test generateMarkdown", () => {
           // This should cause an error when trying to resolve the $ref in anyOf
         },
       };
-      expect(() => generateMarkdown(testSchema, specId, "spec", undefined)).toThrowErrorMatchingInlineSnapshot(
-        // TODO: should throw the same error as for test "should throw when 'allOf' reference cannot be resolved"
-        `"Expected object with title "Property 1 title" to have either "properties" or "patternProperties" defined."`,
-      );
+      expect(() => generateMarkdown(testSchema, specId, "spec", undefined)).toThrowErrorMatchingInlineSnapshot(`
+        "Could not resolve $ref "#/definitions/TypeB" for 
+         {
+          "title": "Property 1 title",
+          "description": "Property 1 description",
+          "type": "object",
+          "anyOf": [
+            {
+              "$ref": "#/definitions/TypeA"
+            },
+            {
+              "$ref": "#/definitions/TypeB"
+            }
+          ]
+        }"
+      `);
     });
   });
 

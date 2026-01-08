@@ -20,7 +20,7 @@ describe("CLI End-to-End Tests", () => {
       );
 
       // Check that stdout is like expected and not suspiciously long (accidental console.logs)
-      expect(stdout.length).toBeLessThan(7050);
+      expect(stdout.length).toBeLessThan(7250);
 
       // Check that stderr is empty
       expect(stderr).toEqual("");

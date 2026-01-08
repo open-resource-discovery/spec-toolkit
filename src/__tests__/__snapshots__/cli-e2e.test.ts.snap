@@ -144,8 +144,11 @@ See [Primer: Definitions](../primer.md#definitions).
 
 Definition of a CDS modeling artifact, put into [Definitions](#definitions).
 
-**Type**: 
-[Context Definition](#context-definition) \\| [Entity Definition](#entity-definition) \\| [Service Definition](#service-definition) \\| [Type Definition](#type-definition)<br/>
+**Type**: Object([Context Definition](#context-definition) \\| [Entity Definition](#entity-definition) \\| [Service Definition](#service-definition) \\| [Type Definition](#type-definition)) <br/>
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="definitionentry_kind">kind<br/><span className="mandatory">MANDATORY</span><a className="hash-link" href="#definitionentry_kind" title="#definitionentry_kind"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">The modeling artefact kind.<br/>It's value is been used as a _discriminator_ to distinguish the matching schema that should be further validated.<hr/>**Allowed Values**: <ul><li>\`"context"\`</li><li>\`"entity"\`</li><li>\`"service"\`</li><li>\`"type"\`</li></ul></div>|
+
 
 ### Entity Definition
 
@@ -264,8 +267,12 @@ See [Primer: Language-dependent annotation values](../primer.md#language-depende
 
 In CSN it is possible to define Custom Types.
 
-**Type**: 
-[Boolean Type Definition](#boolean-type-definition) \\| [String Type Definition](#string-type-definition)<br/>
+**Type**: Object([Boolean Type Definition](#boolean-type-definition) \\| [String Type Definition](#string-type-definition)) <br/>
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="type-definition_kind">kind<br/><span className="mandatory">MANDATORY</span><a className="hash-link" href="#type-definition_kind" title="#type-definition_kind"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">The kind property is used when defining derived types.<br/>In this case \`Kind = "type"\` MUST be provided.<hr/>**Constant Value**: \`type\`</div>|
+|<div className="interface-property-name anchor" id="type-definition_type">type<br/><span className="mandatory">MANDATORY</span><a className="hash-link" href="#type-definition_type" title="#type-definition_type"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">The CDS data type of the derived type.<br/><br/>Custom types in CSN Interop Effective MUST always point to a \`cds.*\` type.<hr/>**Allowed Values**: <ul><li>\`"cds.Boolean"\`</li><li>\`"cds.String"\`</li></ul></div>|
+
 
 #### Boolean Type Definition
 
@@ -1736,8 +1743,11 @@ See [Primer: Definitions](../primer.md#definitions).
 
 Definition of a CDS modeling artifact, put into [Definitions](#definitions).
 
-**Type**: 
-[Context Definition](#context-definition) \\| [Entity Definition](#entity-definition) \\| [Service Definition](#service-definition) \\| [Type Definition](#type-definition)<br/>
+**Type**: Object([Context Definition](#context-definition) \\| [Entity Definition](#entity-definition) \\| [Service Definition](#service-definition) \\| [Type Definition](#type-definition)) <br/>
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="definitionentry_kind">kind<br/><span className="mandatory">MANDATORY</span><a className="hash-link" href="#definitionentry_kind" title="#definitionentry_kind"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">The modeling artefact kind.<br/>It's value is been used as a _discriminator_ to distinguish the matching schema that should be further validated.<hr/>**Allowed Values**: <ul><li>\`"context"\`</li><li>\`"entity"\`</li><li>\`"service"\`</li><li>\`"type"\`</li></ul></div>|
+
 
 ### Entity Definition
 
@@ -1856,8 +1866,12 @@ See [Primer: Language-dependent annotation values](../primer.md#language-depende
 
 In CSN it is possible to define Custom Types.
 
-**Type**: 
-[Boolean Type Definition](#boolean-type-definition) \\| [String Type Definition](#string-type-definition)<br/>
+**Type**: Object([Boolean Type Definition](#boolean-type-definition) \\| [String Type Definition](#string-type-definition)) <br/>
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="type-definition_kind">kind<br/><span className="mandatory">MANDATORY</span><a className="hash-link" href="#type-definition_kind" title="#type-definition_kind"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">The kind property is used when defining derived types.<br/>In this case \`Kind = "type"\` MUST be provided.<hr/>**Constant Value**: \`type\`</div>|
+|<div className="interface-property-name anchor" id="type-definition_type">type<br/><span className="mandatory">MANDATORY</span><a className="hash-link" href="#type-definition_type" title="#type-definition_type"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">The CDS data type of the derived type.<br/><br/>Custom types in CSN Interop Effective MUST always point to a \`cds.*\` type.<hr/>**Allowed Values**: <ul><li>\`"cds.Boolean"\`</li><li>\`"cds.String"\`</li></ul></div>|
+
 
 #### Boolean Type Definition
 

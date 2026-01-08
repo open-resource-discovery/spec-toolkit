@@ -10,6 +10,9 @@ For a roadmap including expected timeline, please refer to [ROADMAP.md](./ROADMA
 
 ## [unreleased]
 
+- breaking: deleted `x-hide-properties`, remove it from JSON schema if used
+- breaking: renamed `x-hide-property` to new `x-hide` which can be placed now on object property level and entity definition level
+
 ## [0.6.0]
 
 - new feature: provided default values are validated against current JSON schema type

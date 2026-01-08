@@ -225,7 +225,6 @@ definitions:
             - kind
         then:
           $ref: "#/definitions/TypeDefinition"
-    x-hide-properties: true
 
   EntityDefinition:
     title: Entity Definition
@@ -269,57 +268,57 @@ definitions:
       #-------------------------------------------------------------
       abstract:
         type: ["string", "number", "boolean", "array", "object"]
-        x-hide-property: true
+        x-hide: true
         description: |-
           Proper syntax element in ABAP CDS producing Abstract CDS Entities
       customEntity:
         type: ["string", "number", "boolean", "array", "object"]
-        x-hide-property: true
+        x-hide: true
         description: |-
           Proper syntax element in ABAP CDS producing Custom CDS Entities
       tableFunction:
         type: ["string", "number", "boolean", "array", "object"]
-        x-hide-property: true
+        x-hide: true
         description: |-
           Proper syntax element in ABAP CDS producing CDS Table Functions.
       externalEntity:
         type: ["string", "number", "boolean", "array", "object"]
-        x-hide-property: true
+        x-hide: true
         description: |-
           Proper syntax element in ABAP CDS producing CDS  External Entities
       providerContract:
         type: ["string", "number", "boolean", "array", "object"]
-        x-hide-property: true
+        x-hide: true
         description: |-
           ABAP CDS Projection have the additional information of a provider contract
       rootEntity:
         type: ["string", "number", "boolean", "array", "object"]
-        x-hide-property: true
+        x-hide: true
         description: |-
           ABAP CDS Root View Entities define a RAP Business Object.
       transient:
         type: ["string", "number", "boolean", "array", "object"]
-        x-hide-property: true
+        x-hide: true
         description: |-
           Special kind of analytical ABAP CDS Projection view.
       literal:
         type: ["string", "number", "boolean", "array", "object"]
-        x-hide-property: true
+        x-hide: true
         description: |-
           In the selection element list of a CDS view.
       toCompositionChild:
         type: ["string", "number", "boolean", "array", "object"]
-        x-hide-property: true
+        x-hide: true
         description: |-
           When redirecting associations in ABAP CDS Projections with the additional keywords "to composition child", this indicates a Parent-Child-Composition an requires the redirection target to have a matching "to parent" association redefinition.
       toParent:
         type: ["string", "number", "boolean", "array", "object"]
-        x-hide-property: true
+        x-hide: true
         description: |-
           When redirecting associations in ABAP CDS Projections with the additional keywords "to composition child", this indicates a Parent-Child-Composition an requires the redirection target to have a matching "to parent" association redefinition.
       hana_on_asString:
         type: ["string", "number", "boolean", "array", "object"]
-        x-hide-property: true
+        x-hide: true
         description: |-
           Contains the SQL on condition as string
       #-----------------------
@@ -483,7 +482,6 @@ definitions:
     required:
       - kind
       - type
-    x-hide-properties: true
 
   BooleanTypeDefinition:
     title: Boolean Type Definition

@@ -203,13 +203,9 @@ export interface SpecJsonSchema {
    */
   "x-association-target"?: string[];
   /**
-   * Hide property from generated documentation, but keep it in exported JSON Schema.
+   * Hide JSON path node from generated documentation, but keep it in exported JSON Schema.
    */
-  "x-hide-property"?: boolean;
-  /**
-   * Hide properties table from generated documentation, but keep it in exported JSON Schema.
-   */
-  "x-hide-properties"?: boolean;
+  "x-hide"?: boolean;
   /**
    * Define extension points in the target document
    */
@@ -357,13 +353,9 @@ export interface SpecExtensionJsonSchema {
    */
   "x-association-target"?: string[];
   /**
-   * Hide property from generated documentation, but keep it in exported JSON Schema.
+   * Hide JSON path node from generated documentation, but keep it in exported JSON Schema.
    */
-  "x-hide-property"?: boolean;
-  /**
-   * Hide properties table from generated documentation, but keep it in exported JSON Schema.
-   */
-  "x-hide-properties"?: boolean;
+  "x-hide"?: boolean;
   /**
    * Define extension points in the target document
    */
