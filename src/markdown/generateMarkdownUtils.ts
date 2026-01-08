@@ -20,6 +20,11 @@ export function jsonSchemaToMd(
 ): string {
   let text = "";
 
+  // Skip generating markdown documentation for objects marked as hidden. Note: the object is still part of the final generated JSON schema.
+  if (jsonSchemaObject["x-hide"]) {
+    return text;
+  }
+
   if (jsonSchemaObject["x-abstract"]) {
     return text;
   }
@@ -196,6 +201,20 @@ function getTypeColumnText(
   }
 }
 
+function anyOfReferenceHandling(jsonSchemaObject: SpecJsonSchema, jsonSchemaRoot: SpecJsonSchemaRoot): string {
+  const anyOfReferences: string[] = [];
+  if (jsonSchemaObject.anyOf) {
+    for (const anyOf of jsonSchemaObject.anyOf) {
+      if (!anyOf.$ref) {
+        throw new Error("anyOf needs to use $refs");
+      }
+      anyOfReferences.push(getMdLinkFromRef(anyOf.$ref, jsonSchemaObject, jsonSchemaRoot));
+    }
+    return anyOfReferences.join(" \\| ");
+  }
+  return "";
+}
+
 function oneOfReferenceHandling(jsonSchemaObject: SpecJsonSchema, jsonSchemaRoot: SpecJsonSchemaRoot): string {
   const oneOfReferences: string[] = [];
   if (jsonSchemaObject.oneOf) {
@@ -210,7 +229,11 @@ function oneOfReferenceHandling(jsonSchemaObject: SpecJsonSchema, jsonSchemaRoot
   return "";
 }
 
-function allOfReferenceHandling(jsonSchemaObject: SpecJsonSchema, jsonSchemaRoot: SpecJsonSchemaRoot): string {
+function allOfReferenceHandling(
+  jsonSchemaObject: SpecJsonSchema,
+  jsonSchemaRoot: SpecJsonSchemaRoot,
+  bindingSign: "|" | "&" = "|",
+): string {
   const allOfReferences: string[] = [];
   if (jsonSchemaObject.allOf) {
     for (const allOf of jsonSchemaObject.allOf) {
@@ -222,7 +245,7 @@ function allOfReferenceHandling(jsonSchemaObject: SpecJsonSchema, jsonSchemaRoot
         throw new Error("allOf needs to use $refs or if/then with $ref");
       }
     }
-    return allOfReferences.join(" \\| ");
+    return allOfReferences.join(` \\${bindingSign} `);
   }
   return "";
 }
@@ -282,7 +305,7 @@ function getPropertiesTableEntryText(
       // get Property to hand over to functions
       const property = jsonSchemaObject.properties[propertyName];
 
-      if (property["x-hide-property"]) {
+      if (property["x-hide"]) {
         continue;
       }
 
@@ -400,10 +423,7 @@ function getPatternPropertiesTableEntryText(
  * Adds default value
  * Will also validate that the default value matches the jsonSchemaObject type
  */
-export function getJsonSchemaDefaultValue(
-  jsonSchemaObject: SpecJsonSchema,
-  jsonSchemaRoot: SpecJsonSchemaRoot,
-): string {
+function getJsonSchemaDefaultValue(jsonSchemaObject: SpecJsonSchema, jsonSchemaRoot: SpecJsonSchemaRoot): string {
   if (jsonSchemaObject.default !== undefined) {
     // Validate default before adding it
     validateDefault(jsonSchemaObject, jsonSchemaRoot);
@@ -459,65 +479,72 @@ export function getObjectDescriptionTable(
   targetDocumentId: string | undefined,
 ): string {
   let text = "";
+  let typeAlreadySet = false;
 
-  if (jsonSchemaObject.allOf) {
-    // we write "One of the following" in the generated UI because we use allOf with discriminator "kind"
-    // and don't want to confuse the end users with terms like "All of the following"
-    // text += "**One of the following**: \n";
-    text += "**Type**: \n";
-    text += allOfReferenceHandling(jsonSchemaObject, jsonSchemaRoot);
-    text += "<br/>\n";
+  if (jsonSchemaObject.allOf && jsonSchemaObject.allOf.length > 0) {
+    // is this an allOf with if/then where one property of the object is used as a _discriminator_
+    // to distinguish the matching schema that should be further validated?
+    if (jsonSchemaObject.allOf[0].if && jsonSchemaObject.allOf[0].then) {
+      text += `**Type**: Object(${allOfReferenceHandling(jsonSchemaObject, jsonSchemaRoot)}) <br/>\n`;
+    } else {
+      // regular allOf handling, create a new type by combining multiple existing types with the '&' operator
+      text += `**Type**: Object(${allOfReferenceHandling(jsonSchemaObject, jsonSchemaRoot, "&")}) <br/>\n`;
+      // TODO: Consider merging properties of allOf items into the properties table below?
+    }
+
+    typeAlreadySet = true;
   }
 
-  if (!jsonSchemaObject["x-hide-properties"]) {
-    if (jsonSchemaObject.properties || jsonSchemaObject.patternProperties) {
-      // Add overview type
-      // TODO: Consider making this an option. Maybe dependent on how many properties there are?
-      if (jsonSchemaObject.properties) {
-        // Filter our hidden properties
-        const objectProperties = [];
-        for (const propertyName in jsonSchemaObject.properties) {
-          if (!jsonSchemaObject.properties[propertyName]["x-hide-property"]) {
-            objectProperties.push(propertyName);
-          }
+  if (jsonSchemaObject.properties || jsonSchemaObject.patternProperties) {
+    // Add overview type
+    // TODO: Consider making this an option. Maybe dependent on how many properties there are?
+    if (jsonSchemaObject.properties) {
+      // Filter our hidden properties
+      const objectProperties = [];
+      for (const propertyName in jsonSchemaObject.properties) {
+        if (!jsonSchemaObject.properties[propertyName]["x-hide"]) {
+          objectProperties.push(propertyName);
         }
-        const propertiesList = objectProperties.map((propertyName) => {
-          const propertyId = getHashIdForProperty(getSchemaObjectId(jsonSchemaObject), propertyName);
-          return `<a href="#${propertyId}">${propertyName}</a>`;
-        });
+      }
+      const propertiesList = objectProperties.map((propertyName) => {
+        const propertyId = getHashIdForProperty(getSchemaObjectId(jsonSchemaObject), propertyName);
+        return `<a href="#${propertyId}">${propertyName}</a>`;
+      });
+
+      if (!typeAlreadySet) {
         text += `**Type**: Object(${propertiesList.join(", ")})\n\n`;
       }
-
-      //create object table header
-      text += "| Property | Type | Description |\n";
-      text += "| -------- | ---- | ----------- |\n";
-
-      //Object does have to have properties for the following
-      //Remark: Root Object (definitions) does not have properties
-      //TODO: is it possible that an entry can also have only "Pattern Properties?"
-      if (jsonSchemaObject.properties) {
-        //Check if Required Properties exist
-        checkRequiredPropertiesExist(jsonSchemaObject);
-
-        //Add Properties
-        text += getPropertiesTableEntryText(jsonSchemaObject, jsonSchemaRoot, targetDocumentId);
-      }
-
-      //Add Pattern Properties
-      text += getPatternPropertiesTableEntryText(jsonSchemaObject, jsonSchemaRoot);
-
-      //Add information about additional properties
-      if (jsonSchemaObject.additionalProperties) {
-        text += "| <i>*</i> | | <i>Additional, unspecified properties MAY be added to the object</i>. |\n";
-      }
-      text += "\n";
-    } else {
-      // TODO: log filename in which the error occurred
-      // log.error(`Error in file ${specConfig.sourceFilePath}`);
-      throw new Error(
-        `Expected object with title "${jsonSchemaObject.title}" to have either "properties" or "patternProperties" defined.`,
-      );
     }
+
+    //create object table header
+    text += "| Property | Type | Description |\n";
+    text += "| -------- | ---- | ----------- |\n";
+
+    //Object does have to have properties for the following
+    //Remark: Root Object (definitions) does not have properties
+    //TODO: is it possible that an entry can also have only "Pattern Properties?"
+    if (jsonSchemaObject.properties) {
+      //Check if Required Properties exist
+      checkRequiredPropertiesExist(jsonSchemaObject);
+
+      //Add Properties
+      text += getPropertiesTableEntryText(jsonSchemaObject, jsonSchemaRoot, targetDocumentId);
+    }
+
+    //Add Pattern Properties
+    text += getPatternPropertiesTableEntryText(jsonSchemaObject, jsonSchemaRoot);
+
+    //Add information about additional properties
+    if (jsonSchemaObject.additionalProperties) {
+      text += "| <i>*</i> | | <i>Additional, unspecified properties MAY be added to the object</i>. |\n";
+    }
+    text += "\n";
+  }
+
+  if (jsonSchemaObject.anyOf) {
+    text += "Any of the following: \n";
+    text += anyOfReferenceHandling(jsonSchemaObject, jsonSchemaRoot);
+    text += "<br/>\n";
   }
 
   if (jsonSchemaObject.oneOf) {
@@ -901,7 +928,7 @@ export function detectOneOfEnum(jsonSchemaObject: SpecJsonSchema): boolean {
  *
  * @see https://github.com/json-schema-org/json-schema-spec/issues/57#issuecomment-247861695
  */
-export function detectOneOfRef(jsonSchemaObject: SpecJsonSchema): boolean {
+function detectOneOfRef(jsonSchemaObject: SpecJsonSchema): boolean {
   if (!jsonSchemaObject.oneOf) {
     return false;
   }
@@ -953,11 +980,7 @@ export function detectExtensibleEnum(jsonSchemaObject: SpecJsonSchema): boolean 
   }
 }
 
-export function getReferencedSchema(
-  $ref: string,
-  jsonSchemaRoot: SpecJsonSchemaRoot,
-  location: string,
-): SpecJsonSchema {
+function getReferencedSchema($ref: string, jsonSchemaRoot: SpecJsonSchemaRoot, location: string): SpecJsonSchema {
   // In this case there is no direct object in the JSON Schema root
   // We'll look up the main level $ref to see which one is considered the Root
   const refName = $ref.replace("#/definitions/", "");
@@ -970,7 +993,7 @@ export function getReferencedSchema(
 /**
  * Created description of a oneOf enum that has `const` values and optionally description attached to it
  */
-export function getOneOfEnumDescription(jsonSchemaObject: SpecJsonSchema, title = "Allowed Values"): string {
+function getOneOfEnumDescription(jsonSchemaObject: SpecJsonSchema, title = "Allowed Values"): string {
   let result = "";
 
   const oneOfEnum = detectOneOfEnum(jsonSchemaObject);
@@ -1010,7 +1033,7 @@ export function getOneOfEnumDescription(jsonSchemaObject: SpecJsonSchema, title 
 /**
  * Created description of a oneOf enum that has `const` values and optionally description attached to it
  */
-export function getOneOfRefDescription(
+function getOneOfRefDescription(
   jsonSchemaObject: SpecJsonSchema,
   jsonSchemaRoot: SpecJsonSchemaRoot,
   title = "One of",
@@ -1052,7 +1075,7 @@ export function getOneOfRefDescription(
   return result;
 }
 
-export function getAllOfRefDescription(jsonSchemaObject: SpecJsonSchema, jsonSchemaRoot: SpecJsonSchemaRoot): string {
+function getAllOfRefDescription(jsonSchemaObject: SpecJsonSchema, jsonSchemaRoot: SpecJsonSchemaRoot): string {
   let result = "";
   if (jsonSchemaObject.allOf) {
     result += `**All of**: <ul>`;
@@ -1069,7 +1092,7 @@ export function getAllOfRefDescription(jsonSchemaObject: SpecJsonSchema, jsonSch
   return result;
 }
 
-export function getAnyOfDescription(
+function getAnyOfDescription(
   jsonSchemaObject: SpecJsonSchema,
   jsonSchemaRoot: SpecJsonSchemaRoot,
   targetDocumentId: string | undefined,

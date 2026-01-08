@@ -84,10 +84,7 @@ This is optional and can be omitted if no general configuration is needed.
 
 Definition of a docsConfig item.
 
-**Type**: 
-[SpecConfig](#specconfig) \| [SpecExtensionConfig](#specextensionconfig)<br/>
-**Type**: Object(<a href="#docsconfigitem_type">type</a>)
-
+**Type**: Object([SpecConfig](#specconfig) \| [SpecExtensionConfig](#specextensionconfig)) <br/>
 | Property | Type | Description |
 | -------- | ---- | ----------- |
 |<div className="interface-property-name anchor" id="docsconfigitem_type">type<br/><span className="mandatory">MANDATORY</span><a className="hash-link" href="#docsconfigitem_type" title="#docsconfigitem_type"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">The docsConfig item type.<br/>It's value is been used as a _discriminator_ to distinguish the matching schema that should be further validated.<hr/>**Allowed Values**: <ul><li>`"spec"`</li><li>`"specExtension"`</li></ul></div>|

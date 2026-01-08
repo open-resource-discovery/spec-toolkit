@@ -337,12 +337,9 @@ definitions:
           Use a $ref pointer array as values
         items:
           type: string
-      x-hide-property:
+      x-hide:
         type: boolean
-        description: Hide property from generated documentation, but keep it in exported JSON Schema.
-      x-hide-properties:
-        type: boolean
-        description: Hide properties table from generated documentation, but keep it in exported JSON Schema.
+        description: Hide JSON path node from generated documentation, but keep it in exported JSON Schema.
       x-extension-points:
         type: array
         description: Define extension points in the target document
