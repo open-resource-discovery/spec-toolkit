@@ -88,7 +88,8 @@ export function convertSpecJsonSchemaToUmsMetadata(
     log.info("--------------------------------------------------------------------------");
 
     // Handle root-level schema with x-ums-type: root (for schemas without definitions)
-    if (document["x-ums-type"] === "root" && document.type === "object" && document.properties) {
+    // Only process if metadataPath is configured (required for UMS conversion)
+    if (document["x-ums-type"] === "root" && document.type === "object" && document.properties && config.metadataPath) {
       // Use title without spaces (PascalCase) to match definition-based naming convention
       const rootName = (document.title || documentId).split(" ").join("");
       const rootContext = getContext(context, rootName);
