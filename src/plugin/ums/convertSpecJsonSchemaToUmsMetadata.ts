@@ -87,6 +87,14 @@ export function convertSpecJsonSchemaToUmsMetadata(
     log.info(` ${getPath(context)}`);
     log.info("--------------------------------------------------------------------------");
 
+    // Handle root-level schema with x-ums-type: root (for schemas without definitions)
+    if (document["x-ums-type"] === "root" && document.type === "object" && document.properties) {
+      // Use title without spaces (PascalCase) to match definition-based naming convention
+      const rootName = (document.title || documentId).split(" ").join("");
+      const rootContext = getContext(context, rootName);
+      results.push(...jsonSchemaObjectToUmsMetadata(document as unknown as SpecJsonSchemaWithUmsSupport, rootContext));
+    }
+
     for (const entityName in document.definitions) {
       const definition = document.definitions[entityName];
       const newContext = getContext(context, entityName);

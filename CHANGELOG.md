@@ -10,6 +10,10 @@ For a roadmap including expected timeline, please refer to [ROADMAP.md](./ROADMA
 
 ## [unreleased]
 
+## [0.7.1]
+
+- fix: UMS plugin now supports root-level schemas with `x-ums-type: root` (schemas without `definitions` section)
+
 ## [0.7.0]
 
 - breaking: deleted `x-hide-properties`, remove it from JSON schema if used
