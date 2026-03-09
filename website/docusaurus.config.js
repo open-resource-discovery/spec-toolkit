@@ -8,7 +8,7 @@ const config = {
   title: "Spec-Toolkit",
   tagline: "Helping you to create JSON Schema based interface contracts and specifications.",
   url: "https://open-resource-discovery.github.io",
-  baseUrl: "/spec-toolkit/",
+  baseUrl: process.env.BASE_URL || "/spec-toolkit/",
   trailingSlash: false,
   onBrokenLinks: "throw",
   onDuplicateRoutes: "throw",
@@ -54,7 +54,7 @@ const config = {
     ],
   ],
 
-  scripts: ["/spec-toolkit/js/custom.js"],
+  scripts: [(process.env.BASE_URL || "/spec-toolkit/") + "js/custom.js"],
 
   themes: [
     "@docusaurus/theme-mermaid",
@@ -75,6 +75,16 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
+      ...(process.env.PR_PREVIEW_NUMBER
+        ? {
+            announcementBar: {
+              content: `<b>This is a preview version of the website for <a href="https://github.com/open-resource-discovery/spec-toolkit/pull/${process.env.PR_PREVIEW_NUMBER}" target="_blank">PR #${process.env.PR_PREVIEW_NUMBER}</a></b>`,
+              backgroundColor: "#e65050ff",
+              textColor: "#fff",
+              isCloseable: false,
+            },
+          }
+        : {}),
       colorMode: {
         defaultMode: "light",
         disableSwitch: true,
