@@ -15,6 +15,6 @@ jobs:
 
     steps:
       - name: PR preview (worker)
-        uses: open-resource-discovery/pr-preview-action@fix/artifact-upload-ghes-github-compat
+        uses: open-resource-discovery/pr-preview-action@main
         with:
           token: ${{ secrets.PR_PREVIEW_TOKEN }}

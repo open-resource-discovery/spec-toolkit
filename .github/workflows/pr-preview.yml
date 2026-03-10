@@ -40,7 +40,7 @@ jobs:
           npm run build
 
       - name: PR preview
-        uses: open-resource-discovery/pr-preview-action@fix/artifact-upload-ghes-github-compat
+        uses: open-resource-discovery/pr-preview-action@main
         with:
           fork: true
           build-dir: website/build
