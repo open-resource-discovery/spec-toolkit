@@ -48,7 +48,7 @@
     "gfm-escape": "0.2.0",
     "js-yaml": "4.1.1",
     "json-schema-to-typescript": "15.0.4",
-    "lodash": "4.17.21",
+    "lodash": "4.17.23",
     "quicktype-core": "23.2.6",
     "tslog": "4.9.3"
   },
