@@ -393,7 +393,7 @@
         },
         "x-hide": {
           "type": "boolean",
-          "description": "Hide JSON path node from generated documentation, but keep it in exported JSON Schema."
+          "description": "Hide JSON path node from generated markdown documentation, but keep it in exported JSON Schema."
         },
         "x-extension-points": {
           "type": "array",
@@ -637,7 +637,7 @@
         },
         "x-hide": {
           "type": "boolean",
-          "description": "Hide JSON path node from generated documentation, but keep it in exported JSON Schema."
+          "description": "Hide JSON path node from generated markdown documentation, but keep it in exported JSON Schema."
         },
         "x-extension-points": {
           "type": "array",

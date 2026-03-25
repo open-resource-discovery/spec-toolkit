@@ -496,6 +496,8 @@ export function getObjectDescriptionTable(
   }
 
   if (jsonSchemaObject.properties || jsonSchemaObject.patternProperties) {
+    const numberOfProperties = jsonSchemaObject.properties ? Object.keys(jsonSchemaObject.properties).length : 0;
+    let numberOfHiddenProperties = 0;
     // Add overview type
     // TODO: Consider making this an option. Maybe dependent on how many properties there are?
     if (jsonSchemaObject.properties) {
@@ -504,6 +506,8 @@ export function getObjectDescriptionTable(
       for (const propertyName in jsonSchemaObject.properties) {
         if (!jsonSchemaObject.properties[propertyName]["x-hide"]) {
           objectProperties.push(propertyName);
+        } else {
+          numberOfHiddenProperties++;
         }
       }
       const propertiesList = objectProperties.map((propertyName) => {
@@ -512,29 +516,32 @@ export function getObjectDescriptionTable(
       });
 
       if (!typeAlreadySet) {
-        text += `**Type**: Object(${propertiesList.join(", ")})\n\n`;
+        text +=
+          propertiesList.length > 0 ? `**Type**: Object(${propertiesList.join(", ")})\n\n` : `**Type**: Object\n\n`;
       }
     }
 
-    //create object table header
-    text += "| Property | Type | Description |\n";
-    text += "| -------- | ---- | ----------- |\n";
+    // create object table header
+    if (numberOfProperties - numberOfHiddenProperties > 0 || jsonSchemaObject.patternProperties) {
+      text += "| Property | Type | Description |\n";
+      text += "| -------- | ---- | ----------- |\n";
+    }
 
-    //Object does have to have properties for the following
-    //Remark: Root Object (definitions) does not have properties
-    //TODO: is it possible that an entry can also have only "Pattern Properties?"
+    // Object does have to have properties for the following
+    // Remark: Root Object (definitions) does not have properties
+    // TODO: is it possible that an entry can also have only "Pattern Properties?"
     if (jsonSchemaObject.properties) {
-      //Check if Required Properties exist
+      // Check if Required Properties exist
       checkRequiredPropertiesExist(jsonSchemaObject);
 
-      //Add Properties
+      // Add Properties
       text += getPropertiesTableEntryText(jsonSchemaObject, jsonSchemaRoot, targetDocumentId);
     }
 
     //Add Pattern Properties
     text += getPatternPropertiesTableEntryText(jsonSchemaObject, jsonSchemaRoot);
 
-    //Add information about additional properties
+    // Add information about additional properties
     if (jsonSchemaObject.additionalProperties) {
       text += "| <i>*</i> | | <i>Additional, unspecified properties MAY be added to the object</i>. |\n";
     }

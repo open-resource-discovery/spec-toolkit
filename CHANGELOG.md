@@ -11,6 +11,7 @@ For a roadmap including expected timeline, please refer to [ROADMAP.md](./ROADMA
 ## [unreleased]
 
 - breaking: added new configuration option `generalConfig.preservedCoreSpecificXProperties` which is an array of x- property names that the spec-toolkit adds to the output JSON Schema. If not provided, all core spec-toolkit specific x- properties will be removed from the generated output JSON Schema.
+- fix: there should be no rendering of an empty properties table when all properties of an object are marked with `x-hide`
 
 ## [0.7.1]
 
