@@ -23,7 +23,7 @@
     "@docusaurus/theme-mermaid": "3.9.2",
     "@docusaurus/tsconfig": "3.9.2",
     "@docusaurus/types": "3.9.2",
-    "@easyops-cn/docusaurus-search-local": "0.52.2",
+    "@easyops-cn/docusaurus-search-local": "0.55.1",
     "@monaco-editor/react": "4.7.0",
     "@tsconfig/docusaurus": "2.0.9",
     "@ui5/webcomponents-base": "2.17.0",
