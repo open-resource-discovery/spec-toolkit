@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunk_open_resource_discovery_spec_toolkit_website=globalThis.webpackChunk_open_resource_discovery_spec_toolkit_website||[]).push([[6235],{6235(e,s,o){o.d(s,{createInfoServices:()=>_.v});var _=o(1009);o(6902)}}]);
