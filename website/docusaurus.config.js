@@ -12,7 +12,6 @@ const config = {
   trailingSlash: false,
   onBrokenLinks: "throw",
   onDuplicateRoutes: "throw",
-  onBrokenMarkdownLinks: "throw",
   staticDirectories: ["static"],
   favicon: "img/favicon.ico",
 
@@ -31,6 +30,9 @@ const config = {
 
   markdown: {
     mermaid: true,
+    hooks: {
+      onBrokenMarkdownLinks: "throw",
+    },
   },
 
   presets: [

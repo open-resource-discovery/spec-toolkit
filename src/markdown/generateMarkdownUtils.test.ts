@@ -81,5 +81,50 @@ describe("test utils functions", () => {
         "
       `);
     });
+
+    it("should not generate a properties table when all properties of an object are hidden", () => {
+      // hide both properties of the object
+      jsonSchemaObject.properties!["testObjectProperty1"]["x-hide"] = true;
+      jsonSchemaObject.properties!["testObjectProperty2"]["x-hide"] = true;
+      const result = jsonSchemaToMd(jsonSchemaObject, jsonSchemaRoot, undefined);
+      expect(result).toMatchInlineSnapshot(`
+        "
+        ### Test Object
+
+        Test Object documentation.
+
+        **Type**: Object
+
+
+        "
+      `);
+    });
+
+    it("should generate a properties table when all properties of an object are hidden and the object has patternProperties defined", () => {
+      // hide both properties of the object
+      jsonSchemaObject.properties!["testObjectProperty1"]["x-hide"] = true;
+      jsonSchemaObject.properties!["testObjectProperty2"]["x-hide"] = true;
+      jsonSchemaObject.patternProperties = {
+        "^testPatternProperty": {
+          type: "string",
+          description: "This is a pattern property.",
+        },
+      };
+      const result = jsonSchemaToMd(jsonSchemaObject, jsonSchemaRoot, undefined);
+      expect(result).toMatchInlineSnapshot(`
+        "
+        ### Test Object
+
+        Test Object documentation.
+
+        **Type**: Object
+
+        | Property | Type | Description |
+        | -------- | ---- | ----------- |
+        | Additional Properties<br/><i><code className="regex">^testPatternProperty</code></i><br/><span className="optional">OPTIONAL</span> | string | This is a pattern property.<br/><br/><i>Additional properties MUST follow key name regexp pattern</i>: <code className="regex">^testPatternProperty</code> |
+
+        "
+      `);
+    });
   });
 });

@@ -203,7 +203,7 @@ export interface SpecJsonSchema {
    */
   "x-association-target"?: string[];
   /**
-   * Hide JSON path node from generated documentation, but keep it in exported JSON Schema.
+   * Hide JSON path node from generated markdown documentation, but keep it in exported JSON Schema.
    */
   "x-hide"?: boolean;
   /**
@@ -353,7 +353,7 @@ export interface SpecExtensionJsonSchema {
    */
   "x-association-target"?: string[];
   /**
-   * Hide JSON path node from generated documentation, but keep it in exported JSON Schema.
+   * Hide JSON path node from generated markdown documentation, but keep it in exported JSON Schema.
    */
   "x-hide"?: boolean;
   /**
