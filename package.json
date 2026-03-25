@@ -44,7 +44,7 @@
     "comment-json": "4.5.1",
     "exceljs": "4.4.0",
     "fast-glob": "3.3.3",
-    "fs-extra": "11.3.3",
+    "fs-extra": "11.3.4",
     "gfm-escape": "0.2.0",
     "js-yaml": "4.1.1",
     "json-schema-to-typescript": "15.0.4",
