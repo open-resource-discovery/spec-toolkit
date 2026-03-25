@@ -218,23 +218,18 @@ export function removeAllExtensionProperties(jsonSchema: SpecJsonSchemaRoot): Sp
   );
 }
 
-// list of "x-" properties that are considered relevant for end spec consumers and should not be cleaned
-export const allowedListProperties = [
-  "x-extension-targets",
-  "x-extension-points",
-  "x-recommended",
-  "x-introduced-in-version",
-  "x-feature-status",
-  "x-pattern-properties-description",
-  "x-association-target",
-  "x-root-entity",
-];
+// list of plugin specific "x-" properties that are considered relevant for end spec consumers and should not be cleaned
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export const ajvPreservedPluginSpecificXPropertiesList: string[] = [];
 
 /**
  * Clean up x- properties from schema
  *
  */
-export function removeSomeExtensionProperties(jsonSchema: SpecJsonSchemaRoot): SpecJsonSchemaRoot {
+export function removeSomeExtensionProperties(
+  jsonSchema: SpecJsonSchemaRoot,
+  preservedCoreSpecificXProperties: string[] = [],
+): SpecJsonSchemaRoot {
   // If this is the case when spec-toolkit self documents it's own spec schema, we want to keep all x- properties as part of the generated documentation
   if (jsonSchema.$id?.includes("spec.schema.json") && jsonSchema.title?.includes("Spec Json Schema Root")) {
     return jsonSchema;
@@ -242,7 +237,11 @@ export function removeSomeExtensionProperties(jsonSchema: SpecJsonSchemaRoot): S
 
   return JSON.parse(
     JSON.stringify(jsonSchema, (key, val) => {
-      return key.startsWith("x-") && allowedListProperties.indexOf(key) < 0 ? undefined : val;
+      return key.startsWith("x-") &&
+        ajvPreservedPluginSpecificXPropertiesList.indexOf(key) < 0 &&
+        preservedCoreSpecificXProperties.indexOf(key) < 0
+        ? undefined
+        : val;
     }),
   );
 }

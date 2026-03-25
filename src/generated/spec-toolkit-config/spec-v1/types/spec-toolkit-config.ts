@@ -50,6 +50,13 @@ export interface GeneralConfig {
    * The '.js' file extension is useful for compatibility with Node.js ESM modules but in Node.js commonjs modules it is not needed.
    */
   tsTypeExportExcludeJsFileExtension?: boolean;
+  /**
+   * Array of x- property names that the spec-toolkit adds to the output JSON Schema.
+   * This is used to include the core spec-toolkit specific x- properties in the generated JSON Schema.
+   *
+   * If not provided, all core spec-toolkit specific x- properties will be removed from the generated output JSON Schema.
+   */
+  preservedCoreSpecificXProperties?: string[];
 }
 /**
  * This is the configuration for a JSON Schema specification.

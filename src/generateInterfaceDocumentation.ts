@@ -136,6 +136,7 @@ export function jsonSchemaToDocumentation(configData: SpecToolkitConfigurationDo
 export function writeSpecJsonSchemaFiles(
   filePath: string,
   jsonSchema: SpecJsonSchemaRoot,
+  preservedCoreSpecificXProperties: string[] = [],
   isMainSchema?: boolean,
 ): void {
   const refConvertedJsonSchema = convertRefToDocToStandardRef(jsonSchema);
@@ -146,7 +147,7 @@ export function writeSpecJsonSchemaFiles(
   if (isMainSchema) {
     // Clean up the JSON Schema from everything spec specific
     const jsonSchema1 = removeDescriptionsFromRefPointers(refConvertedJsonSchema);
-    const jsonSchema2 = removeSomeExtensionProperties(jsonSchema1);
+    const jsonSchema2 = removeSomeExtensionProperties(jsonSchema1, preservedCoreSpecificXProperties);
 
     // write it as schema file that does not include all the x- extensions
     fs.outputFileSync(filePath, JSON.stringify(jsonSchema2, null, 2));
