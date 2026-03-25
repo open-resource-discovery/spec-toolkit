@@ -73,11 +73,12 @@ Spec-Toolkit CLI root level configuration document (`spec-toolkit.config.json`),
 This is the general configuration for the spec-toolkit.
 This is optional and can be omitted if no general configuration is needed.
 
-**Type**: Object(<a href="#generalconfig_tstypeexportexcludejsfileextension">tsTypeExportExcludeJsFileExtension</a>)
+**Type**: Object(<a href="#generalconfig_tstypeexportexcludejsfileextension">tsTypeExportExcludeJsFileExtension</a>, <a href="#generalconfig_preservedcorespecificxproperties">preservedCoreSpecificXProperties</a>)
 
 | Property | Type | Description |
 | -------- | ---- | ----------- |
 |<div className="interface-property-name anchor" id="generalconfig_tstypeexportexcludejsfileextension">tsTypeExportExcludeJsFileExtension<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#generalconfig_tstypeexportexcludejsfileextension" title="#generalconfig_tstypeexportexcludejsfileextension"></a></div>|<div className="interface-property-type">boolean</div>|<div className="interface-property-description">If set to `true`, the generated TypeScript types will exclude the `.js` file extension in the export statements.<br/>The '.js' file extension is useful for compatibility with Node.js ESM modules but in Node.js commonjs modules it is not needed.<hr/>**Default Value**: `true`</div>|
+|<div className="interface-property-name anchor" id="generalconfig_preservedcorespecificxproperties">preservedCoreSpecificXProperties<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#generalconfig_preservedcorespecificxproperties" title="#generalconfig_preservedcorespecificxproperties"></a></div>|<div className="interface-property-type">Array&lt;string&gt;</div>|<div className="interface-property-description">Array of x- property names that the spec-toolkit adds to the output JSON Schema.<br/>This is used to include the core spec-toolkit specific x- properties in the generated JSON Schema.<br/><br/>If not provided, all core spec-toolkit specific x- properties will be removed from the generated output JSON Schema.<hr/>**Example Values**: <ul className="examples"><li>`["x-recommended"]`</li><li>`["x-introduced-in-version","x-deprecated-in-version"]`</li></ul></div>|
 
 
 ### DocsConfigItem

@@ -9,7 +9,7 @@ title: "Overview"
 :::note[Quick Facts]
 
 - **STATUS**: <span className="feature-status-draft">DRAFT</span>. This project is currently 🚧 Work in Progress 🚧 not yet recommended to be productively used.
-- v1 to be released Q4 2025 / Q1 2026.
+- v1 to be released Q2 2026 / Q3 2026.
 
 :::
 

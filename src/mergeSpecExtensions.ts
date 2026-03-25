@@ -104,7 +104,12 @@ export function mergeSpecExtensions(configData: SpecToolkitConfigurationDocument
       // Validate resulting JSON Schema document
       validateSpecJsonSchema(targetDocument, docConfig1.sourceFilePath);
 
-      writeSpecJsonSchemaFiles(targetDocumentFilePath, targetDocument, true);
+      writeSpecJsonSchemaFiles(
+        targetDocumentFilePath,
+        targetDocument,
+        configData.generalConfig?.preservedCoreSpecificXProperties,
+        true,
+      );
 
       log.info(`Written: ${targetDocumentFilePath}`);
     }

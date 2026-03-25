@@ -1,5 +1,5 @@
 import { SpecToolkitConfigurationDocument } from "../generated/spec-toolkit-config/spec-v1/types/index.js";
-import { allowedListProperties } from "../util/jsonSchemaConversion.js";
+import { ajvPreservedPluginSpecificXPropertiesList } from "../util/jsonSchemaConversion.js";
 import { log } from "../util/log.js";
 import { preparedAjv } from "../util/validation.js";
 import PluginManager from "./pluginManager.js";
@@ -29,7 +29,7 @@ export default async function registerPlugins(configData: SpecToolkitConfigurati
           log.info(
             `Adding x- property ${xProperty} for plugin ${plugin.packageName} to the allowed list of x- properties that are preserved in the output JSON Schema.`,
           );
-          allowedListProperties.push(xProperty);
+          ajvPreservedPluginSpecificXPropertiesList.push(xProperty);
         }
       }
     }

@@ -10,6 +10,8 @@ For a roadmap including expected timeline, please refer to [ROADMAP.md](./ROADMA
 
 ## [unreleased]
 
+- breaking: added new configuration option `generalConfig.preservedCoreSpecificXProperties` which is an array of x- property names that the spec-toolkit adds to the output JSON Schema. If not provided, all core spec-toolkit specific x- properties will be removed from the generated output JSON Schema.
+
 ## [0.7.1]
 
 - fix: UMS plugin now supports root-level schemas with `x-ums-type: root` (schemas without `definitions` section)
