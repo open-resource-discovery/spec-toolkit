@@ -333,10 +333,12 @@ definitions:
       x-association-target:
         type: array
         description: |
-          Point to the association target entity and optionally the property which is used as its ID.
-          Use a $ref pointer array as values
+          Points to the association target entity and optionally the property which is used as its ID.
         items:
           type: string
+        examples:
+          - ["#/definitions/EntityDefinition"]
+          - ["#/definitions/ApiResource/ordId", "#/definitions/EventResource/ordId"]
       x-hide:
         type: boolean
         description: Hide JSON path node from generated markdown documentation, but keep it in exported JSON Schema.

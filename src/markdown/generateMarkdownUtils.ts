@@ -1262,7 +1262,7 @@ function getMdLinkFromRef($ref: string, context: SpecJsonSchema, rootJsonSchema:
     if (!referencedSchema.properties || !referencedSchema.properties[propertyName]) {
       throw new Error(`Could not resolve $ref "${$ref}" for\n ${JSON.stringify(context, null, 2)}`);
     }
-    link = `[${propertyName}](${getAnchorLinkFromTitle(referencedSchema.title)}_${propertyName.toLowerCase()}))`;
+    link = `[${entityName}.${propertyName}](${getAnchorLinkFromTitle(referencedSchema.title)}_${propertyName.toLowerCase()})`;
   }
   return link;
 }

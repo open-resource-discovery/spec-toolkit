@@ -197,8 +197,7 @@ export interface SpecJsonSchema {
    */
   "x-property-order"?: string[];
   /**
-   * Point to the association target entity and optionally the property which is used as its ID.
-   * Use a $ref pointer array as values
+   * Points to the association target entity and optionally the property which is used as its ID.
    *
    */
   "x-association-target"?: string[];
@@ -347,8 +346,7 @@ export interface SpecExtensionJsonSchema {
    */
   "x-property-order"?: string[];
   /**
-   * Point to the association target entity and optionally the property which is used as its ID.
-   * Use a $ref pointer array as values
+   * Points to the association target entity and optionally the property which is used as its ID.
    *
    */
   "x-association-target"?: string[];
