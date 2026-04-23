@@ -24,6 +24,28 @@ export interface Context {
 }
 
 /**
+ * Detects whether an object schema has an object-level `anyOf` where every entry contains only a `required`
+ * array. This represents the "at least one of these properties must be present" constraint pattern.
+ *
+ * Example:
+ * ```yaml
+ * anyOf:
+ *   - required: [ordId]
+ *   - required: [url]
+ *   - required: [correlationIds]
+ * ```
+ */
+export function isObjectLevelAnyOfRequired(schema: SpecJsonSchemaWithUmsSupport): boolean {
+  if (!schema.anyOf || schema.anyOf.length === 0) {
+    return false;
+  }
+  return schema.anyOf.every((entry) => {
+    const keys = Object.keys(entry);
+    return keys.length === 1 && keys[0] === "required" && Array.isArray(entry.required) && entry.required.length > 0;
+  });
+}
+
+/**
  * Detects whether this is an "extensible" enum where the enum values are described via `anyOf`
  *
  * TODO: Reconsider how to do this best and complement with validation
@@ -121,6 +143,22 @@ export function getContext(context: Context, appendPath: string): Context {
 }
 
 export function checkForUnsupportedFeatures(schema: SpecJsonSchemaWithUmsSupport, context: Context): void {
+  // Check for object-level anyOf patterns on the schema itself (not on individual properties)
+  if (schema.anyOf) {
+    if (isObjectLevelAnyOfRequired(schema)) {
+      const propertyNames = schema.anyOf.flatMap((entry) => entry.required || []);
+      log.info(
+        `${getPath(context)}: Object-level anyOf with required properties detected [${propertyNames.join(", ")}]. ` +
+          `This expresses an "at least one of" constraint which cannot be fully represented in UMS. Properties will be treated as optional.`,
+      );
+    } else {
+      log.error(
+        `${getPath(context)}: Unsupported object-level anyOf detected. Only anyOf entries with a single "required" array are supported at the object level.`,
+        schema.anyOf,
+      );
+    }
+  }
+
   for (const propertyName in schema.properties) {
     const property = schema.properties[propertyName];
     const newContext = getContext(context, propertyName);

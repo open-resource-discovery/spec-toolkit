@@ -3,6 +3,7 @@ import { SpecExtensionJsonSchema, SpecJsonSchema, SpecJsonSchemaRoot } from "../
 import { log } from "../util/log.js";
 import { SpecTarget } from "./index.js";
 import { checkRequiredPropertiesExist, validateDefault, validateExamples } from "../util/validation.js";
+import { isObjectLevelAnyOfRequired } from "../plugin/ums/specJsonSchemaHelper.js";
 import { documentationOutputFolderName, extensionFolderDiffToOutputFolderName, getOutputPath } from "../generate.js";
 import assert from "assert";
 import GfmEscape from "gfm-escape";
@@ -548,7 +549,7 @@ export function getObjectDescriptionTable(
     text += "\n";
   }
 
-  if (jsonSchemaObject.anyOf) {
+  if (jsonSchemaObject.anyOf && !isObjectLevelAnyOfRequired(jsonSchemaObject)) {
     text += "Any of the following: \n";
     text += anyOfReferenceHandling(jsonSchemaObject, jsonSchemaRoot);
     text += "<br/>\n";
