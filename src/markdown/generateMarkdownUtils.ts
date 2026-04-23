@@ -7,6 +7,7 @@ import type {
   SpecJsonSchema,
   SpecJsonSchemaRoot,
 } from "../generated/spec/spec-v1/types/index.js";
+import { isObjectLevelAnyOfRequired } from "../plugin/ums/specJsonSchemaHelper.js";
 import { log } from "../util/log.js";
 import { checkRequiredPropertiesExist, validateDefault, validateExamples } from "../util/validation.js";
 import type { SpecTarget } from "./index.js";
@@ -558,7 +559,7 @@ export function getObjectDescriptionTable(
     text += "\n";
   }
 
-  if (jsonSchemaObject.anyOf) {
+  if (jsonSchemaObject.anyOf && !isObjectLevelAnyOfRequired(jsonSchemaObject)) {
     text += "Any of the following: \n";
     text += anyOfReferenceHandling(jsonSchemaObject, jsonSchemaRoot);
     text += "<br/>\n";
