@@ -10,6 +10,9 @@ For a roadmap including expected timeline, please refer to [ROADMAP.md](./ROADMA
 
 ## [unreleased]
 
+
+- new feature: support object-level `anyOf` with `required`-only entries, expressing an "at least one of these properties must be present" constraint
+
 ## [0.8.2]
 
 - new feature: added `proposed` value to the `x-feature-status` enum for features that are specified but not yet implemented (#84)
