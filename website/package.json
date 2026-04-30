@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "@docusaurus/core": "3.9.2",
-    "@docusaurus/module-type-aliases": "3.9.2",
+    "@docusaurus/module-type-aliases": "3.10.1",
     "@docusaurus/preset-classic": "3.9.2",
     "@docusaurus/theme-mermaid": "3.9.2",
     "@docusaurus/tsconfig": "3.9.2",
