@@ -54,7 +54,7 @@
   },
   "devDependencies": {
     "@expo/spawn-async": "1.7.2",
-    "@sap/eslint-config": "0.4.0",
+    "@sap/eslint-config": "0.5.1",
     "@tsconfig/node22": "22.0.5",
     "@types/fs-extra": "11.0.4",
     "@types/jest": "30.0.0",
