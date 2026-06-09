@@ -6,12 +6,8 @@
     "moduleResolution": "NodeNext",
     "outDir": "dist",
     "rootDir": "src",
-    "baseUrl": "src",
     "inlineSourceMap": true,
     "resolveJsonModule": true,
-    "paths": {
-      "src/*": ["src/*"]
-    },
     "declaration": true,
     "strict": true,
     "isolatedModules": true,
