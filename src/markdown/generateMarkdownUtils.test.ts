@@ -64,7 +64,7 @@ describe("test utils functions", () => {
     });
 
     it("should not generate markdown documentation for hidden property of an object", () => {
-      jsonSchemaObject.properties?.testObjectProperty1["x-hide"] = true; // hide testObjectProperty1 from documentation
+      jsonSchemaObject.properties!.testObjectProperty1["x-hide"] = true; // hide testObjectProperty1 from documentation
       const result = jsonSchemaToMd(jsonSchemaObject, jsonSchemaRoot, undefined);
       expect(result).toMatchInlineSnapshot(`
         "
@@ -84,8 +84,8 @@ describe("test utils functions", () => {
 
     it("should not generate a properties table when all properties of an object are hidden", () => {
       // hide both properties of the object
-      jsonSchemaObject.properties?.testObjectProperty1["x-hide"] = true;
-      jsonSchemaObject.properties?.testObjectProperty2["x-hide"] = true;
+      jsonSchemaObject.properties!.testObjectProperty1["x-hide"] = true;
+      jsonSchemaObject.properties!.testObjectProperty2["x-hide"] = true;
       const result = jsonSchemaToMd(jsonSchemaObject, jsonSchemaRoot, undefined);
       expect(result).toMatchInlineSnapshot(`
         "
@@ -102,8 +102,8 @@ describe("test utils functions", () => {
 
     it("should generate a properties table when all properties of an object are hidden and the object has patternProperties defined", () => {
       // hide both properties of the object
-      jsonSchemaObject.properties?.testObjectProperty1["x-hide"] = true;
-      jsonSchemaObject.properties?.testObjectProperty2["x-hide"] = true;
+      jsonSchemaObject.properties!.testObjectProperty1["x-hide"] = true;
+      jsonSchemaObject.properties!.testObjectProperty2["x-hide"] = true;
       jsonSchemaObject.patternProperties = {
         "^testPatternProperty": {
           type: "string",
