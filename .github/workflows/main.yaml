@@ -17,7 +17,7 @@ jobs:
       - name: Installing Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: "22"
+          node-version: "24"
 
       - name: Install NPM dependencies
         run: npm ci
@@ -28,12 +28,15 @@ jobs:
   tests:
     name: Tests
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ["22", "24"]
     steps:
       - uses: actions/checkout@v6
 
       - uses: actions/setup-node@v6
         with:
-          node-version: "22"
+          node-version: ${{ matrix.node-version }}
 
       - name: Install NPM dependencies
         run: npm ci
@@ -44,7 +47,7 @@ jobs:
       - uses: actions/upload-artifact@v7 # upload test results
         if: success() || failure() # run this step even if previous step failed
         with:
-          name: test-results
+          name: test-results-node${{ matrix.node-version }}
           path: reports/jest-coverage/junit.xml
 
   build:
@@ -55,7 +58,7 @@ jobs:
 
       - uses: actions/setup-node@v6
         with:
-          node-version: "22"
+          node-version: "24"
 
       - name: Install NPM dependencies
         run: npm ci
@@ -73,7 +76,7 @@ jobs:
 
       - uses: actions/setup-node@v6
         with:
-          node-version: "22"
+          node-version: "24"
 
       - name: Install NPM dependencies
         working-directory: ./website
