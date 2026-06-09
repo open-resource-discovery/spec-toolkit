@@ -1,5 +1,5 @@
-import { isUmsAbstractTypeMapping, UmsMetadata } from "./umsMetadataTypes.js";
 import { log } from "../../util/log.js";
+import { isUmsAbstractTypeMapping, type UmsMetadata } from "./umsMetadataTypes.js";
 
 export interface ValidationStatistics {
   info: number;

@@ -1,4 +1,4 @@
-import { PluginConfigData } from "../generated/spec-toolkit-config/spec-v1/types/index.js";
+import type { PluginConfigData } from "../generated/spec-toolkit-config/spec-v1/types/index.js";
 import PluginManager from "./pluginManager.js";
 
 describe("PluginManager Tests", () => {

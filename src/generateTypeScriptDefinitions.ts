@@ -1,20 +1,19 @@
+import fs from "fs-extra";
+import yaml from "js-yaml";
+import type { JSONSchema4 } from "json-schema";
+import { compile as jsonSchemaToTypeScript } from "json-schema-to-typescript";
+import { schemasOutputFolderName, typesOutputFolderName } from "./generate.js";
+import type { SpecJsonSchemaRoot } from "./generated/spec/spec-v1/types/index.js";
+import type { SpecToolkitConfigurationDocument } from "./generated/spec-toolkit-config/spec-v1/types/index.js";
 import {
   convertAllOfWithIfThenDiscriminatorToOneOf,
   convertAnyOfEnum,
   convertOneOfEnum,
   convertRefToDocToStandardRef,
-  removeDescriptionsFromRefPointers,
   removeAllExtensionProperties,
+  removeDescriptionsFromRefPointers,
 } from "./util/jsonSchemaConversion.js";
-
-import { JSONSchema4 } from "json-schema";
-import { SpecJsonSchemaRoot } from "./generated/spec/spec-v1/types/index.js";
-import fs from "fs-extra";
-import { compile as jsonSchemaToTypeScript } from "json-schema-to-typescript";
 import { log } from "./util/log.js";
-import yaml from "js-yaml";
-import { SpecToolkitConfigurationDocument } from "./generated/spec-toolkit-config/spec-v1/types/index.js";
-import { schemasOutputFolderName, typesOutputFolderName } from "./generate.js";
 
 export async function generateTypeScriptDefinitions(configData: SpecToolkitConfigurationDocument): Promise<void> {
   let indexExportStatements = "";
@@ -71,7 +70,7 @@ export async function generateTypeScriptDefinitions(configData: SpecToolkitConfi
       const allPostProcessingReplacements: { oldValue: string; newValue: string }[] = [];
       const allPostProcessingReplacementMatches = [...definitions.matchAll(/.*replaceKeyType_{(.*)}/gm)];
       for (const match of allPostProcessingReplacementMatches) {
-        const replacementNewValue = match[0].replace("string", match[1]).split(";")[0] + ";";
+        const replacementNewValue = `${match[0].replace("string", match[1]).split(";")[0]};`;
         const indexStart = match.index;
         const indexEnd = match.index + match[0].length;
         allPostProcessingReplacements.push({

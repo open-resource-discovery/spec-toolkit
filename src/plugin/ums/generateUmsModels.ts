@@ -1,9 +1,9 @@
 import fs from "fs-extra";
 import yaml from "js-yaml";
-import { convertSpecJsonSchemaToUmsMetadata } from "./convertSpecJsonSchemaToUmsMetadata.js";
-import { SpecJsonSchemaRootWithUmsSupport } from "./types.js";
 import { log } from "../../util/log.js";
-import { UmsPluginConfig } from "./configModel.js";
+import type { UmsPluginConfig } from "./configModel.js";
+import { convertSpecJsonSchemaToUmsMetadata } from "./convertSpecJsonSchemaToUmsMetadata.js";
+import type { SpecJsonSchemaRootWithUmsSupport } from "./types.js";
 
 export const pluginOutputFolderName = "plugins/ums";
 

@@ -3,14 +3,15 @@
  ** This is a wrapper that executes all the generators in one go.
  **
  * */
+
+import type { SpecToolkitConfigurationDocument } from "./generated/spec-toolkit-config/spec-v1/types/index.js";
 import { generateExampleDocumentation } from "./generateExampleDocumentation.js";
 import { jsonSchemaToDocumentation } from "./generateInterfaceDocumentation.js";
 import { generateTypeScriptDefinitions } from "./generateTypeScriptDefinitions.js";
-import { log } from "./util/log.js";
 import { mergeSpecExtensions } from "./mergeSpecExtensions.js";
-import { SpecToolkitConfigurationDocument } from "./generated/spec-toolkit-config/spec-v1/types/index.js";
-import PluginManager from "./plugin/pluginManager.js";
-import SpecToolkitPlugin from "./plugin/specToolkitPlugin.js";
+import type PluginManager from "./plugin/pluginManager.js";
+import type SpecToolkitPlugin from "./plugin/specToolkitPlugin.js";
+import { log } from "./util/log.js";
 
 export const documentationOutputFolderName = "docs";
 export const documentationExtensionsOutputFolderName = "docs/extensions";
@@ -86,7 +87,7 @@ export async function generate(
 
         await pluginInstance.generate(
           allMainSpecSourceFilePaths,
-          configData.outputPath + `/plugin/${pluginName}`,
+          `${configData.outputPath}/plugin/${pluginName}`,
           plugin.options,
         );
       } else {

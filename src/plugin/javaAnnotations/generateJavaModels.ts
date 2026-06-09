@@ -1,9 +1,15 @@
-import * as fs from "fs";
-import * as path from "path";
+import * as fs from "node:fs";
+import * as path from "node:path";
 import { load as loadYaml } from "js-yaml";
+import {
+  FetchingJSONSchemaStore,
+  InputData,
+  JSONSchemaInput,
+  quicktype,
+  type SerializedRenderResult,
+} from "quicktype-core";
 import { log } from "../../util/log.js";
 import type { JavaAnnotationsConfig } from "./configModel.js";
-import { quicktype, InputData, JSONSchemaInput, FetchingJSONSchemaStore } from "quicktype-core";
 
 /**
  * Reads a YAML or JSON file and returns its contents as a formatted JSON string.
@@ -70,7 +76,7 @@ export async function generateModels(
   inputData.addInput(schemaInput);
 
   // Invoke quicktype to generate Java code
-  let qtResult;
+  let qtResult: SerializedRenderResult;
   try {
     qtResult = await quicktype({
       inputData,
@@ -85,11 +91,12 @@ export async function generateModels(
   // Split output by Quicktype file markers
   const fullCode = qtResult.lines.join("\n");
   const filePattern = /\/\/\s*(\w+)\.java\s*\r?\n([\s\S]*?)(?=\/\/\s*\w+\.java|$)/g;
-  let match: RegExpExecArray | null;
-  while ((match = filePattern.exec(fullCode))) {
+  let match = filePattern.exec(fullCode);
+  while (match !== null) {
     const [, className, body] = match;
-    const fileContent = body.trim() + "\n";
+    const fileContent = `${body.trim()}\n`;
     const filePath = path.join(targetDir, `${className}.java`);
     fs.writeFileSync(filePath, fileContent, "utf8");
+    match = filePattern.exec(fullCode);
   }
 }

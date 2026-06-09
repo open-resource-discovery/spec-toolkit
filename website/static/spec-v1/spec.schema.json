@@ -94,40 +94,20 @@
   },
   "patternProperties": {
     "^x-[a-z]+(-[a-z]+)+$": {
-      "type": [
-        "string",
-        "number",
-        "boolean",
-        "array",
-        "object",
-        "null"
-      ],
+      "type": ["string", "number", "boolean", "array", "object", "null"],
       "description": "Spec Toolkit plugin specific x- properties.\nMUST start with `x-<pluginName>-` and can be used to extend the specification document with additional properties.\n",
       "tsType": "unknown // replaceKeyType_{SpecToolkitPluginXxPropertyKey}",
-      "examples": [
-        "x-ums-implements",
-        "x-ums-type"
-      ]
+      "examples": ["x-ums-implements", "x-ums-type"]
     }
   },
-  "required": [
-    "definitions"
-  ],
+  "required": ["definitions"],
   "additionalProperties": false,
   "definitions": {
     "SpecJsonSchemaTypeName": {
       "title": "Spec Json Schema Type Name",
       "type": "string",
       "description": "Name of the type used in the Spec JSON Schema.\nThis is used to define the type of properties in the specification document.\n",
-      "enum": [
-        "string",
-        "number",
-        "integer",
-        "boolean",
-        "object",
-        "array",
-        "null"
-      ]
+      "enum": ["string", "number", "integer", "boolean", "object", "array", "null"]
     },
     "SpecJsonSchemaTypeNameArray": {
       "title": "Spec Json Schema Type Name Array",
@@ -139,12 +119,7 @@
     },
     "Example": {
       "title": "Example",
-      "type": [
-        "object",
-        "string",
-        "array",
-        "boolean"
-      ],
+      "type": ["object", "string", "array", "boolean"],
       "description": "Example item used in the examples array.\nThis is used to provide an example of how the property can be used in practice.\n"
     },
     "SpecJsonSchemaType": {
@@ -333,11 +308,7 @@
           "type": "string"
         },
         "default": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+          "type": ["string", "number", "boolean"]
         },
         "examples": {
           "type": "array",
@@ -368,10 +339,7 @@
         "x-feature-status": {
           "type": "string",
           "description": "Feature Status. Use this to mark something as alpha or beta.",
-          "enum": [
-            "alpha",
-            "beta"
-          ]
+          "enum": ["alpha", "beta"]
         },
         "x-pattern-properties-description": {
           "type": "string",
@@ -391,13 +359,8 @@
             "type": "string"
           },
           "examples": [
-            [
-              "#/definitions/EntityDefinition"
-            ],
-            [
-              "#/definitions/ApiResource/ordId",
-              "#/definitions/EventResource/ordId"
-            ]
+            ["#/definitions/EntityDefinition"],
+            ["#/definitions/ApiResource/ordId", "#/definitions/EventResource/ordId"]
           ]
         },
         "x-hide": {
@@ -423,27 +386,15 @@
         "tsType": {
           "type": "string",
           "description": "Overwrite the generated TypeScript Type.\n\nUsed and defined by json-schema-to-typescript [tsType](https://github.com/bcherny/json-schema-to-typescript?tab=readme-ov-file#custom-schema-properties).\nFor advanced use cases where the json-schema-to-typescript library doesn't support to define the \"key\" type of patternProperties. Use `// replaceKeyType_` as workaround.\nIn the curly brackets you can combine multiple type names by the pipe/vertical bar character.\n",
-          "examples": [
-            "tsType: unknown // replaceKeyType_{YourTypeNameHere}"
-          ]
+          "examples": ["tsType: unknown // replaceKeyType_{YourTypeNameHere}"]
         }
       },
       "patternProperties": {
         "^x-[a-z]+(-[a-z]+)+$": {
-          "type": [
-            "string",
-            "number",
-            "boolean",
-            "array",
-            "object",
-            "null"
-          ],
+          "type": ["string", "number", "boolean", "array", "object", "null"],
           "description": "Spec Toolkit plugin specific x- properties.\nMUST start with `x-<pluginName>-` and can be used to extend the specification document with additional properties.\n",
           "tsType": "unknown // replaceKeyType_{SpecToolkitPluginXxPropertyKey}",
-          "examples": [
-            "x-ums-implements",
-            "x-ums-type"
-          ]
+          "examples": ["x-ums-implements", "x-ums-type"]
         }
       },
       "additionalProperties": false
@@ -586,11 +537,7 @@
           "type": "string"
         },
         "default": {
-          "type": [
-            "string",
-            "number",
-            "boolean"
-          ]
+          "type": ["string", "number", "boolean"]
         },
         "examples": {
           "type": "array",
@@ -621,10 +568,7 @@
         "x-feature-status": {
           "type": "string",
           "description": "Feature Status. Use this to mark something as alpha or beta.",
-          "enum": [
-            "alpha",
-            "beta"
-          ]
+          "enum": ["alpha", "beta"]
         },
         "x-pattern-properties-description": {
           "type": "string",
@@ -644,13 +588,8 @@
             "type": "string"
           },
           "examples": [
-            [
-              "#/definitions/EntityDefinition"
-            ],
-            [
-              "#/definitions/ApiResource/ordId",
-              "#/definitions/EventResource/ordId"
-            ]
+            ["#/definitions/EntityDefinition"],
+            ["#/definitions/ApiResource/ordId", "#/definitions/EventResource/ordId"]
           ]
         },
         "x-hide": {
@@ -676,9 +615,7 @@
         "tsType": {
           "type": "string",
           "description": "Overwrite the generated TypeScript Type.\n\nUsed and defined by json-schema-to-typescript [tsType](https://github.com/bcherny/json-schema-to-typescript?tab=readme-ov-file#custom-schema-properties).\nFor advanced use cases where the json-schema-to-typescript library doesn't support to define the \"key\" type of patternProperties. Use `// replaceKeyType_` as workaround.\nIn the curly brackets you can combine multiple type names by the pipe/vertical bar character.\n",
-          "examples": [
-            "tsType: unknown // replaceKeyType_{YourTypeNameHere}"
-          ]
+          "examples": ["tsType: unknown // replaceKeyType_{YourTypeNameHere}"]
         },
         "x-extension-targets": {
           "type": "array",
@@ -693,20 +630,10 @@
       },
       "patternProperties": {
         "^x-[a-z]+(-[a-z]+)+$": {
-          "type": [
-            "string",
-            "number",
-            "boolean",
-            "array",
-            "object",
-            "null"
-          ],
+          "type": ["string", "number", "boolean", "array", "object", "null"],
           "description": "Spec Toolkit plugin specific x- properties.\nMUST start with `x-<pluginName>-` and can be used to extend the specification document with additional properties.\n",
           "tsType": "unknown // replaceKeyType_{SpecToolkitPluginXxPropertyKey}",
-          "examples": [
-            "x-ums-implements",
-            "x-ums-type"
-          ]
+          "examples": ["x-ums-implements", "x-ums-type"]
         }
       },
       "additionalProperties": false
@@ -726,10 +653,7 @@
           "description": "URI reference to the referenced document."
         }
       },
-      "required": [
-        "title",
-        "ref"
-      ]
+      "required": ["title", "ref"]
     },
     "XCustomTypescriptType": {
       "title": "Xx Property Custom TypeScript Type",
@@ -746,10 +670,7 @@
         }
       },
       "additionalProperties": false,
-      "required": [
-        "typeName",
-        "typeValue"
-      ]
+      "required": ["typeName", "typeValue"]
     },
     "JsonSchemaDefinitions": {
       "title": "Json Schema Definitions",

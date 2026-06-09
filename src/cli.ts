@@ -4,7 +4,7 @@ import { init } from "./cliRunner.js";
 try {
   const currentNodeVersion = process.versions.node;
   const semver = currentNodeVersion.split(".");
-  const major = parseInt(semver[0]);
+  const major = parseInt(semver[0], 10);
 
   if (major < 22) {
     process.stdout.write(

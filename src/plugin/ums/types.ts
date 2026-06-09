@@ -1,4 +1,4 @@
-import { SpecJsonSchema, SpecJsonSchemaRoot } from "../../generated/spec/spec-v1/types/index.js";
+import type { SpecJsonSchema, SpecJsonSchemaRoot } from "../../generated/spec/spec-v1/types/index.js";
 
 export interface SpecJsonSchemaRootWithUmsSupport extends SpecJsonSchemaRoot {
   definitions: JsonSchemaDefinitionsWithUmsSupport;
@@ -18,7 +18,7 @@ export const supportedUmsTypes = ["root", "custom", "ignore", "embedded"] as con
 export type UmsType = (typeof supportedUmsTypes)[number];
 
 export interface SpecJsonSchemaWithUmsSupport extends SpecJsonSchema {
-  "properties"?: PropertiesWithUmsSupport;
+  properties?: PropertiesWithUmsSupport;
   "x-ums-type"?: UmsType;
 
   /**

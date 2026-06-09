@@ -1,8 +1,8 @@
-import fs from "fs-extra";
-import path from "path";
+import path from "node:path";
 import spawnAsync from "@expo/spawn-async";
+import fs from "fs-extra";
 import yaml from "js-yaml";
-import { SpecToolkitConfigurationDocument } from "../generated/spec-toolkit-config/spec-v1/types/spec-toolkit-config.js";
+import type { SpecToolkitConfigurationDocument } from "../generated/spec-toolkit-config/spec-v1/types/spec-toolkit-config.js";
 
 describe("CLI plugin config tests", () => {
   const cliBin = "node";
@@ -81,15 +81,15 @@ describe("CLI plugin config tests", () => {
 
       test("should successfully preserve plugin specific x- properties in the output JSON schema if configured", async () => {
         const schemaWithxUmsPropertyToPreserve = {
-          "$schema": "http://json-schema.org/draft-07/schema#",
-          "title": "Person",
-          "type": "object",
+          $schema: "http://json-schema.org/draft-07/schema#",
+          title: "Person",
+          type: "object",
           "x-ums-type": "root",
-          "properties": {
+          properties: {
             firstName: { type: "string" },
             lastName: { type: "string" },
           },
-          "required": ["firstName", "lastName"],
+          required: ["firstName", "lastName"],
         };
         const schemaPath = path.join(tmpTestData, "personWithXUmsProperty.schema.yaml");
         fs.writeFileSync(schemaPath, yaml.dump(schemaWithxUmsPropertyToPreserve), "utf8");

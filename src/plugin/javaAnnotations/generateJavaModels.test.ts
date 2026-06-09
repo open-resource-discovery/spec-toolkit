@@ -1,6 +1,6 @@
+import path from "node:path";
 import { jest } from "@jest/globals";
 import fs from "fs-extra";
-import path from "path";
 import yaml from "js-yaml";
 import { log } from "../../util/log.js";
 import type { JavaAnnotationsConfig } from "./configModel.js";
@@ -49,7 +49,7 @@ describe("generateModels", () => {
     await jest.isolateModulesAsync(async () => {
       // Mock quicktype-core to delegate to actual implementation for this test
       jest.doMock("quicktype-core", () => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // biome-ignore lint/suspicious/noExplicitAny: mock setup requires any
         const actual: any = jest.requireActual("quicktype-core");
         return {
           __esModule: true,
@@ -57,7 +57,7 @@ describe("generateModels", () => {
           FetchingJSONSchemaStore: actual.FetchingJSONSchemaStore,
           InputData: actual.InputData,
           // delegate to real quicktype
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/explicit-function-return-type
+          // biome-ignore lint/suspicious/noExplicitAny: mock setup requires any
           quicktype: (opts: any) => actual.quicktype(opts),
         };
       });

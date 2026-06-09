@@ -1,4 +1,4 @@
-import { SpecToolkitConfigurationDocument } from "../generated/spec-toolkit-config/spec-v1/types/index.js";
+import type { SpecToolkitConfigurationDocument } from "../generated/spec-toolkit-config/spec-v1/types/index.js";
 import { ajvPreservedPluginSpecificXPropertiesList } from "../util/jsonSchemaConversion.js";
 import { log } from "../util/log.js";
 import { preparedAjv } from "../util/validation.js";

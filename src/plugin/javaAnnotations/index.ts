@@ -1,8 +1,8 @@
+import { log } from "../../util/log.js";
 import SpecToolkitPlugin from "../specToolkitPlugin.js";
 import type { JavaAnnotationsConfig } from "./configModel.js";
 import { generateAnnotations } from "./generateJavaAnnotations.js";
 import { generateModels } from "./generateJavaModels.js";
-import { log } from "../../util/log.js";
 
 export default class JavaAnnotationsPlugin extends SpecToolkitPlugin {
   public constructor() {

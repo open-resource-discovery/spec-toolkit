@@ -1,5 +1,5 @@
 declare module "gfm-escape" {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: type declaration for untyped module
   let missingTypes: any;
   export = missingTypes;
 }
