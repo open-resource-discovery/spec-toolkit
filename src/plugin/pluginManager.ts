@@ -51,7 +51,9 @@ class PluginManager {
 
       this.addPlugin(pluginConfigData, packageContents as object);
 
-      const xProperties = (packageContents as Record<string, unknown> & { default?: { prototype?: { xProperties?: string[] } } }).default?.prototype?.xProperties;
+      const xProperties = (
+        packageContents as Record<string, unknown> & { default?: { prototype?: { xProperties?: string[] } } }
+      ).default?.prototype?.xProperties;
       if (xProperties && Array.isArray(xProperties)) {
         log.info(`Plugin ${pluginConfigData.packageName} has the following x- properties: ${xProperties.join(", ")}`);
         return xProperties;
