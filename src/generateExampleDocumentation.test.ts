@@ -1,10 +1,10 @@
-import fs from "fs-extra";
-import path from "path";
-import yaml from "js-yaml";
-import { SpecToolkitConfigurationDocument } from "./index.js";
-import { generateExampleDocumentation } from "./generateExampleDocumentation.js";
-import { log } from "./util/log.js";
+import path from "node:path";
 import { jest } from "@jest/globals";
+import fs from "fs-extra";
+import yaml from "js-yaml";
+import { generateExampleDocumentation } from "./generateExampleDocumentation.js";
+import type { SpecToolkitConfigurationDocument } from "./index.js";
+import { log } from "./util/log.js";
 
 describe("test generateExampleDocumentation", () => {
   const tmpTestDataName = "tmpTestData-generateExampleDocumentation";

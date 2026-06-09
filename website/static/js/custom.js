@@ -5,7 +5,6 @@ window.addEventListener(
   "DOMContentLoaded",
   () => {
     locationHashChanged();
-    console.debug("Loaded");
   },
   false,
 );
@@ -15,7 +14,6 @@ function locationHashChanged() {
     dfn.classList.remove("highlight");
   });
   const highlightedElementId = location.hash.split("#")[1];
-  console.debug("highlighting", highlightedElementId);
   const highlightedElement = document.getElementById(highlightedElementId);
   if (highlightedElement) {
     highlightedElement.classList.add("highlight");

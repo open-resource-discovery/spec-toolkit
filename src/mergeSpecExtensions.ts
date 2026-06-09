@@ -1,12 +1,12 @@
+import path from "node:path";
 import fs from "fs-extra";
 import * as yaml from "js-yaml";
-import { log } from "./util/log.js";
-import { SpecExtensionJsonSchema, SpecJsonSchemaRoot } from "./generated/spec/spec-v1/types/index.js";
-import { validateSpecJsonSchema } from "./util/validation.js";
-import { writeSpecJsonSchemaFiles } from "./generateInterfaceDocumentation.js";
-import { SpecToolkitConfigurationDocument } from "./generated/spec-toolkit-config/spec-v1/types/index.js";
-import path from "path";
 import { schemasOutputFolderName } from "./generate.js";
+import type { SpecExtensionJsonSchema, SpecJsonSchemaRoot } from "./generated/spec/spec-v1/types/index.js";
+import type { SpecToolkitConfigurationDocument } from "./generated/spec-toolkit-config/spec-v1/types/index.js";
+import { writeSpecJsonSchemaFiles } from "./generateInterfaceDocumentation.js";
+import { log } from "./util/log.js";
+import { validateSpecJsonSchema } from "./util/validation.js";
 
 export function mergeSpecExtensions(configData: SpecToolkitConfigurationDocument): void {
   for (const docConfig1 of configData.docsConfig) {

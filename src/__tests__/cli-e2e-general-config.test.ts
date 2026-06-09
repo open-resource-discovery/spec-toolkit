@@ -1,8 +1,8 @@
-import fs from "fs-extra";
-import path from "path";
+import path from "node:path";
 import spawnAsync from "@expo/spawn-async";
+import fs from "fs-extra";
 import yaml from "js-yaml";
-import { SpecToolkitConfigurationDocument } from "../generated/spec-toolkit-config/spec-v1/types/spec-toolkit-config.js";
+import type { SpecToolkitConfigurationDocument } from "../generated/spec-toolkit-config/spec-v1/types/spec-toolkit-config.js";
 
 describe("CLI generalConfig tests", () => {
   const cliBin = "node";
@@ -21,7 +21,7 @@ describe("CLI generalConfig tests", () => {
       title: "Person",
       type: "object",
       properties: {
-        firstName: { "type": "string", "x-hide": true, "x-deprecated-in-version": "1.0.2" },
+        firstName: { type: "string", "x-hide": true, "x-deprecated-in-version": "1.0.2" },
         lastName: { type: "string" },
       },
       required: ["firstName", "lastName"],

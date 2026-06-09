@@ -1,7 +1,7 @@
 import fg from "fast-glob";
 import fs from "fs-extra";
 import * as yaml from "js-yaml";
-import { compileSchema, JsonError, JsonSchema, ErrorConfig } from "json-schema-library";
+import { compileSchema, type ErrorConfig, type JsonError, type JsonSchema } from "json-schema-library";
 
 describe("Valid Config Example Files", (): void => {
   const testSchema = yaml.load(fs.readFileSync(`./spec/v1/spec-toolkit-config.schema.yaml`).toString()) as JsonSchema;
@@ -37,11 +37,13 @@ describe("Valid Config Example Files", (): void => {
   }
 });
 
+// biome-ignore lint/suspicious/noExportsInTest: used by other files
 export type JsonSchemaValidationError = {
   code: ErrorConfig | string;
   pointer: string;
   message: string;
 };
+// biome-ignore lint/suspicious/noExportsInTest: used by other files
 export function simplifyValidationErrors(errors: JsonError[]): JsonSchemaValidationError[] {
   return errors.map((el) => {
     return {

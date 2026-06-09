@@ -1,10 +1,9 @@
+import { Ajv, type ValidateFunction } from "ajv";
+import addFormats from "ajv-formats";
 import fs from "fs-extra";
 
-import { Ajv, ValidateFunction } from "ajv";
-import { SpecJsonSchema, SpecJsonSchemaRoot } from "../generated/spec/spec-v1/types/index.js";
-
 import _ from "lodash";
-import addFormats from "ajv-formats";
+import type { SpecJsonSchema, SpecJsonSchemaRoot } from "../generated/spec/spec-v1/types/index.js";
 import { log } from "./log.js";
 
 // Prepare JSON Schema validator
@@ -118,9 +117,9 @@ export function validateJsonSchema(
 export function validateRefLinks(jsonSchema: SpecJsonSchemaRoot, jsonSchemaFilePath: string): ValidationResultEntry[] {
   const errors: ValidationResultEntry[] = [];
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: cloneDeep callback requires any types
   function cloneFn(this: SpecJsonSchemaRoot, value: any, _key: any, _object: any, _stack: any): any {
-    if (value && value.$ref && typeof value.$ref === "string") {
+    if (value?.$ref && typeof value.$ref === "string") {
       const $ref = value.$ref as string;
       const refArr = $ref.split("/");
 
@@ -181,7 +180,7 @@ export function validateExamples(jsonSchemaObject: SpecJsonSchema, jsonSchemaRoo
       if (!valid) {
         log.error("--------------------------------------------------------------------------");
         log.error(`Example value "${example}" is invalid: \n ${JSON.stringify(jsonSchemaObject, null, 2)}`);
-        log.error(validate.errors![0].message);
+        log.error(validate.errors?.[0].message);
         log.error("--------------------------------------------------------------------------");
         process.exit(1);
       }
@@ -204,7 +203,7 @@ export function validateDefault(jsonSchemaObject: SpecJsonSchema, jsonSchemaRoot
       log.error(
         `Default value "${jsonSchemaObject.default}" is invalid: \n ${JSON.stringify(jsonSchemaObject, null, 2)}`,
       );
-      log.error(validate.errors![0].message);
+      log.error(validate.errors?.[0].message);
       log.error("--------------------------------------------------------------------------");
       process.exit(1);
     }

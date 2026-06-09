@@ -1,8 +1,9 @@
 import { jest } from "@jest/globals";
 import fs from "fs-extra";
 import yaml from "js-yaml";
+import type { JSONSchema7 } from "json-schema";
 import { MermaidDiagram } from "./mermaidClass.js";
-import { JSONSchema7 } from "json-schema";
+
 describe("test generateDiagrams", () => {
   describe("test generateEntityRelationshipModel", () => {
     afterEach(() => {

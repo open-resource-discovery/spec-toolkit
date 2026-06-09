@@ -3,42 +3,46 @@
 // # TODO: Add ID properties from composite parent root (e.g. apiResourceId, eventResourceId)
 // # TODO: Add ID for the Consumption Bundle (metadata relation)
 
-import { UmsMetadataOverrides, UmsPluginConfig } from "./configModel.js";
-import {
-  MetadataRelation,
-  MetadataProperty,
-  UmsMetadataType,
-  UmsType,
-  CustomTypeDefinition,
-  CommonAttributes,
-  Constraints,
-  UmsAbstractTypeMapping,
-  UmsMetadata,
-  isUmsMetadataType,
-  isUmsMetadataTypeOrAbstractMetadataType,
-} from "./umsMetadataTypes.js";
-import {
-  isExtensibleEnum,
-  isComplexEnum,
-  isPolymorphicComposition,
-  getPath,
-  Context,
-  getContext,
-  checkForUnsupportedFeatures,
-  getReferenceTarget,
-  getReferenceName,
-  getUnionType,
-  getReferenceTargetFromRef,
-  convertPropertyRefToObjectRef,
-  getDocumentId,
-  isAssociation,
-} from "./specJsonSchemaHelper.js";
-import { validateUmsMetadata } from "./validateUmsMetadata.js";
+import fs from "fs-extra";
+import yaml from "js-yaml";
 import _ from "lodash";
 import { log } from "../../util/log.js";
-import { SpecJsonSchemaRootWithUmsSupport, SpecJsonSchemaWithUmsSupport, supportedUmsTypes } from "./types.js";
-import yaml from "js-yaml";
-import fs from "fs-extra";
+import type { UmsMetadataOverrides, UmsPluginConfig } from "./configModel.js";
+import {
+  type Context,
+  checkForUnsupportedFeatures,
+  convertPropertyRefToObjectRef,
+  getContext,
+  getDocumentId,
+  getPath,
+  getReferenceName,
+  getReferenceTarget,
+  getReferenceTargetFromRef,
+  getUnionType,
+  isAssociation,
+  isComplexEnum,
+  isExtensibleEnum,
+  isPolymorphicComposition,
+} from "./specJsonSchemaHelper.js";
+import {
+  type SpecJsonSchemaRootWithUmsSupport,
+  type SpecJsonSchemaWithUmsSupport,
+  supportedUmsTypes,
+} from "./types.js";
+import {
+  type CommonAttributes,
+  type Constraints,
+  type CustomTypeDefinition,
+  isUmsMetadataType,
+  isUmsMetadataTypeOrAbstractMetadataType,
+  type MetadataProperty,
+  type MetadataRelation,
+  type UmsAbstractTypeMapping,
+  type UmsMetadata,
+  type UmsMetadataType,
+  type UmsType,
+} from "./umsMetadataTypes.js";
+import { validateUmsMetadata } from "./validateUmsMetadata.js";
 
 export type MetadataType =
   | "MetadataProperty"
@@ -199,7 +203,7 @@ export function jsonSchemaObjectToUmsMetadata(schema: SpecJsonSchemaWithUmsSuppo
     for (const entityName in context.document.definitions) {
       const entity = context.document.definitions[entityName];
       if (entity["x-ums-implements"] === `#/definitions/${mainFile.spec.typeName}`) {
-        umsTypeMappingMetadata.spec.includedTypes!.push({
+        umsTypeMappingMetadata.spec.includedTypes?.push({
           includedType: {
             name: entityName,
             namespace: context.config.metadataPath,
@@ -212,7 +216,11 @@ export function jsonSchemaObjectToUmsMetadata(schema: SpecJsonSchemaWithUmsSuppo
 
   const metadata = jsonSchemaObjectToMetadata(schema, context);
   mainFile.spec.metadataProperties.push(...metadata.metadataProperties);
-  mainFile.spec.customTypeDefinitions.push(...metadata.customTypeDefinitions);
+  for (const ctd of metadata.customTypeDefinitions) {
+    if (!mainFile.spec.customTypeDefinitions.some((existing) => existing.name === ctd.name)) {
+      mainFile.spec.customTypeDefinitions.push(ctd);
+    }
+  }
   mainFile.spec.metadataRelations.push(...metadata.metadataRelations);
 
   log.info("--------------------------------------------------------------------------");
@@ -243,7 +251,7 @@ export function jsonSchemaObjectToMetadata(schema: SpecJsonSchemaWithUmsSupport,
   // If the schema has patternProperties, we treat it as a "freestyle" map
   // This means that we create metadata properties where key and value are provided as arbitrary string
   if (schema.patternProperties) {
-    if (schema.properties && schema.properties.length) {
+    if (schema.properties?.length) {
       throw new Error(
         `${getPath(context)}: Unsupported mix of patternProperties and properties. An with patternProperties cannot have properties and will be treated by UMS as dynamic key-value map.`,
       );
@@ -355,7 +363,11 @@ export function jsonSchemaObjectToMetadata(schema: SpecJsonSchemaWithUmsSupport,
       const r = jsonSchemaObjectToMetadata(refTarget, newContext);
       customTypeDefinition.metadataProperties = r.metadataProperties;
       result.customTypeDefinitions.push(customTypeDefinition);
-      result.customTypeDefinitions.push(...r.customTypeDefinitions);
+      for (const ctd of r.customTypeDefinitions) {
+        if (!result.customTypeDefinitions.some((existing) => existing.name === ctd.name)) {
+          result.customTypeDefinitions.push(ctd);
+        }
+      }
     } else if (category === "metadataRelation") {
       //////////////////////////////////////////
       // Simple Metadata Relation             //
@@ -424,7 +436,7 @@ export function jsonSchemaObjectToMetadata(schema: SpecJsonSchemaWithUmsSupport,
  * Helper function to derive some common attributes from a JSON Schema property that are shared across MetadataRelations and MetadataProperties
  */
 export function getCommonAttributes(schema: SpecJsonSchemaWithUmsSupport, propertyName: string): CommonAttributes {
-  if (!schema.properties || !schema.properties[propertyName]) {
+  if (!schema.properties?.[propertyName]) {
     throw new Error(`${getPath}: Expected input object to have property: ${propertyName}`);
   }
   const property = schema.properties[propertyName];
@@ -435,7 +447,7 @@ export function getCommonAttributes(schema: SpecJsonSchemaWithUmsSupport, proper
       throw new Error(`${getPath}: Description of ${propertyName} is more than 2000 characters.`);
     }
   }
-  if (schema.required && schema.required.includes(propertyName)) {
+  if (schema.required?.includes(propertyName)) {
     commonAttributes.mandatory = true;
   }
   return commonAttributes;
@@ -445,7 +457,7 @@ export function getArrayAttribute(
   schema: SpecJsonSchemaWithUmsSupport,
   propertyName: string,
 ): Partial<MetadataProperty> {
-  if (!schema.properties || !schema.properties[propertyName]) {
+  if (!schema.properties?.[propertyName]) {
     throw new Error(`${getPath}: Expected input object to have property: ${propertyName}`);
   }
   const property = schema.properties[propertyName];
@@ -462,7 +474,7 @@ export function getConstraints(
   propertyName: string,
   context: Context,
 ): { constraints?: Constraints } {
-  if (!schema.properties || !schema.properties[propertyName]) {
+  if (!schema.properties?.[propertyName]) {
     throw new Error(`${getPath(context)}: Expected input object to have property: ${propertyName}`);
   }
   const property = schema.properties[propertyName];
@@ -602,7 +614,7 @@ function getPolymorphicMetadataRelation(
   context: Context,
 ): MetadataRelation[] {
   const result: MetadataRelation[] = [];
-  let abstractObject: string | undefined = undefined;
+  let abstractObject: string | undefined;
   for (const target of targets) {
     const objectRef = convertPropertyRefToObjectRef(target);
     const refTargetObject = getReferenceTargetFromRef(objectRef, context);
@@ -621,8 +633,8 @@ function getPolymorphicMetadataRelation(
       );
     }
   }
-  const abstractTargetParsed = abstractObject!.split("/");
-  const abstractTargetTypeName = abstractTargetParsed[2];
+  const abstractTargetParsed = abstractObject?.split("/");
+  const abstractTargetTypeName = abstractTargetParsed?.[2];
 
   log.debug(
     `${getPath(context)}: Polymorphic association to "${abstractTargetTypeName}" detected  (${JSON.stringify(targets)})`,
@@ -630,7 +642,7 @@ function getPolymorphicMetadataRelation(
 
   const metadataRelation: MetadataRelation = {
     propertyName: propertyName,
-    relatedTypeName: abstractTargetTypeName,
+    relatedTypeName: abstractTargetTypeName ?? "",
     relatedTypeNamespace: context.config.metadataPath!,
     ...getCommonAttributes(schema, propertyName),
     correspondingRelationPropertyNames: [],
@@ -643,7 +655,7 @@ function getPolymorphicMetadataRelation(
   for (const target of targets) {
     const targetParsed = target.split("/");
     const relationTypeName = lowercaseFirstLetter(`${targetParsed[2]}${capitalizeFirstLetter(targetParsed[3])}`);
-    metadataRelation.correspondingRelationPropertyNames!.push(relationTypeName);
+    metadataRelation.correspondingRelationPropertyNames?.push(relationTypeName);
 
     const additionalMetadataRelation: MetadataRelation = {
       propertyName: relationTypeName,
@@ -749,7 +761,7 @@ export function addReverseRelations(
           relatedTypeName: entityName,
           relatedTypeNamespace: context.config.metadataPath!,
           description: reverseRelation.description || `Reverse relation for ${propertyName}`,
-          mandatory: reverseRelation.min ? true : false,
+          mandatory: !!reverseRelation.min,
         };
 
         const associationTargets = analyze["x-association-target"];

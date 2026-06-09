@@ -1,6 +1,4 @@
-import _ from "lodash";
-
-import { SpecJsonSchema, SpecJsonSchemaRoot } from "../generated/spec/spec-v1/types/index.js";
+import type { SpecJsonSchema, SpecJsonSchemaRoot } from "../generated/spec/spec-v1/types/index.js";
 import { detectExtensibleEnum, detectOneOfEnum } from "../markdown/generateMarkdownUtils.js";
 
 /**
@@ -85,7 +83,7 @@ export function convertOneOfEnum(documentSchema: SpecJsonSchemaRoot): SpecJsonSc
             }
           }
           delete property.oneOf;
-        } else if (propertyItems && propertyItems.oneOf && detectOneOfEnum(propertyItems)) {
+        } else if (propertyItems?.oneOf && detectOneOfEnum(propertyItems)) {
           // Do the same for .items
           propertyItems.enum = [];
           for (const oneOfItem of propertyItems.oneOf) {
@@ -128,7 +126,7 @@ export function convertAnyOfEnum(documentSchema: SpecJsonSchemaRoot): SpecJsonSc
               delete anyOfItem.const;
             }
           }
-        } else if (propertyItems && propertyItems.anyOf && detectExtensibleEnum(propertyItems)) {
+        } else if (propertyItems?.anyOf && detectExtensibleEnum(propertyItems)) {
           // Do the same for .items
           for (const anyOfItem of propertyItems.anyOf) {
             if (anyOfItem.const) {
@@ -164,10 +162,9 @@ export function convertAllOfWithIfThenDiscriminatorToOneOf(documentSchema: SpecJ
     if (allOf) {
       const allOfReferences: SpecJsonSchema[] = [];
       for (const allOfItem of allOf) {
-        if (allOfItem.if && allOfItem.then && allOfItem.then.$ref) {
+        if (allOfItem.if && allOfItem.then?.$ref) {
           allOfReferences.push({ $ref: allOfItem.then.$ref });
         } else {
-          continue;
         }
       }
       jsonSchemaObject.oneOf = [...allOfReferences];

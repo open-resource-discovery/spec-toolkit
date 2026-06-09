@@ -1,11 +1,11 @@
 import _ from "lodash";
-import { SpecJsonSchemaRoot } from "../generated/spec/spec-v1/types/index.js";
 import { extensionFolderDiffToOutputFolderName } from "../generate.js";
+import type { SpecJsonSchemaRoot } from "../generated/spec/spec-v1/types/index.js";
 import {
   getAnchorLinkFromTitle,
   getExtensionOverviewTable,
-  getObjectDescriptionTable,
   getJsonSchemaExamples,
+  getObjectDescriptionTable,
   jsonSchemaToMd,
 } from "./generateMarkdownUtils.js";
 

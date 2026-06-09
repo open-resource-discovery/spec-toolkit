@@ -56,7 +56,7 @@ const config = {
     ],
   ],
 
-  scripts: [(process.env.BASE_URL || "/spec-toolkit/") + "js/custom.js"],
+  scripts: [`${process.env.BASE_URL || "/spec-toolkit/"}js/custom.js`],
 
   themes: [
     "@docusaurus/theme-mermaid",

@@ -1,13 +1,13 @@
-import { Command, Option } from "commander";
-import * as packageJson from "../package.json" with { type: "json" };
 import { readFileSync } from "node:fs";
-import { generate } from "./generate.js";
 import path from "node:path";
-import { SpecToolkitConfigurationDocument } from "./generated/spec-toolkit-config/spec-v1/types/index.js";
-import { Ajv, Schema } from "ajv";
+import { Ajv, type Schema } from "ajv";
+import addFormats from "ajv-formats";
+import { Command, Option } from "commander";
 import fs from "fs-extra";
 import yaml from "js-yaml";
-import addFormats from "ajv-formats";
+import * as packageJson from "../package.json" with { type: "json" };
+import { generate } from "./generate.js";
+import type { SpecToolkitConfigurationDocument } from "./generated/spec-toolkit-config/spec-v1/types/index.js";
 import registerPlugins from "./plugin/index.js";
 
 interface CliOptions {

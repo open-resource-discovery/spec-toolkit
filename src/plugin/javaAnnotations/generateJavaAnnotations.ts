@@ -1,13 +1,13 @@
-import * as fs from "fs";
-import * as path from "path";
+import * as fs from "node:fs";
+import * as path from "node:path";
 import { load as loadYaml } from "js-yaml";
-import { log } from "../../util/log.js";
-import type { JavaAnnotationsConfig } from "./configModel.js";
 import type {
-  SpecJsonSchema,
   JsonSchemaDefinition,
   JsonSchemaDefinitions,
+  SpecJsonSchema,
 } from "../../generated/spec/spec-v1/types/spec.js";
+import { log } from "../../util/log.js";
+import type { JavaAnnotationsConfig } from "./configModel.js";
 
 export function generateAnnotations(
   config: JavaAnnotationsConfig,

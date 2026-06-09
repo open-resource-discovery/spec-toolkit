@@ -1,13 +1,13 @@
+import * as path from "node:path";
+import { parse } from "comment-json";
 import fg from "fast-glob";
 import fs from "fs-extra";
-import * as path from "path";
-import { log } from "./util/log.js";
-import { SpecToolkitConfigurationDocument } from "./generated/spec-toolkit-config/spec-v1/types/index.js";
-import { documentationExamplesOutputFolderName, schemasOutputFolderName } from "./generate.js";
-import { SpecJsonSchemaRoot } from "./index.js";
 import * as yaml from "js-yaml";
+import { documentationExamplesOutputFolderName, schemasOutputFolderName } from "./generate.js";
+import type { SpecToolkitConfigurationDocument } from "./generated/spec-toolkit-config/spec-v1/types/index.js";
+import type { SpecJsonSchemaRoot } from "./index.js";
+import { log } from "./util/log.js";
 import { getJsonSchemaValidator } from "./util/validation.js";
-import { parse } from "comment-json";
 
 interface ExampleDocumentsDict {
   [fileName: string]: string;
@@ -34,7 +34,7 @@ export function generateExampleDocumentation(configData: SpecToolkitConfiguratio
         fs.readFileSync(path.join(process.cwd(), generatedJsonSchemaFilePath)).toString(),
       ) as SpecJsonSchemaRoot;
       for (const filePath of jsonExampleFilePaths) {
-        let exampleFileContent;
+        let exampleFileContent: unknown;
         if (filePath.endsWith(".jsonc")) {
           exampleFileContent = parse(fs.readFileSync(filePath).toString());
         } else if (filePath.endsWith(".json")) {
@@ -60,10 +60,10 @@ export function generateExampleDocumentation(configData: SpecToolkitConfiguratio
       // for each json,jsonc example generate a documentation .md site
       for (const filePath of jsonExampleFilePaths) {
         const exampleFileContent = fs.readFileSync(filePath).toString();
-        const fileName = path.parse(filePath).name + ".md";
+        const fileName = `${path.parse(filePath).name}.md`;
 
         const exampleFileIntroPath = filePath.replace(/.(json?|jsonc?)$/, ".intro.md");
-        let exampleFileIntroContent = undefined;
+        let exampleFileIntroContent: string | undefined;
         try {
           exampleFileIntroContent = fs.readFileSync(exampleFileIntroPath).toString();
         } catch (_) {
@@ -71,7 +71,7 @@ export function generateExampleDocumentation(configData: SpecToolkitConfiguratio
         }
 
         const exampleFileOutroPath = filePath.replace(/.(json?|jsonc?)$/, ".outro.md");
-        let exampleFileOutroContent = undefined;
+        let exampleFileOutroContent: string | undefined;
         try {
           exampleFileOutroContent = fs.readFileSync(exampleFileOutroPath).toString();
         } catch (_) {
@@ -97,7 +97,7 @@ export function generateExampleDocumentation(configData: SpecToolkitConfiguratio
         text += exampleFileContent;
         text += "\n```\n";
         if (exampleFileOutroContent) {
-          text += "\n" + exampleFileOutroContent;
+          text += `\n${exampleFileOutroContent}`;
         }
 
         mdExamplePages[fileName] = text;
@@ -111,7 +111,7 @@ export function generateExampleDocumentation(configData: SpecToolkitConfiguratio
           fileName,
         );
         fs.outputFileSync(exampleFilePath, fileContent);
-        log.info("- " + exampleFilePath);
+        log.info(`- ${exampleFilePath}`);
       }
     }
   }

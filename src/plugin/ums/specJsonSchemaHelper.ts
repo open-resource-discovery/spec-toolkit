@@ -1,6 +1,6 @@
 import { log } from "../../util/log.js";
-import { UmsPluginConfig } from "./configModel.js";
-import { SpecJsonSchemaRootWithUmsSupport, SpecJsonSchemaWithUmsSupport } from "./types.js";
+import type { UmsPluginConfig } from "./configModel.js";
+import type { SpecJsonSchemaRootWithUmsSupport, SpecJsonSchemaWithUmsSupport } from "./types.js";
 
 export type DocumentId = string;
 export type EntityId = string;
@@ -235,7 +235,7 @@ export function getReferenceTargetFromRef(ref: string, context: Context): SpecJs
   if (refArray.length === 1) {
     return targetObject;
   } else if (refArray.length === 2) {
-    if (!targetObject.properties || !targetObject.properties[refArray[1]]) {
+    if (!targetObject.properties?.[refArray[1]]) {
       log.error(`${getPath(context)}: Could not find target property for $ref="${ref}"`);
       throw new Error(`${getPath(context)}: Could not find target property for $ref="${ref}"`);
     }
@@ -293,11 +293,11 @@ export function calculateJsonSchemaUnion(schemas: SpecJsonSchemaWithUmsSupport[]
     for (const propertyName in schema.properties) {
       const property = schema.properties[propertyName];
       // Merge Properties
-      if (!mergedSchema.properties![propertyName]) {
+      if (!mergedSchema.properties?.[propertyName]) {
         mergedSchema.properties![propertyName] = property;
       } else if (property.enum) {
-        mergedSchema.properties![propertyName].enum = mergedSchema.properties![propertyName].enum || [];
-        mergedSchema.properties![propertyName].enum?.push(...property.enum);
+        mergedSchema.properties![propertyName].enum = mergedSchema.properties![propertyName].enum ?? [];
+        mergedSchema.properties![propertyName].enum!.push(...property.enum);
       }
       // Calculate required properties
       if (schema.required) {
@@ -308,7 +308,7 @@ export function calculateJsonSchemaUnion(schemas: SpecJsonSchemaWithUmsSupport[]
 
     for (const propertyName in requiredProperties) {
       if (requiredProperties[propertyName] === schemas.length) {
-        mergedSchema.required!.push(propertyName);
+        mergedSchema.required?.push(propertyName);
       }
     }
 

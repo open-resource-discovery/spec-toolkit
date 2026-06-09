@@ -1,9 +1,9 @@
 import { jest } from "@jest/globals";
+import type { SpecToolkitConfigurationDocument } from "../generated/spec-toolkit-config/spec-v1/types/index.js";
+import { ajvPreservedPluginSpecificXPropertiesList } from "../util/jsonSchemaConversion.js";
+import { preparedAjv } from "../util/validation.js";
 import registerPlugins from "./index.js";
 import PluginManager from "./pluginManager.js";
-import { preparedAjv } from "../util/validation.js";
-import { ajvPreservedPluginSpecificXPropertiesList } from "../util/jsonSchemaConversion.js";
-import type { SpecToolkitConfigurationDocument } from "../generated/spec-toolkit-config/spec-v1/types/index.js";
 
 describe("registerPlugins tests", () => {
   const initialAllowed = [...ajvPreservedPluginSpecificXPropertiesList];

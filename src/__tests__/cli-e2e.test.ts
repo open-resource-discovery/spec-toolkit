@@ -1,4 +1,4 @@
-import * as fs from "fs";
+import * as fs from "node:fs";
 import spawnAsync from "@expo/spawn-async";
 
 describe("CLI End-to-End Tests", () => {

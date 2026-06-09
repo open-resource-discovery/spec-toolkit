@@ -1,5 +1,5 @@
 import SpecToolkitPlugin from "../specToolkitPlugin.js";
-import { UmsPluginConfig } from "./configModel.js";
+import type { UmsPluginConfig } from "./configModel.js";
 import { generateUmsModels } from "./generateUmsModels.js";
 
 class UmsPlugin extends SpecToolkitPlugin {

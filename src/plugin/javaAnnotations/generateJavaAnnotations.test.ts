@@ -1,6 +1,6 @@
+import path from "node:path";
 import { jest } from "@jest/globals";
 import fs from "fs-extra";
-import path from "path";
 import yaml from "js-yaml";
 import { log } from "../../util/log.js";
 import type { JavaAnnotationsConfig } from "./configModel.js";

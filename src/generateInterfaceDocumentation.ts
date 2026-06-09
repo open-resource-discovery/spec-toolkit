@@ -9,22 +9,8 @@
  * * Add **Type**: consistently for non-object Definition entries
  */
 
-import { readTextFromFile } from "./model/config.js";
-import { SpecJsonSchemaRoot } from "./generated/spec/spec-v1/types/index.js";
-import { SpecToolkitConfigurationDocument } from "./generated/spec-toolkit-config/spec-v1/types/index.js";
-import { getMarkdownFrontMatter } from "./util/markdownTextHelper.js";
-import { validateSpecJsonSchema } from "./util/validation.js";
-import {
-  preprocessSpecJsonSchema,
-  removeDescriptionsFromRefPointers,
-  removeSomeExtensionProperties,
-  convertRefToDocToStandardRef,
-} from "./util/jsonSchemaConversion.js";
-
-import _ from "lodash";
+import path from "node:path";
 import fs from "fs-extra";
-import { log } from "./util/log.js";
-import path from "path";
 import yaml from "js-yaml";
 import {
   documentationExtensionsOutputFolderName,
@@ -32,7 +18,19 @@ import {
   getOutputPath,
   schemasOutputFolderName,
 } from "./generate.js";
-import { generateMarkdown, SpecTarget } from "./markdown/index.js";
+import type { SpecJsonSchemaRoot } from "./generated/spec/spec-v1/types/index.js";
+import type { SpecToolkitConfigurationDocument } from "./generated/spec-toolkit-config/spec-v1/types/index.js";
+import { generateMarkdown, type SpecTarget } from "./markdown/index.js";
+import { readTextFromFile } from "./model/config.js";
+import {
+  convertRefToDocToStandardRef,
+  preprocessSpecJsonSchema,
+  removeDescriptionsFromRefPointers,
+  removeSomeExtensionProperties,
+} from "./util/jsonSchemaConversion.js";
+import { log } from "./util/log.js";
+import { getMarkdownFrontMatter } from "./util/markdownTextHelper.js";
+import { validateSpecJsonSchema } from "./util/validation.js";
 
 ////////////////////////////////////////////////////////////
 // JSON SCHEMA TO MARKDOWN                                //
@@ -78,7 +76,7 @@ export function jsonSchemaToDocumentation(configData: SpecToolkitConfigurationDo
     log.info(`${docConfig.sourceFilePath} loaded and prepared.`);
 
     // Read extension target file if given
-    let specTarget: SpecTarget | undefined = undefined;
+    let specTarget: SpecTarget | undefined;
     if (docConfig.type === "specExtension") {
       const target = configData.docsConfig.find((config) => config.id === docConfig.targetDocumentId);
       if (target) {
@@ -113,9 +111,9 @@ export function jsonSchemaToDocumentation(configData: SpecToolkitConfigurationDo
     // Write Markdown Documentation
     let filePath = "";
     if (docConfig.type === "spec") {
-      filePath = getOutputPath() + `/${documentationOutputFolderName}/${docConfig.id}.md`;
+      filePath = `${getOutputPath()}/${documentationOutputFolderName}/${docConfig.id}.md`;
     } else if (docConfig.type === "specExtension") {
-      filePath = getOutputPath() + `/${documentationExtensionsOutputFolderName}/${docConfig.id}.md`;
+      filePath = `${getOutputPath()}/${documentationExtensionsOutputFolderName}/${docConfig.id}.md`;
     }
     fs.outputFileSync(filePath, text);
     log.info(`Written: ${filePath}`);

@@ -1,9 +1,9 @@
 import * as WorkbookPackage from "exceljs";
 import fs from "fs-extra";
 import yaml from "js-yaml";
-import { JSONSchema7, JSONSchema7Object } from "json-schema";
+import type { JSONSchema7, JSONSchema7Object } from "json-schema";
+import type { SpecJsonSchemaRoot } from "../../generated/spec/spec-v1/types/index.js";
 import { log } from "../../util/log.js";
-import { SpecJsonSchemaRoot } from "../../generated/spec/spec-v1/types/index.js";
 
 export interface OrdSimplifiedTableFormat {
   entityName: string;

@@ -1,7 +1,7 @@
 {
   "$schema": "http://json.schemastore.org/package",
   "name": "@open-resource-discovery/spec-toolkit",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "JSON Schema Toolkit CLI to create schema based interface documentation",
   "author": "SAP SE",
   "license": "Apache-2.0",
@@ -21,13 +21,12 @@
     "prebuild": "rimraf ./dist",
     "build": "tsc -p ./tsconfig.build.json",
     "postbuild": "npm run postbuild-spec-toolkit-config && npm run postbuild-spec",
-    "postbuild-spec-toolkit-config": "node ./dist/cli.js -c ./spec-toolkit-config.config.json && cp -r ./src/generated/spec-toolkit-config/spec-v1/docs/spec-toolkit-config.md -t 'website/docs/docs/' && cp -r ./src/generated/spec-toolkit-config/spec-v1/schemas/* -t 'website/static/spec-v1/'",
-    "postbuild-spec": "node ./dist/cli.js -c ./spec.config.json && cp -r ./src/generated/spec/spec-v1/docs/spec.md -t 'website/docs/docs/' && cp -r ./src/generated/spec/spec-v1/schemas/* -t 'website/static/spec-v1/'",
+    "postbuild-spec-toolkit-config": "node ./dist/cli.js -c ./spec-toolkit-config.config.json && cp ./src/generated/spec-toolkit-config/spec-v1/docs/spec-toolkit-config.md website/docs/docs/ && cp ./src/generated/spec-toolkit-config/spec-v1/schemas/* website/static/spec-v1/",
+    "postbuild-spec": "node ./dist/cli.js -c ./spec.config.json && cp ./src/generated/spec/spec-v1/docs/spec.md website/docs/docs/ && cp ./src/generated/spec/spec-v1/schemas/* website/static/spec-v1/",
+    "lint": "npm run biome",
     "lint:staged": "lint-staged",
-    "eslint": "eslint . --fix",
-    "eslint:ci": "eslint .",
-    "prettier": "prettier --write \"**/*.{js,ts,json,yml,yaml,md}\"",
-    "prettier:ci": "prettier --check \"**/*.{js,ts,json,yml,yaml,md}\"",
+    "biome": "biome check --write .",
+    "biome:ci": "biome ci .",
     "test": "npm run build && node --experimental-vm-modules --no-warnings=ExperimentalWarning node_modules/jest/bin/jest.js --ci --collectCoverage",
     "test:watch": "node --experimental-vm-modules --no-warnings=ExperimentalWarning node_modules/jest/bin/jest.js --watchAll",
     "prepare": "is-ci || husky"
@@ -38,47 +37,45 @@
   },
   "homepage": "https://open-resource-discovery.github.io/spec-toolkit/",
   "dependencies": {
-    "ajv": "8.18.0",
+    "ajv": "8.20.0",
     "ajv-formats": "3.0.1",
     "commander": "14.0.3",
     "comment-json": "4.6.2",
     "exceljs": "4.4.0",
     "fast-glob": "3.3.3",
-    "fs-extra": "11.3.4",
+    "fs-extra": "11.3.5",
     "gfm-escape": "0.2.0",
-    "js-yaml": "4.1.1",
+    "js-yaml": "4.2.0",
     "json-schema-to-typescript": "15.0.4",
-    "lodash": "4.17.23",
+    "lodash": "4.18.1",
     "quicktype-core": "23.2.6",
-    "tslog": "4.9.3"
+    "tslog": "4.10.2"
   },
   "devDependencies": {
-    "@expo/spawn-async": "1.7.2",
-    "@sap/eslint-config": "0.4.0",
+    "@biomejs/biome": "2.4.16",
+    "@expo/spawn-async": "1.8.0",
     "@tsconfig/node22": "22.0.5",
     "@types/fs-extra": "11.0.4",
     "@types/jest": "30.0.0",
     "@types/js-yaml": "4.0.9",
     "@types/lodash": "4.17.24",
-    "@types/node": "25.5.0",
-    "eslint": "9.39.4",
+    "@types/node": "25.9.2",
     "husky": "9.1.7",
     "is-ci": "4.1.0",
-    "jest": "30.3.0",
+    "jest": "30.4.2",
     "jest-watch-typeahead": "3.0.1",
     "json-schema": "0.4.0",
-    "json-schema-library": "11.0.5",
-    "lint-staged": "16.4.0",
-    "prettier": "3.8.1",
+    "json-schema-library": "11.5.1",
+    "lint-staged": "17.0.7",
     "rimraf": "6.1.3",
-    "ts-jest": "29.4.6",
+    "ts-jest": "29.4.11",
     "ts-node": "10.9.2",
-    "tsx": "4.21.0",
-    "typescript": "5.9.3"
+    "tsx": "4.22.4",
+    "typescript": "6.0.3"
   },
   "lint-staged": {
-    "**/*.{js,ts,json,yml,yaml,md}}": [
-      "prettier --write"
+    "**/*.{js,ts,json,yml,yaml,md}": [
+      "biome check --write --no-errors-on-unmatched"
     ]
   }
 }

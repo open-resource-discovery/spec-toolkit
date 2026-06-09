@@ -1,4 +1,4 @@
-import { PluginOptions } from "../index.js";
+import type { PluginOptions } from "../index.js";
 
 export default abstract class SpecToolkitPlugin {
   private readonly _name: string;

@@ -1,11 +1,16 @@
-import _ from "lodash";
-import { SpecExtensionJsonSchema, SpecJsonSchema, SpecJsonSchemaRoot } from "../generated/spec/spec-v1/types/index.js";
-import { log } from "../util/log.js";
-import { SpecTarget } from "./index.js";
-import { checkRequiredPropertiesExist, validateDefault, validateExamples } from "../util/validation.js";
-import { documentationOutputFolderName, extensionFolderDiffToOutputFolderName, getOutputPath } from "../generate.js";
-import assert from "assert";
+import assert from "node:assert";
 import GfmEscape from "gfm-escape";
+import _ from "lodash";
+import { documentationOutputFolderName, extensionFolderDiffToOutputFolderName, getOutputPath } from "../generate.js";
+import type {
+  SpecExtensionJsonSchema,
+  SpecJsonSchema,
+  SpecJsonSchemaRoot,
+} from "../generated/spec/spec-v1/types/index.js";
+import { log } from "../util/log.js";
+import { checkRequiredPropertiesExist, validateDefault, validateExamples } from "../util/validation.js";
+import type { SpecTarget } from "./index.js";
+
 const escaper = new GfmEscape({ table: true });
 
 /**
@@ -72,11 +77,7 @@ export function jsonSchemaToMd(
       // Find extension point
       for (const definitionName in specTarget.extensionTarget.definitions) {
         const definition = specTarget.extensionTarget.definitions[definitionName];
-        if (
-          definition["x-extension-points"] &&
-          definition["x-extension-points"].includes(extensionPoint) &&
-          specTarget.targetDocumentId
-        ) {
+        if (definition["x-extension-points"]?.includes(extensionPoint) && specTarget.targetDocumentId) {
           text += `[${definitionName}](${extensionFolderDiffToOutputFolderName + specTarget.targetDocumentId}${getAnchorLinkFromTitle(definition.title)}), `;
           found++;
         }
@@ -85,7 +86,7 @@ export function jsonSchemaToMd(
         throw new Error(`Could not find extension point "${extensionPoint}" in extension target file.`);
       }
     }
-    text = text.substring(0, text.length - 2) + "<br/>\n";
+    text = `${text.substring(0, text.length - 2)}<br/>\n`;
   }
 
   // is this an object with a reference to core?
@@ -121,8 +122,8 @@ function handleRefToCore(jsonSchemaObject: SpecJsonSchema): string {
     let refToDocDocId = "";
     let refToDocDoc = "";
     if (typeof refToDoc === "object" && refToDoc !== undefined) {
-      refToDocTitle = "title" in refToDoc ? refToDoc.title + "" : ""; // TODO: Simplify this
-      refToDocDocId = "$refDoc" in refToDoc ? refToDoc.$refDoc + "" : ""; // TODO: Simplify this
+      refToDocTitle = "title" in refToDoc ? `${refToDoc.title}` : ""; // TODO: Simplify this
+      refToDocDocId = "$refDoc" in refToDoc ? `${refToDoc.$refDoc}` : ""; // TODO: Simplify this
       refToDocDoc = `${getOutputPath()}/${documentationOutputFolderName}/${refToDocDocId}.md`;
     }
     //TODO: Calculate RefToCore from Document Title?
@@ -145,7 +146,7 @@ function getTypeColumnText(
     );
   }
   // in case of a reference link to the reference object
-  else if (jsonSchemaObject && jsonSchemaObject.$ref) {
+  else if (jsonSchemaObject?.$ref) {
     return getMdLinkFromRef(jsonSchemaObject.$ref, jsonSchemaObject, jsonSchemaRoot);
   }
   // in case it is an object through an error that $ ref should be used!
@@ -169,11 +170,11 @@ function getTypeColumnText(
     return `[${castedJsonSchemaObject["x-ref-to-doc"].title}](${extensionFolderDiffToOutputFolderName + targetDocumentId}${getAnchorLinkFromTitle(castedJsonSchemaObject["x-ref-to-doc"].title)})`;
   }
   // if its referencing to an interface in another document, create a cross-page link:
-  else if (jsonSchemaObject && jsonSchemaObject.type) {
+  else if (jsonSchemaObject?.type) {
     return jsonSchemaObject.type as string;
   }
   //in case it is a anyOf: option 1 | option 2 | option 3 ...
-  else if (jsonSchemaObject && jsonSchemaObject.anyOf) {
+  else if (jsonSchemaObject?.anyOf) {
     const anyOfReferences: string[] = [];
     for (const anyOf of jsonSchemaObject.anyOf) {
       if (!anyOf.$ref) {
@@ -185,9 +186,9 @@ function getTypeColumnText(
   }
   //in case it is a oneOf: option 1 | option 2 | option 3 ...
   //TODO: the syntax is exactly the same as anyOf - Is this correct?
-  else if (jsonSchemaObject && jsonSchemaObject.oneOf) {
+  else if (jsonSchemaObject?.oneOf) {
     return oneOfReferenceHandling(jsonSchemaObject, jsonSchemaRoot);
-  } else if (jsonSchemaObject && jsonSchemaObject.allOf) {
+  } else if (jsonSchemaObject?.allOf) {
     return allOfReferenceHandling(jsonSchemaObject, jsonSchemaRoot);
   } else {
     //Check if we have a reference to another file
@@ -239,7 +240,7 @@ function allOfReferenceHandling(
     for (const allOf of jsonSchemaObject.allOf) {
       if (allOf.$ref) {
         allOfReferences.push(getMdLinkFromRef(allOf.$ref, jsonSchemaObject, jsonSchemaRoot));
-      } else if (allOf.if && allOf.then && allOf.then.$ref) {
+      } else if (allOf.if && allOf.then?.$ref) {
         allOfReferences.push(getMdLinkFromRef(allOf.then.$ref, jsonSchemaObject, jsonSchemaRoot));
       } else {
         throw new Error("allOf needs to use $refs or if/then with $ref");
@@ -320,7 +321,7 @@ function getPropertiesTableEntryText(
             jsonSchemaRoot,
             `${jsonSchemaObject.title} > ${propertyName}`,
           );
-          if (referencedSchema && referencedSchema.description) {
+          if (referencedSchema?.description) {
             description = escapeMdInTable(referencedSchema.description);
             log.debug(`Inheriting description for ${jsonSchemaObject.title} > ${propertyName}`);
           } else {
@@ -362,7 +363,7 @@ function getPatternPropertiesTableEntryText(
       if (Array.isArray(value.type)) {
         valueType = value.type.join(" \\| ");
       }
-      if (valueItems && valueItems.type) {
+      if (valueItems?.type) {
         valueType = escapeHtmlChars(`${valueType}<${valueItems.type}>`);
       }
 
@@ -672,17 +673,17 @@ function generatePrimitiveTypeDescription(
   // Support enums defined as oneOf const
   // See https://github.com/json-schema-org/json-schema-spec/issues/57#issuecomment-247861695
   if (detectOneOfEnum(jsonSchemaObject)) {
-    text += getOneOfEnumDescription(jsonSchemaObject) + "\n";
+    text += `${getOneOfEnumDescription(jsonSchemaObject)}\n`;
   }
 
   if (detectOneOfRef(jsonSchemaObject)) {
-    text += getOneOfRefDescription(jsonSchemaObject, jsonSchemaRoot) + "\n";
+    text += `${getOneOfRefDescription(jsonSchemaObject, jsonSchemaRoot)}\n`;
   }
 
   // Support extensible enums defined as anyOf[] const
   // See https://github.com/json-schema-org/json-schema-spec/issues/57#issuecomment-247861695
   if (detectExtensibleEnum(jsonSchemaObject)) {
-    text += getAnyOfDescription(jsonSchemaObject, jsonSchemaRoot, targetDocumentId) + "\n";
+    text += `${getAnyOfDescription(jsonSchemaObject, jsonSchemaRoot, targetDocumentId)}\n`;
   }
 
   if (jsonSchemaObject["x-introduced-in-version"]) {
@@ -700,7 +701,7 @@ function generatePrimitiveTypeDescription(
   }
 
   if (text.endsWith("<br/>\n")) {
-    text = text.substring(0, text.length - 6) + "\n";
+    text = `${text.substring(0, text.length - 6)}\n`;
   }
 
   if (jsonSchemaObject.examples && Array.isArray(jsonSchemaObject.examples)) {
@@ -715,9 +716,9 @@ function generatePrimitiveTypeDescription(
 }
 
 function getRequired(jsonSchemaObject: SpecJsonSchema, propertyName: string): "mandatory" | "recommended" | "optional" {
-  if (jsonSchemaObject.required && jsonSchemaObject.required.includes(propertyName)) {
+  if (jsonSchemaObject.required?.includes(propertyName)) {
     return "mandatory";
-  } else if (jsonSchemaObject["x-recommended"] && jsonSchemaObject["x-recommended"].includes(propertyName)) {
+  } else if (jsonSchemaObject["x-recommended"]?.includes(propertyName)) {
     return "recommended";
   } else {
     return "optional";
@@ -1259,7 +1260,7 @@ function getMdLinkFromRef($ref: string, context: SpecJsonSchema, rootJsonSchema:
   let link = `[${referencedSchema.title}](${getAnchorLinkFromTitle(referencedSchema.title)})`;
 
   if (propertyName) {
-    if (!referencedSchema.properties || !referencedSchema.properties[propertyName]) {
+    if (!referencedSchema.properties?.[propertyName]) {
       throw new Error(`Could not resolve $ref "${$ref}" for\n ${JSON.stringify(context, null, 2)}`);
     }
     link = `[${entityName}.${propertyName}](${getAnchorLinkFromTitle(referencedSchema.title)}_${propertyName.toLowerCase()})`;

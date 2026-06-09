@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { JSONSchema7, JSONSchema7Object } from "json-schema";
-import { log } from "../../util/log.js";
+
 import fs from "fs-extra";
+import type { JSONSchema7, JSONSchema7Object } from "json-schema";
+import { log } from "../../util/log.js";
 
 export interface EntityRelationshipModel {
   entities: Entity[];
@@ -134,6 +135,7 @@ export class MermaidDiagram {
     const jsonSchemaProperties = jsonSchemaObject.properties as { [propertyName: string]: JSONSchema7Object };
 
     for (const propertyName in jsonSchemaProperties) {
+      // biome-ignore lint/suspicious/noExplicitAny: property shape is dynamic and varies by schema
       const property = jsonSchemaProperties[propertyName] as any;
 
       // Find Compositions
@@ -179,6 +181,7 @@ export class MermaidDiagram {
     jsonSchemaObjectName: string,
     jsonSchemaObject: JSONSchema7Object,
     propertyName: string,
+    // biome-ignore lint/suspicious/noExplicitAny: property shape is dynamic and varies by schema
     property: any,
   ): Relation {
     const ref = property.$ref || property.items?.$ref;
@@ -202,6 +205,7 @@ export class MermaidDiagram {
     jsonSchemaObjectName: string,
     jsonSchemaObject: JSONSchema7Object,
     propertyName: string,
+    // biome-ignore lint/suspicious/noExplicitAny: property shape is dynamic and varies by schema
     property: any,
   ): Relation {
     const associationTarget =
@@ -227,13 +231,14 @@ export class MermaidDiagram {
     return relation;
   }
 
+  // biome-ignore lint/suspicious/noExplicitAny: property shape is dynamic and varies by schema
   private prepareRelationObject(jsonSchemaObjectName: string, propertyName: string, property: any): Relation {
     const relation: Relation = {
       id: `${jsonSchemaObjectName}.${propertyName}`,
       title: property.title || propertyName,
       description: property.description,
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
+      // @ts-expect-error
       type: "Composition" || "Association", // eslint-disable-line no-constant-binary-expression
       maxCardinality: 1,
       minCardinality: 0,
@@ -278,7 +283,7 @@ export class MermaidDiagram {
   }
 
   private updateClassDiagramMapWithRelation(relation: Relation, target: string | string[]): void {
-    if (target instanceof Array) {
+    if (Array.isArray(target)) {
       target.forEach((el) => {
         this.updateClassDiagramMapWithRelation(relation, el);
       });
@@ -302,7 +307,7 @@ export class MermaidDiagram {
     const relationTitle = relation.title;
 
     // early return if relationTarget is an array
-    if (relationTarget instanceof Array) {
+    if (Array.isArray(relationTarget)) {
       return "";
     }
     this.updateClickSet(relationSource, relationTarget);
