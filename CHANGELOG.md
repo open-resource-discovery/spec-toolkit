@@ -10,6 +10,8 @@ For a roadmap including expected timeline, please refer to [ROADMAP.md](./ROADMA
 
 ## [unreleased]
 
+- fix: deduplicate `customTypeDefinitions` by name when merging, so shared referenced types (e.g. `Labels`) are only registered once even when multiple nested custom types reference the same definition
+
 ## [0.8.0]
 
 - breaking: added new configuration option `generalConfig.preservedCoreSpecificXProperties` which is an array of x- property names that the spec-toolkit adds to the output JSON Schema. If not provided, all core spec-toolkit specific x- properties will be removed from the generated output JSON Schema.

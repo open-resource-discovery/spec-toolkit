@@ -212,7 +212,11 @@ export function jsonSchemaObjectToUmsMetadata(schema: SpecJsonSchemaWithUmsSuppo
 
   const metadata = jsonSchemaObjectToMetadata(schema, context);
   mainFile.spec.metadataProperties.push(...metadata.metadataProperties);
-  mainFile.spec.customTypeDefinitions.push(...metadata.customTypeDefinitions);
+  for (const ctd of metadata.customTypeDefinitions) {
+    if (!mainFile.spec.customTypeDefinitions.some((existing) => existing.name === ctd.name)) {
+      mainFile.spec.customTypeDefinitions.push(ctd);
+    }
+  }
   mainFile.spec.metadataRelations.push(...metadata.metadataRelations);
 
   log.info("--------------------------------------------------------------------------");
@@ -355,7 +359,11 @@ export function jsonSchemaObjectToMetadata(schema: SpecJsonSchemaWithUmsSupport,
       const r = jsonSchemaObjectToMetadata(refTarget, newContext);
       customTypeDefinition.metadataProperties = r.metadataProperties;
       result.customTypeDefinitions.push(customTypeDefinition);
-      result.customTypeDefinitions.push(...r.customTypeDefinitions);
+      for (const ctd of r.customTypeDefinitions) {
+        if (!result.customTypeDefinitions.some((existing) => existing.name === ctd.name)) {
+          result.customTypeDefinitions.push(ctd);
+        }
+      }
     } else if (category === "metadataRelation") {
       //////////////////////////////////////////
       // Simple Metadata Relation             //
