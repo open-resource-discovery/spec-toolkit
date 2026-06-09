@@ -49,9 +49,9 @@ class PluginManager {
         packageContents = await import(pluginConfigData.packageName);
       }
 
-      this.addPlugin(pluginConfigData, packageContents);
+      this.addPlugin(pluginConfigData, packageContents as object);
 
-      const xProperties = packageContents.default?.prototype?.xProperties;
+      const xProperties = (packageContents as Record<string, unknown> & { default?: { prototype?: { xProperties?: string[] } } }).default?.prototype?.xProperties;
       if (xProperties && Array.isArray(xProperties)) {
         log.info(`Plugin ${pluginConfigData.packageName} has the following x- properties: ${xProperties.join(", ")}`);
         return xProperties;
@@ -86,7 +86,7 @@ class PluginManager {
   }
 
   private addPlugin(plugin: Plugin, packageContents: unknown): void {
-    if (!Object.hasOwn(packageContents, "default")) {
+    if (!Object.hasOwn(packageContents as object, "default")) {
       throw new Error(`Plugin ${plugin.packageName} does not have a default export.`);
     }
 

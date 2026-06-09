@@ -634,7 +634,7 @@ function getPolymorphicMetadataRelation(
     }
   }
   const abstractTargetParsed = abstractObject?.split("/");
-  const abstractTargetTypeName = abstractTargetParsed[2];
+  const abstractTargetTypeName = abstractTargetParsed?.[2];
 
   log.debug(
     `${getPath(context)}: Polymorphic association to "${abstractTargetTypeName}" detected  (${JSON.stringify(targets)})`,
@@ -642,7 +642,7 @@ function getPolymorphicMetadataRelation(
 
   const metadataRelation: MetadataRelation = {
     propertyName: propertyName,
-    relatedTypeName: abstractTargetTypeName,
+    relatedTypeName: abstractTargetTypeName ?? "",
     relatedTypeNamespace: context.config.metadataPath!,
     ...getCommonAttributes(schema, propertyName),
     correspondingRelationPropertyNames: [],

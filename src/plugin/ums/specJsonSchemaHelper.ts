@@ -296,8 +296,8 @@ export function calculateJsonSchemaUnion(schemas: SpecJsonSchemaWithUmsSupport[]
       if (!mergedSchema.properties?.[propertyName]) {
         mergedSchema.properties![propertyName] = property;
       } else if (property.enum) {
-        mergedSchema.properties?.[propertyName].enum = mergedSchema.properties?.[propertyName].enum || [];
-        mergedSchema.properties?.[propertyName].enum?.push(...property.enum);
+        mergedSchema.properties![propertyName].enum = mergedSchema.properties![propertyName].enum ?? [];
+        mergedSchema.properties![propertyName].enum!.push(...property.enum);
       }
       // Calculate required properties
       if (schema.required) {
