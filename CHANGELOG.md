@@ -10,6 +10,10 @@ For a roadmap including expected timeline, please refer to [ROADMAP.md](./ROADMA
 
 ## [unreleased]
 
+## [0.8.2]
+
+- fix: render `x-deprecated-in-version` and `x-deprecation-text` at the object-definition level so deprecation info is surfaced for both object-typed and primitive-typed definitions
+
 ## [0.8.1]
 
 - fix: deduplicate `customTypeDefinitions` by name when merging, so shared referenced types (e.g. `Labels`) are only registered once even when multiple nested custom types reference the same definition

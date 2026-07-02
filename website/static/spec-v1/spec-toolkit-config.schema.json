@@ -56,7 +56,10 @@
       }
     }
   },
-  "required": ["outputPath", "docsConfig"],
+  "required": [
+    "outputPath",
+    "docsConfig"
+  ],
   "additionalProperties": false,
   "definitions": {
     "GeneralConfig": {
@@ -74,7 +77,15 @@
           "items": {
             "type": "string"
           },
-          "examples": [["x-recommended"], ["x-introduced-in-version", "x-deprecated-in-version"]]
+          "examples": [
+            [
+              "x-recommended"
+            ],
+            [
+              "x-introduced-in-version",
+              "x-deprecated-in-version"
+            ]
+          ]
         }
       },
       "additionalProperties": false,
@@ -86,11 +97,16 @@
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["spec", "specExtension"],
+          "enum": [
+            "spec",
+            "specExtension"
+          ],
           "description": "The docsConfig item type.\nIt's value is been used as a _discriminator_ to distinguish the matching schema that should be further validated."
         }
       },
-      "required": ["type"],
+      "required": [
+        "type"
+      ],
       "allOf": [
         {
           "if": {
@@ -100,7 +116,9 @@
                 "const": "spec"
               }
             },
-            "required": ["type"]
+            "required": [
+              "type"
+            ]
           },
           "then": {
             "$ref": "#/definitions/SpecConfig"
@@ -114,7 +132,9 @@
                 "const": "specExtension"
               }
             },
-            "required": ["type"]
+            "required": [
+              "type"
+            ]
           },
           "then": {
             "$ref": "#/definitions/SpecExtensionConfig"
@@ -156,7 +176,11 @@
           "$ref": "#/definitions/MdFrontmatter"
         }
       },
-      "required": ["type", "id", "sourceFilePath"],
+      "required": [
+        "type",
+        "id",
+        "sourceFilePath"
+      ],
       "additionalProperties": false,
       "title": "SpecConfig"
     },
@@ -193,7 +217,12 @@
           "$ref": "#/definitions/MdFrontmatter"
         }
       },
-      "required": ["type", "id", "sourceFilePath", "targetDocumentId"],
+      "required": [
+        "type",
+        "id",
+        "sourceFilePath",
+        "targetDocumentId"
+      ],
       "additionalProperties": false,
       "title": "SpecExtensionConfig"
     },
@@ -220,7 +249,9 @@
           "$ref": "#/definitions/PluginOptions"
         }
       },
-      "required": ["packageName"],
+      "required": [
+        "packageName"
+      ],
       "additionalProperties": false,
       "examples": [
         {
@@ -233,7 +264,9 @@
           "packageName": "./node_modules/@open-resource-discovery/spec-toolkit/dist/plugin/ums/index.js",
           "options": {
             "metadataPath": "/sap/core/ucl/metadata/ord/v1",
-            "overrides": ["./document.ums.yaml"]
+            "overrides": [
+              "./document.ums.yaml"
+            ]
           }
         },
         {
