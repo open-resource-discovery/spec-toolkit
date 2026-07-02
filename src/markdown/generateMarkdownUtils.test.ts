@@ -126,5 +126,13 @@ describe("test utils functions", () => {
         "
       `);
     });
+
+    it("should render deprecation markers at the top of an object definition", () => {
+      jsonSchemaObject["x-deprecated-in-version"] = "1.2.5";
+      jsonSchemaObject["x-deprecation-text"] = "Prefer NewObject instead.";
+      const result = jsonSchemaToMd(jsonSchemaObject, jsonSchemaRoot, undefined);
+      expect(result).toContain("<strong>Deprecated in Version</strong>: 1.2.5");
+      expect(result).toContain(`<span class="deprecated">DEPRECATION-TEXT</span>: Prefer NewObject instead.`);
+    });
   });
 });

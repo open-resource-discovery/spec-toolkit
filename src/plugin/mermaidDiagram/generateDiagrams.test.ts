@@ -1,7 +1,7 @@
 import { jest } from "@jest/globals";
 import fs from "fs-extra";
-import yaml from "js-yaml";
 import type { JSONSchema7 } from "json-schema";
+import { loadYaml } from "../../util/yamlLoad.js";
 import { MermaidDiagram } from "./mermaidClass.js";
 
 describe("test generateDiagrams", () => {
@@ -11,7 +11,7 @@ describe("test generateDiagrams", () => {
     });
 
     it("should get correct entity relationship model", async () => {
-      const jsonSchemaDocumentRoot = yaml.load(
+      const jsonSchemaDocumentRoot = loadYaml(
         (await fs.readFile(`./src/plugin/mermaidDiagram/testData/testDiagramDocumentSchema.yaml`)).toString(),
       ) as JSONSchema7;
 
@@ -27,7 +27,7 @@ describe("test generateDiagrams", () => {
 
   describe("test generateMermaidClassDiagram", () => {
     it("should generate correct mermaid class diagram", async () => {
-      const jsonSchemaDocumentRoot = yaml.load(
+      const jsonSchemaDocumentRoot = loadYaml(
         (await fs.readFile(`./src/plugin/mermaidDiagram/testData/testDiagramDocumentSchema.yaml`)).toString(),
       ) as JSONSchema7;
 
@@ -44,7 +44,7 @@ describe("test generateDiagrams", () => {
     });
 
     it("should not generate duplicate relations when target and source are the same", async () => {
-      const jsonSchemaDocumentRoot = yaml.load(
+      const jsonSchemaDocumentRoot = loadYaml(
         (await fs.readFile(`./src/plugin/mermaidDiagram/testData/testDiagramDocumentSchema.yaml`)).toString(),
       ) as JSONSchema7;
 
@@ -66,7 +66,7 @@ describe("test generateDiagrams", () => {
     });
 
     it("should generate class diagram with clickable links", async () => {
-      const jsonSchemaDocumentRoot = yaml.load(
+      const jsonSchemaDocumentRoot = loadYaml(
         (await fs.readFile(`./src/plugin/mermaidDiagram/testData/testDiagramDocumentSchema.yaml`)).toString(),
       ) as JSONSchema7;
 

@@ -1,6 +1,7 @@
 import fs from "fs-extra";
-import yaml from "js-yaml";
+import * as yaml from "js-yaml";
 import { log } from "../../util/log.js";
+import { loadYaml } from "../../util/yamlLoad.js";
 import type { UmsPluginConfig } from "./configModel.js";
 import { convertSpecJsonSchemaToUmsMetadata } from "./convertSpecJsonSchemaToUmsMetadata.js";
 import type { SpecJsonSchemaRootWithUmsSupport } from "./types.js";
@@ -15,7 +16,7 @@ export function generateUmsModels(
   const allSpecJsonSchemaRootWithUmsSupport: SpecJsonSchemaRootWithUmsSupport[] = [];
   for (const specSourceFilePath of mainSpecSourceFilePaths) {
     // TODO: Validate the content before casting it as SpecJsonSchemaRootWithUmsSupport
-    const specJsonSchemaRoot = yaml.load(
+    const specJsonSchemaRoot = loadYaml(
       fs.readFileSync(specSourceFilePath).toString(),
     ) as SpecJsonSchemaRootWithUmsSupport;
     allSpecJsonSchemaRootWithUmsSupport.push(specJsonSchemaRoot);

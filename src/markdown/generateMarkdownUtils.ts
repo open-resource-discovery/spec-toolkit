@@ -52,6 +52,15 @@ export function jsonSchemaToMd(
     text += `<span className="feature-status-${status}" title="This feature is ${status.toUpperCase()} status and subject to potential changes.">${status.toUpperCase()}</span> \n\n`;
   }
 
+  // Deprecation markers rendered at the definition level so that both object-typed
+  // and primitive-typed definitions surface deprecation info consistently.
+  if (jsonSchemaObject["x-deprecated-in-version"]) {
+    text += `<strong>Deprecated in Version</strong>: ${jsonSchemaObject["x-deprecated-in-version"]}<br/>\n\n`;
+  }
+  if (jsonSchemaObject["x-deprecation-text"]) {
+    text += `<span class="deprecated">DEPRECATION-TEXT</span>: ${jsonSchemaObject["x-deprecation-text"]}\n\n`;
+  }
+
   // add introduction text of the object
   if (jsonSchemaObject.description) {
     text += `${jsonSchemaObject.description.trim()}\n\n`;
@@ -688,11 +697,6 @@ function generatePrimitiveTypeDescription(
 
   if (jsonSchemaObject["x-introduced-in-version"]) {
     text += `<strong>Introduced in Version</strong>: ${jsonSchemaObject["x-introduced-in-version"]}<br/>\n`;
-  }
-
-  if (jsonSchemaObject["x-deprecated-in-version"]) {
-    text = addVerticalSeparator(text);
-    text += `<strong>Deprecated in Version</strong>: ${jsonSchemaObject["x-deprecated-in-version"]}`;
   }
 
   const castedJsonSchemaObject = jsonSchemaObject as SpecExtensionJsonSchema;

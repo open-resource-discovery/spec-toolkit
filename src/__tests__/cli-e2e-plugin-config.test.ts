@@ -1,7 +1,7 @@
 import path from "node:path";
 import spawnAsync from "@expo/spawn-async";
 import fs from "fs-extra";
-import yaml from "js-yaml";
+import * as yaml from "js-yaml";
 import type { SpecToolkitConfigurationDocument } from "../generated/spec-toolkit-config/spec-v1/types/spec-toolkit-config.js";
 
 describe("CLI plugin config tests", () => {
