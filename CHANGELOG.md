@@ -14,6 +14,7 @@ For a roadmap including expected timeline, please refer to [ROADMAP.md](./ROADMA
 
 - new feature: added `proposed` value to the `x-feature-status` enum for features that are specified but not yet implemented (#84)
 - chore: updated all dependencies (TypeScript 7, Biome 2.5, js-yaml 5, tslog 5, commander 15, quicktype-core 26, and others); replaced `ts-jest` with `@swc/jest` for the test transform
+- fix: render `x-deprecated-in-version` and `x-deprecation-text` at the object-definition level so deprecation info is surfaced for both object-typed and primitive-typed definitions
 
 ## [0.8.1]
 
