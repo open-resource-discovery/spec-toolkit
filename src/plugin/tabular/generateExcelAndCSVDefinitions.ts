@@ -1,9 +1,9 @@
 import * as WorkbookPackage from "exceljs";
 import fs from "fs-extra";
-import yaml from "js-yaml";
 import type { JSONSchema7, JSONSchema7Object } from "json-schema";
 import type { SpecJsonSchemaRoot } from "../../generated/spec/spec-v1/types/index.js";
 import { log } from "../../util/log.js";
+import { loadYaml } from "../../util/yamlLoad.js";
 
 export interface OrdSimplifiedTableFormat {
   entityName: string;
@@ -17,7 +17,7 @@ export async function generateExcelAndCsvDefinitions(
   outputPath: string,
 ): Promise<void> {
   for (const specSourceFilePath of mainSpecSourceFilePaths) {
-    const specJsonSchemaRoot = yaml.load(fs.readFileSync(specSourceFilePath).toString()) as SpecJsonSchemaRoot;
+    const specJsonSchemaRoot = loadYaml(fs.readFileSync(specSourceFilePath).toString()) as SpecJsonSchemaRoot;
     if (!specJsonSchemaRoot.title) {
       log.error(
         `Root JSON Schema object has no "title" property, skipping CSV and Excel generation for file: ${specSourceFilePath}`,

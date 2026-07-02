@@ -1,10 +1,10 @@
 import fg from "fast-glob";
 import fs from "fs-extra";
-import * as yaml from "js-yaml";
 import { compileSchema, type ErrorConfig, type JsonError, type JsonSchema } from "json-schema-library";
+import { loadYaml } from "../util/yamlLoad.js";
 
 describe("Valid Config Example Files", (): void => {
-  const testSchema = yaml.load(fs.readFileSync(`./spec/v1/spec-toolkit-config.schema.yaml`).toString()) as JsonSchema;
+  const testSchema = loadYaml(fs.readFileSync(`./spec/v1/spec-toolkit-config.schema.yaml`).toString()) as JsonSchema;
   const testSchemaValidator = compileSchema(testSchema);
 
   const jsonDocumentFilePaths = fg.sync("./examples/*.json", {});
@@ -27,7 +27,7 @@ describe("Valid Config Example Files", (): void => {
     const fileContent = fs.readFileSync(yamlFilePath).toString();
     describe(yamlFilePath, (): void => {
       test("yaml config example file passes simple JSON Schema based validation", (): void => {
-        const data = yaml.load(fileContent);
+        const data = loadYaml(fileContent);
         expect(fileContent).toBeDefined();
         expect(data).toBeDefined();
         const validateResult = testSchemaValidator.validate(data);

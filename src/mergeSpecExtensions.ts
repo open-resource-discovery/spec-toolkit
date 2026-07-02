@@ -1,19 +1,19 @@
 import path from "node:path";
 import fs from "fs-extra";
-import * as yaml from "js-yaml";
 import { schemasOutputFolderName } from "./generate.js";
 import type { SpecExtensionJsonSchema, SpecJsonSchemaRoot } from "./generated/spec/spec-v1/types/index.js";
 import type { SpecToolkitConfigurationDocument } from "./generated/spec-toolkit-config/spec-v1/types/index.js";
 import { writeSpecJsonSchemaFiles } from "./generateInterfaceDocumentation.js";
 import { log } from "./util/log.js";
 import { validateSpecJsonSchema } from "./util/validation.js";
+import { loadYaml } from "./util/yamlLoad.js";
 
 export function mergeSpecExtensions(configData: SpecToolkitConfigurationDocument): void {
   for (const docConfig1 of configData.docsConfig) {
     if (docConfig1.type === "spec") {
       const targetDocumentFilePath = `${configData.outputPath}/${schemasOutputFolderName}/${docConfig1.id}.schema.json`;
       const jsonSchemaFile = fs.readFileSync(path.join(process.cwd(), targetDocumentFilePath)).toString();
-      const targetDocument = yaml.load(jsonSchemaFile) as SpecJsonSchemaRoot;
+      const targetDocument = loadYaml(jsonSchemaFile) as SpecJsonSchemaRoot;
 
       const specExtensions: string[] = [];
       for (const docConfig2 of configData.docsConfig) {
@@ -48,7 +48,7 @@ export function mergeSpecExtensions(configData: SpecToolkitConfigurationDocument
         log.info(`Merging ${specExtensionFile}`);
 
         const fileText = fs.readFileSync(specExtensionFile).toString();
-        const specExtension = yaml.load(fileText) as SpecJsonSchemaRoot;
+        const specExtension = loadYaml(fileText) as SpecJsonSchemaRoot;
 
         // Replace x-ref-to-doc with real $ref links
         for (const definitionName in specExtension.definitions) {

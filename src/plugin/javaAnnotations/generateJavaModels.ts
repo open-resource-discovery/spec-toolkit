@@ -1,6 +1,5 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { load as loadYaml } from "js-yaml";
 import {
   FetchingJSONSchemaStore,
   InputData,
@@ -9,6 +8,7 @@ import {
   type SerializedRenderResult,
 } from "quicktype-core";
 import { log } from "../../util/log.js";
+import { loadYaml } from "../../util/yamlLoad.js";
 import type { JavaAnnotationsConfig } from "./configModel.js";
 
 /**
