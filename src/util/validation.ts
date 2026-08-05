@@ -1,3 +1,4 @@
+import { createRequire } from "node:module";
 import { Ajv, type ValidateFunction } from "ajv";
 import addFormats from "ajv-formats";
 import fs from "fs-extra";
@@ -52,7 +53,11 @@ export function validateSpecJsonSchema(jsonSchema: SpecJsonSchemaRoot, jsonSchem
 
   result.errors.push(...validateJsonSchema(jsonSchema, jsonSchemaFilePath));
 
-  result.errors.push(...validateRefLinks(jsonSchema, jsonSchemaFilePath));
+  // Tolerant mode: non-conventional $ref shapes (not `#/definitions/<name>`) are
+  // reported as warnings rather than hard errors. The normalization pass rewrites
+  // arbitrary schemas into the conventional shape before this runs, so surviving
+  // deviations are surfaced without aborting documentation generation.
+  result.warnings.push(...validateRefLinks(jsonSchema, jsonSchemaFilePath));
 
   for (const error of result.errors) {
     log.error(`[${error.context}] ${error.message}`);
@@ -95,7 +100,14 @@ export function validateJsonSchema(
 ): ValidationResultEntry[] {
   const errors: ValidationResultEntry[] = [];
 
-  const jsonSchemaMeta = fs.readJSONSync("./node_modules/ajv/lib/refs/json-schema-draft-07.json") as SpecJsonSchemaRoot;
+  // Resolve the ajv draft-07 meta-schema relative to the installed `ajv`
+  // package rather than the current working directory, so the tool works no
+  // matter where it is invoked from (previously a hardcoded
+  // `./node_modules/ajv/...` path that only resolved from the repo root).
+  const require = createRequire(import.meta.url);
+  const jsonSchemaMeta = fs.readJSONSync(
+    require.resolve("ajv/lib/refs/json-schema-draft-07.json"),
+  ) as SpecJsonSchemaRoot;
   delete jsonSchemaMeta.$id;
 
   const validateMetaSchema = getJsonSchemaValidator(jsonSchemaMeta);

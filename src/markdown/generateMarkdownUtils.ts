@@ -57,14 +57,27 @@ export function jsonSchemaToMd(
     text += `${jsonSchemaObject.description.trim()}\n\n`;
   }
   const castedJsonSchemaObject = jsonSchemaObject as SpecExtensionJsonSchema;
-  // Distinction if this is an object or a simple type
+  // Distinction if this is an object or a simple type.
+  // Tolerant mode: instead of throwing when a node declares no recognizable
+  // type, warn and render it as a free-form value. The allow-list is widened
+  // beyond `type`/`oneOf`/`anyOf` to also accept the constructs the renderer
+  // can already handle (`$ref`, `allOf`, `const`, `enum`, `if`/`then`/`else`).
   if (
     !jsonSchemaObject.type &&
     !jsonSchemaObject.oneOf &&
     !jsonSchemaObject.anyOf &&
+    !jsonSchemaObject.allOf &&
+    !jsonSchemaObject.$ref &&
+    jsonSchemaObject.const === undefined &&
+    !jsonSchemaObject.enum &&
+    !jsonSchemaObject.if &&
     !castedJsonSchemaObject["x-ref-to-doc"]
   ) {
-    throw new Error(`Schema Object must have a "type" keyword! ${JSON.stringify(jsonSchemaObject, null, 2)}`);
+    log.warn(
+      `Schema object "${title}" has no "type" keyword and no recognizable construct; rendered as free-form. Prefer declaring a "type".`,
+    );
+    text += "**Type**: any\n\n";
+    return text;
   }
 
   // Document extensions towards other target documents
@@ -156,13 +169,11 @@ function getTypeColumnText(
     if (text) {
       return text;
     } else {
-      throw new Error(
-        `ERROR: Objects nested in objects are not supported. Please move the inline object to #/definitions and use $ref! Currently at ${JSON.stringify(
-          jsonSchemaObject,
-          null,
-          2,
-        )}`,
-      );
+      // Tolerant mode: the normalization pass hoists inline objects into
+      // #/definitions, so this is rarely reached. If an inline object does slip
+      // through, warn and render a plain "Object" label rather than aborting.
+      log.warn(`Inline nested object encountered where a $ref to #/definitions is preferred; rendered as "Object".`);
+      return "Object";
     }
   }
   //in case it is a primitive type just return it
@@ -175,14 +186,7 @@ function getTypeColumnText(
   }
   //in case it is a anyOf: option 1 | option 2 | option 3 ...
   else if (jsonSchemaObject?.anyOf) {
-    const anyOfReferences: string[] = [];
-    for (const anyOf of jsonSchemaObject.anyOf) {
-      if (!anyOf.$ref) {
-        throw new Error("anyOf needs to use $refs");
-      }
-      anyOfReferences.push(getMdLinkFromRef(anyOf.$ref, jsonSchemaObject, jsonSchemaRoot));
-    }
-    return anyOfReferences.join(" \\| ");
+    return anyOfReferenceHandling(jsonSchemaObject, jsonSchemaRoot);
   }
   //in case it is a oneOf: option 1 | option 2 | option 3 ...
   //TODO: the syntax is exactly the same as anyOf - Is this correct?
@@ -196,20 +200,43 @@ function getTypeColumnText(
     if (text) {
       return text;
     } else {
-      //in no other case than we do not support the type
-      throw new Error(`Could not determine type for\n ${JSON.stringify(jsonSchemaObject, null, 2)}`);
+      // Tolerant mode: render an unrecognized construct as free-form rather than aborting.
+      log.warn(`Could not determine type for a schema node; rendered as "any".`);
+      return "any";
     }
   }
+}
+
+/**
+ * Render a single composition (oneOf/anyOf/allOf) branch as a type label.
+ * Prefers a `$ref` link; tolerates a non-`$ref` inline branch by rendering its
+ * primitive `type`, `const`, or a plain "Object" label (with a warning) instead
+ * of throwing — the normalization pass usually hoists these to `$ref` first.
+ */
+function getBranchTypeText(
+  branch: SpecJsonSchema,
+  parent: SpecJsonSchema,
+  jsonSchemaRoot: SpecJsonSchemaRoot,
+  keyword: "anyOf" | "oneOf" | "allOf",
+): string {
+  if (branch.$ref) {
+    return getMdLinkFromRef(branch.$ref, parent, jsonSchemaRoot);
+  }
+  if (branch.type && branch.type !== "object") {
+    return escapeHtmlChars(String(branch.type));
+  }
+  if (branch.const !== undefined) {
+    return escapeHtmlChars(`"${String(branch.const)}"`);
+  }
+  log.warn(`Inline ${keyword} branch without $ref; rendered as "${branch.type ? String(branch.type) : "Object"}".`);
+  return branch.type ? escapeHtmlChars(String(branch.type)) : "Object";
 }
 
 function anyOfReferenceHandling(jsonSchemaObject: SpecJsonSchema, jsonSchemaRoot: SpecJsonSchemaRoot): string {
   const anyOfReferences: string[] = [];
   if (jsonSchemaObject.anyOf) {
     for (const anyOf of jsonSchemaObject.anyOf) {
-      if (!anyOf.$ref) {
-        throw new Error("anyOf needs to use $refs");
-      }
-      anyOfReferences.push(getMdLinkFromRef(anyOf.$ref, jsonSchemaObject, jsonSchemaRoot));
+      anyOfReferences.push(getBranchTypeText(anyOf, jsonSchemaObject, jsonSchemaRoot, "anyOf"));
     }
     return anyOfReferences.join(" \\| ");
   }
@@ -220,10 +247,7 @@ function oneOfReferenceHandling(jsonSchemaObject: SpecJsonSchema, jsonSchemaRoot
   const oneOfReferences: string[] = [];
   if (jsonSchemaObject.oneOf) {
     for (const oneOf of jsonSchemaObject.oneOf) {
-      if (!oneOf.$ref) {
-        throw new Error("oneOf needs to use $refs");
-      }
-      oneOfReferences.push(getMdLinkFromRef(oneOf.$ref, jsonSchemaObject, jsonSchemaRoot));
+      oneOfReferences.push(getBranchTypeText(oneOf, jsonSchemaObject, jsonSchemaRoot, "oneOf"));
     }
     return oneOfReferences.join(" \\| ");
   }
@@ -242,11 +266,16 @@ function allOfReferenceHandling(
         allOfReferences.push(getMdLinkFromRef(allOf.$ref, jsonSchemaObject, jsonSchemaRoot));
       } else if (allOf.if && allOf.then?.$ref) {
         allOfReferences.push(getMdLinkFromRef(allOf.then.$ref, jsonSchemaObject, jsonSchemaRoot));
+      } else if (allOf.if && allOf.then) {
+        // Tolerant mode: an `if`/`then` conditional that expresses conditional
+        // requiredness (no $ref target) cannot be shown as a type; note it as a
+        // condition rather than aborting. Common in real schemas.
+        log.warn(`allOf if/then conditional (conditional requiredness) is not rendered as a type; skipped.`);
       } else {
-        throw new Error("allOf needs to use $refs or if/then with $ref");
+        allOfReferences.push(getBranchTypeText(allOf, jsonSchemaObject, jsonSchemaRoot, "allOf"));
       }
     }
-    return allOfReferences.join(` \\${bindingSign} `);
+    return allOfReferences.filter(Boolean).join(` \\${bindingSign} `);
   }
   return "";
 }
@@ -486,14 +515,22 @@ export function getObjectDescriptionTable(
     // is this an allOf with if/then where one property of the object is used as a _discriminator_
     // to distinguish the matching schema that should be further validated?
     if (jsonSchemaObject.allOf[0].if && jsonSchemaObject.allOf[0].then) {
-      text += `**Type**: Object(${allOfReferenceHandling(jsonSchemaObject, jsonSchemaRoot)}) <br/>\n`;
+      const conditionalType = allOfReferenceHandling(jsonSchemaObject, jsonSchemaRoot);
+      if (conditionalType) {
+        text += `**Type**: Object(${conditionalType}) <br/>\n`;
+        typeAlreadySet = true;
+      } else {
+        // Tolerant mode: the allOf only expresses conditional requiredness
+        // (if/then with `required`, no $ref target). Surface it as a note and
+        // fall through to the regular property table for `typeAlreadySet`.
+        text += `_This object has conditional requirements (JSON Schema \`if\`/\`then\`); see the source schema for the exact conditions._<br/>\n`;
+      }
     } else {
       // regular allOf handling, create a new type by combining multiple existing types with the '&' operator
       text += `**Type**: Object(${allOfReferenceHandling(jsonSchemaObject, jsonSchemaRoot, "&")}) <br/>\n`;
       // TODO: Consider merging properties of allOf items into the properties table below?
+      typeAlreadySet = true;
     }
-
-    typeAlreadySet = true;
   }
 
   if (jsonSchemaObject.properties || jsonSchemaObject.patternProperties) {
@@ -1070,7 +1107,8 @@ function getOneOfRefDescription(
       if (oneOfItem.$ref) {
         result += `<li><p>${getMdLinkFromRef(oneOfItem.$ref, jsonSchemaObject, jsonSchemaRoot)}</p></li>`;
       } else {
-        throw new Error(`Expected $ref on oneOf item ${JSON.stringify(jsonSchemaObject, null, 2)}`);
+        // Tolerant mode: render an inline (non-$ref) oneOf item as a best-effort label.
+        result += `<li><p>${getBranchTypeText(oneOfItem, jsonSchemaObject, jsonSchemaRoot, "oneOf")}</p></li>`;
       }
       result += suffix;
     }
@@ -1090,8 +1128,12 @@ function getAllOfRefDescription(jsonSchemaObject: SpecJsonSchema, jsonSchemaRoot
     for (const allOfItem of jsonSchemaObject.allOf) {
       if (allOfItem.$ref) {
         result += `<li><p>${getMdLinkFromRef(allOfItem.$ref, jsonSchemaObject, jsonSchemaRoot)}</p></li>`;
+      } else if (allOfItem.if && allOfItem.then) {
+        // Tolerant mode: conditional requiredness, nothing to link.
+        log.warn(`allOf if/then conditional in "${jsonSchemaObject.title}" not rendered as a linked type; skipped.`);
       } else {
-        throw new Error(`Expected $ref on allOf item ${JSON.stringify(jsonSchemaObject, null, 2)}`);
+        // Tolerant mode: render an inline (non-$ref) allOf item as a best-effort label.
+        result += `<li><p>${getBranchTypeText(allOfItem, jsonSchemaObject, jsonSchemaRoot, "allOf")}</p></li>`;
       }
     }
     result += "</ul>";

@@ -4,7 +4,7 @@ import { Ajv, type Schema } from "ajv";
 import addFormats from "ajv-formats";
 import { Command, Option } from "commander";
 import fs from "fs-extra";
-import yaml from "js-yaml";
+import * as yaml from "js-yaml";
 import * as packageJson from "../package.json" with { type: "json" };
 import { generate } from "./generate.js";
 import type { SpecToolkitConfigurationDocument } from "./generated/spec-toolkit-config/spec-v1/types/index.js";
@@ -39,7 +39,10 @@ function init(argv: string[]): void {
 
 async function run(argv: CliOptions): Promise<void> {
   let configData: unknown;
-  const configFilePath = path.join(process.cwd(), argv.config);
+  // Use path.resolve so an ABSOLUTE `-c` path is honored as-is; a relative path
+  // still resolves against the current working directory (backward compatible).
+  // Previously path.join(cwd, argv.config) mangled absolute paths.
+  const configFilePath = path.resolve(process.cwd(), argv.config);
 
   try {
     if (configFilePath.endsWith(".json")) {

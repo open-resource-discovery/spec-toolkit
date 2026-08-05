@@ -1,0 +1,61 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://example.com/my-tolerant-spec.schema.json
+title: My Tolerant Spec
+description: >
+  A deliberately non-convention-clean schema that exercises spec-toolkit's
+  tolerant mode: inline nested objects, an inline oneOf branch, a node missing
+  its `type`, and an allOf if/then conditional (conditional requiredness).
+type: object
+required:
+  - name
+  - target
+properties:
+  name:
+    type: string
+    description: The resource name.
+  # Inline nested object (no $ref) -> should be virtually hoisted.
+  metadata:
+    type: object
+    description: Free-form metadata about the resource.
+    properties:
+      owner:
+        type: string
+      labels:
+        type: object
+        additionalProperties:
+          type: string
+  # Object keywords but missing `type` -> should be assumed object, then hoisted.
+  config:
+    properties:
+      timeoutSeconds:
+        type: integer
+  # Inline (non-$ref) oneOf branches -> object branch hoisted, primitive left inline.
+  value:
+    description: A string shorthand or a structured value.
+    oneOf:
+      - type: string
+      - type: object
+        properties:
+          amount:
+            type: number
+  target:
+    type: object
+    description: What is executed.
+    properties:
+      type:
+        type: string
+        enum:
+          - agent
+          - api
+      id:
+        type: string
+    # allOf if/then conditional (conditional requiredness) -> rendered as a note,
+    # NOT hoisted, and TypeScript type generation for it is skipped with a warning.
+    allOf:
+      - if:
+          properties:
+            type:
+              const: agent
+        then:
+          required:
+            - id

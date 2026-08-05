@@ -1,5 +1,5 @@
 import fs from "fs-extra";
-import yaml from "js-yaml";
+import * as yaml from "js-yaml";
 import type { JSONSchema4 } from "json-schema";
 import { compile as jsonSchemaToTypeScript } from "json-schema-to-typescript";
 import { schemasOutputFolderName, typesOutputFolderName } from "./generate.js";
@@ -25,73 +25,90 @@ export async function generateTypeScriptDefinitions(configData: SpecToolkitConfi
     if (docConfig.type === "spec") {
       const xSchemaFileName = `${docConfig.id}.schema.json`.split(".json").join(".x.json");
       const xSchemaFilePath = `${configData.outputPath}/${schemasOutputFolderName}/${xSchemaFileName}`;
-      let schema = yaml.load(fs.readFileSync(`${xSchemaFilePath}`).toString()) as SpecJsonSchemaRoot;
+      try {
+        let schema = yaml.load(fs.readFileSync(`${xSchemaFilePath}`).toString()) as SpecJsonSchemaRoot;
 
-      schema = convertRefToDocToStandardRef(schema);
-      schema = convertOneOfEnum(schema);
-      schema = convertAnyOfEnum(schema);
-      schema = convertAllOfWithIfThenDiscriminatorToOneOf(schema);
+        schema = convertRefToDocToStandardRef(schema);
+        schema = convertOneOfEnum(schema);
+        schema = convertAnyOfEnum(schema);
+        schema = convertAllOfWithIfThenDiscriminatorToOneOf(schema);
 
-      // Schema cleaned up
-      schema = removeDescriptionsFromRefPointers(schema);
-      const allCustomPropertiesTypescriptTypes = schema["x-custom-typescript-types"];
+        // Schema cleaned up
+        schema = removeDescriptionsFromRefPointers(schema);
+        const allCustomPropertiesTypescriptTypes = schema["x-custom-typescript-types"];
 
-      // Remove x- properties that are not relevant for end spec consumers
-      // But if this is the case when spec-toolkit self documents it's own spec schema,
-      // we want to keep all x- properties as part of the generated documentation
-      if (!schema.$id?.includes("spec.schema.json") && !schema.title?.includes("Spec Json Schema Root")) {
-        schema = removeAllExtensionProperties(schema);
-      }
-
-      const convertedDocumentSchema = schema as unknown as JSONSchema4;
-
-      let definitions = await jsonSchemaToTypeScript(convertedDocumentSchema, `${docConfig.id}`, {
-        unknownAny: true,
-        bannerComment: "// AUTO-GENERATED definition files. Do not modify directly.\n\n",
-        strictIndexSignatures: true,
-        declareExternallyReferenced: true,
-        inferStringEnumKeysFromValues: false,
-      });
-
-      // Clean up unnecessary "This interface was referenced..." mentions
-      definitions = definitions.replace(/ {3}\*\n {3}\* This interface was referenced by (.*)\n(.*)\n/gm, "");
-
-      // Add export of custom defined x-custom-typescript-types
-      if (allCustomPropertiesTypescriptTypes) {
-        for (const xPatternPropertiesTypescriptTypes of allCustomPropertiesTypescriptTypes) {
-          definitions +=
-            `\nexport type ${xPatternPropertiesTypescriptTypes.typeName} = ` +
-            `${xPatternPropertiesTypescriptTypes.typeValue}` +
-            `;\n`;
+        // Remove x- properties that are not relevant for end spec consumers
+        // But if this is the case when spec-toolkit self documents it's own spec schema,
+        // we want to keep all x- properties as part of the generated documentation
+        if (!schema.$id?.includes("spec.schema.json") && !schema.title?.includes("Spec Json Schema Root")) {
+          schema = removeAllExtensionProperties(schema);
         }
-      }
 
-      // Post processing for all tsType "// replaceKeyType_" markings
-      const allPostProcessingReplacements: { oldValue: string; newValue: string }[] = [];
-      const allPostProcessingReplacementMatches = [...definitions.matchAll(/.*replaceKeyType_{(.*)}/gm)];
-      for (const match of allPostProcessingReplacementMatches) {
-        const replacementNewValue = `${match[0].replace("string", match[1]).split(";")[0]};`;
-        const indexStart = match.index;
-        const indexEnd = match.index + match[0].length;
-        allPostProcessingReplacements.push({
-          oldValue: definitions.substring(indexStart, indexEnd),
-          newValue: replacementNewValue,
+        const convertedDocumentSchema = schema as unknown as JSONSchema4;
+
+        let definitions = await jsonSchemaToTypeScript(convertedDocumentSchema, `${docConfig.id}`, {
+          unknownAny: true,
+          bannerComment: "// AUTO-GENERATED definition files. Do not modify directly.\n\n",
+          strictIndexSignatures: true,
+          declareExternallyReferenced: true,
+          inferStringEnumKeysFromValues: false,
         });
-      }
-      for (const replacement of allPostProcessingReplacements) {
-        definitions = definitions.replace(replacement.oldValue, replacement.newValue);
-      }
 
-      fs.unlinkSync(xSchemaFilePath);
-      log.info(`Cleanup temporary file ${xSchemaFilePath}`);
+        // Clean up unnecessary "This interface was referenced..." mentions
+        definitions = definitions.replace(/ {3}\*\n {3}\* This interface was referenced by (.*)\n(.*)\n/gm, "");
 
-      const typesFile = `${process.cwd()}/${configData.outputPath}/${typesOutputFolderName}/${docConfig.id}.ts`;
-      await fs.outputFile(typesFile, definitions);
-      log.info(`Result: ${typesFile}`);
-      if (configData.generalConfig?.tsTypeExportExcludeJsFileExtension) {
-        indexExportStatements += `export * from "./${docConfig.id}";\n`;
-      } else {
-        indexExportStatements += `export * from "./${docConfig.id}.js";\n`;
+        // Add export of custom defined x-custom-typescript-types
+        if (allCustomPropertiesTypescriptTypes) {
+          for (const xPatternPropertiesTypescriptTypes of allCustomPropertiesTypescriptTypes) {
+            definitions +=
+              `\nexport type ${xPatternPropertiesTypescriptTypes.typeName} = ` +
+              `${xPatternPropertiesTypescriptTypes.typeValue}` +
+              `;\n`;
+          }
+        }
+
+        // Post processing for all tsType "// replaceKeyType_" markings
+        const allPostProcessingReplacements: { oldValue: string; newValue: string }[] = [];
+        const allPostProcessingReplacementMatches = [...definitions.matchAll(/.*replaceKeyType_{(.*)}/gm)];
+        for (const match of allPostProcessingReplacementMatches) {
+          const replacementNewValue = `${match[0].replace("string", match[1]).split(";")[0]};`;
+          const indexStart = match.index;
+          const indexEnd = match.index + match[0].length;
+          allPostProcessingReplacements.push({
+            oldValue: definitions.substring(indexStart, indexEnd),
+            newValue: replacementNewValue,
+          });
+        }
+        for (const replacement of allPostProcessingReplacements) {
+          definitions = definitions.replace(replacement.oldValue, replacement.newValue);
+        }
+
+        fs.unlinkSync(xSchemaFilePath);
+        log.info(`Cleanup temporary file ${xSchemaFilePath}`);
+
+        const typesFile = `${process.cwd()}/${configData.outputPath}/${typesOutputFolderName}/${docConfig.id}.ts`;
+        await fs.outputFile(typesFile, definitions);
+        log.info(`Result: ${typesFile}`);
+        if (configData.generalConfig?.tsTypeExportExcludeJsFileExtension) {
+          indexExportStatements += `export * from "./${docConfig.id}";\n`;
+        } else {
+          indexExportStatements += `export * from "./${docConfig.id}.js";\n`;
+        }
+      } catch (err) {
+        // Tolerant mode: TypeScript type generation via json-schema-to-typescript
+        // cannot always handle arbitrary JSON Schema (e.g. inline if/then/else
+        // conditionals). Warn and skip the TS types for this schema rather than
+        // aborting the whole run — the Markdown interface docs (already written)
+        // are the primary artifact and are unaffected.
+        log.warn(
+          `Skipping TypeScript type generation for "${docConfig.id}": ${(err as Error).message}. The Markdown documentation was still generated.`,
+        );
+        // Best-effort cleanup of the temporary x-schema file.
+        try {
+          if (fs.existsSync(xSchemaFilePath)) fs.unlinkSync(xSchemaFilePath);
+        } catch {
+          // ignore
+        }
       }
     }
   }

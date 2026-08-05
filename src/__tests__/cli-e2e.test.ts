@@ -124,4 +124,34 @@ describe("CLI End-to-End Tests", () => {
       expect(e).toEqual("expect this to never happen because above code should not throw an error");
     }
   });
+
+  // Tolerant mode: a deliberately non-convention-clean schema (inline nested
+  // objects, an inline oneOf branch, a node missing `type`, and an allOf
+  // if/then conditional) MUST still generate documentation. Deviations are
+  // warned about (stderr is not required to be empty), TypeScript type
+  // generation for the conditional schema is skipped, and the run succeeds.
+  test("test 5: tolerant run with a non-convention-clean schema still generates docs", async () => {
+    const configFile = "./src/__tests__/testData/valid/test5-my-tolerant-spec-config.json";
+    const cliArguments = [cliScriptPath, "-c", configFile];
+
+    const { stdout } = await spawnAsync(cliBin, cliArguments);
+
+    expect(stdout).toContain(
+      "SUCCESS: Documentation successfully generated to src/__tests__/generated/test5/my-tolerant-spec-v1",
+    );
+    // Normalization warnings are surfaced rather than causing a failure.
+    expect(stdout).toContain("Normalized:");
+    // TypeScript type generation for the conditional schema is skipped, not fatal.
+    expect(stdout).toContain("Skipping TypeScript type generation");
+
+    const mdFileContent = fs
+      .readFileSync("src/__tests__/generated/test5/my-tolerant-spec-v1/docs/my-tolerant-spec.md")
+      .toString();
+    // Inline nested objects were hoisted into linked definitions.
+    expect(mdFileContent).toContain("[Metadata](#metadata)");
+    expect(mdFileContent).toContain("### Target");
+    // The allOf if/then conditional is surfaced as a note.
+    expect(mdFileContent).toContain("conditional requirements");
+    expect(mdFileContent).toMatchSnapshot();
+  });
 });
