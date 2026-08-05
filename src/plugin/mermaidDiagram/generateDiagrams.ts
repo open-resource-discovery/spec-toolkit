@@ -1,5 +1,5 @@
 import fs from "fs-extra";
-import yaml from "js-yaml";
+import * as yaml from "js-yaml";
 import type { JSONSchema7 } from "json-schema";
 import { MermaidDiagram } from "./mermaidClass.js";
 

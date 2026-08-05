@@ -1,0 +1,11 @@
+{
+  "$schema": "https://open-resource-discovery.github.io/spec-toolkit/spec-v1/spec-toolkit-config.schema.json#",
+  "outputPath": "src/__tests__/generated/test5/my-tolerant-spec-v1",
+  "docsConfig": [
+    {
+      "type": "spec",
+      "id": "my-tolerant-spec",
+      "sourceFilePath": "./src/__tests__/testData/valid/test5-my-tolerant-spec.schema.yaml"
+    }
+  ]
+}

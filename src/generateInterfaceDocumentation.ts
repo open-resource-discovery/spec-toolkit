@@ -11,7 +11,7 @@
 
 import path from "node:path";
 import fs from "fs-extra";
-import yaml from "js-yaml";
+import * as yaml from "js-yaml";
 import {
   documentationExtensionsOutputFolderName,
   documentationOutputFolderName,
@@ -30,6 +30,7 @@ import {
 } from "./util/jsonSchemaConversion.js";
 import { log } from "./util/log.js";
 import { getMarkdownFrontMatter } from "./util/markdownTextHelper.js";
+import { normalizeArbitrarySchema } from "./util/normalizeArbitrarySchema.js";
 import { validateSpecJsonSchema } from "./util/validation.js";
 
 ////////////////////////////////////////////////////////////
@@ -66,13 +67,27 @@ export interface DocumentationResult {
 export function jsonSchemaToDocumentation(configData: SpecToolkitConfigurationDocument): void {
   // Iterate the files and generate the documentation
   for (const docConfig of configData.docsConfig) {
-    // Read JSON File
-    const jsonSchemaFile = fs.readFileSync(path.join(process.cwd(), docConfig.sourceFilePath)).toString();
+    // Read JSON File. path.resolve honors an absolute sourceFilePath as-is; a
+    // relative one still resolves against the current working directory.
+    const jsonSchemaFile = fs.readFileSync(path.resolve(process.cwd(), docConfig.sourceFilePath)).toString();
     // TODO: validate here before casting it as SpecJsonSchemaRoot, or probably even better validate outside of the for loop
     const jsonSchemaFileParsed = yaml.load(jsonSchemaFile) as SpecJsonSchemaRoot;
 
     // The Spec JSON Schema based Specification
-    const jsonSchemaRoot = preprocessSpecJsonSchema(jsonSchemaFileParsed);
+    let jsonSchemaRoot = preprocessSpecJsonSchema(jsonSchemaFileParsed);
+
+    // Tolerant mode: normalize arbitrary JSON Schemas into the shape the
+    // renderer and validator expect (hoist inline objects and inline
+    // composition branches into #/definitions, add missing object `type`),
+    // warning on each rewrite instead of rejecting the schema. Schemas already
+    // authored to the conventions pass through unchanged.
+    const normalized = normalizeArbitrarySchema(jsonSchemaRoot);
+    jsonSchemaRoot = normalized.schema;
+    if (normalized.warnings.length > 0) {
+      log.warn(
+        `${docConfig.sourceFilePath}: ${normalized.warnings.length} schema normalization(s) applied for documentation generation (see warnings above).`,
+      );
+    }
     log.info(`${docConfig.sourceFilePath} loaded and prepared.`);
 
     // Read extension target file if given

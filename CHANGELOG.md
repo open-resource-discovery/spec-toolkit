@@ -10,6 +10,17 @@ For a roadmap including expected timeline, please refer to [ROADMAP.md](./ROADMA
 
 ## [unreleased]
 
+- new feature: tolerant mode for arbitrary JSON Schemas. The Markdown documentation generator no longer rejects schemas that break the strong authoring conventions; instead it normalizes them and warns. Specifically:
+  - inline nested objects and inline `oneOf`/`anyOf`/`allOf` branches that carry a shape are virtually hoisted into `#/definitions` (in memory; the authored file is never modified) via a new `normalizeArbitrarySchema` pass;
+  - a node that has object keywords (`properties`/`patternProperties`/`additionalProperties`) but no `type` is treated as `type: object`;
+  - `allOf` `if`/`then` conditionals expressing conditional requiredness are surfaced as a note rather than erroring;
+  - a node with no recognizable construct is rendered as a free-form value instead of throwing.
+  Schemas already authored to the conventions pass through unchanged (no output differences).
+- fix: TypeScript type generation for a single schema that `json-schema-to-typescript` cannot handle (e.g. inline `if`/`then`/`else` conditionals) is now skipped with a warning instead of aborting the whole run; the Markdown documentation is still produced.
+- fix: the ajv draft-07 meta-schema is resolved relative to the installed `ajv` package (via `require.resolve`) instead of a hardcoded `./node_modules/ajv/...` path, so the tool works regardless of the current working directory.
+- fix: absolute `-c` config paths and absolute `sourceFilePath` values are honored as-is (`path.resolve` instead of `path.join(process.cwd(), ...)`), while relative paths remain CWD-relative (backward compatible).
+- fix: non-conventional `$ref` shapes are reported as warnings rather than hard errors, since the normalization pass rewrites arbitrary schemas into the conventional `#/definitions/<name>` form first.
+
 ## [0.8.1]
 
 - fix: deduplicate `customTypeDefinitions` by name when merging, so shared referenced types (e.g. `Labels`) are only registered once even when multiple nested custom types reference the same definition

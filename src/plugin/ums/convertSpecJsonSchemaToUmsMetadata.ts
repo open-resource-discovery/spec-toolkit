@@ -4,7 +4,7 @@
 // # TODO: Add ID for the Consumption Bundle (metadata relation)
 
 import fs from "fs-extra";
-import yaml from "js-yaml";
+import * as yaml from "js-yaml";
 import _ from "lodash";
 import { log } from "../../util/log.js";
 import type { UmsMetadataOverrides, UmsPluginConfig } from "./configModel.js";
