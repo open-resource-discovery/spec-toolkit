@@ -185,9 +185,9 @@ export interface SpecJsonSchema {
    */
   "x-deprecation-text"?: string;
   /**
-   * Feature Status. Use this to mark something as alpha or beta.
+   * Feature Status. Use this to mark something as proposed, alpha or beta. Use `proposed` for a feature that is specified but not yet implemented, so tooling can warn when it is used.
    */
-  "x-feature-status"?: "alpha" | "beta";
+  "x-feature-status"?: "proposed" | "alpha" | "beta";
   /**
    * Add a human readable description for the patternProperties construct
    */
@@ -334,9 +334,9 @@ export interface SpecExtensionJsonSchema {
    */
   "x-deprecation-text"?: string;
   /**
-   * Feature Status. Use this to mark something as alpha or beta.
+   * Feature Status. Use this to mark something as proposed, alpha or beta. Use `proposed` for a feature that is specified but not yet implemented, so tooling can warn when it is used.
    */
-  "x-feature-status"?: "alpha" | "beta";
+  "x-feature-status"?: "proposed" | "alpha" | "beta";
   /**
    * Add a human readable description for the patternProperties construct
    */

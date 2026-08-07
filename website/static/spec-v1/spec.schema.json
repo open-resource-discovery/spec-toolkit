@@ -338,8 +338,8 @@
         },
         "x-feature-status": {
           "type": "string",
-          "description": "Feature Status. Use this to mark something as alpha or beta.",
-          "enum": ["alpha", "beta"]
+          "description": "Feature Status. Use this to mark something as proposed, alpha or beta. Use `proposed` for a feature that is specified but not yet implemented, so tooling can warn when it is used.",
+          "enum": ["proposed", "alpha", "beta"]
         },
         "x-pattern-properties-description": {
           "type": "string",
@@ -567,8 +567,8 @@
         },
         "x-feature-status": {
           "type": "string",
-          "description": "Feature Status. Use this to mark something as alpha or beta.",
-          "enum": ["alpha", "beta"]
+          "description": "Feature Status. Use this to mark something as proposed, alpha or beta. Use `proposed` for a feature that is specified but not yet implemented, so tooling can warn when it is used.",
+          "enum": ["proposed", "alpha", "beta"]
         },
         "x-pattern-properties-description": {
           "type": "string",
