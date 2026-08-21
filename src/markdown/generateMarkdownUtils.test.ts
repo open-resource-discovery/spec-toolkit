@@ -57,6 +57,13 @@ describe("test utils functions", () => {
       `);
     });
 
+    it("should render a proposed feature-status badge", () => {
+      jsonSchemaObject["x-feature-status"] = "proposed";
+      const result = jsonSchemaToMd(jsonSchemaObject, jsonSchemaRoot, undefined);
+      expect(result).toContain('<span className="feature-status-proposed"');
+      expect(result).toContain("PROPOSED");
+    });
+
     it("should not generate markdown documentation for hidden objects", () => {
       jsonSchemaObject["x-hide"] = true;
       const result = jsonSchemaToMd(jsonSchemaObject, jsonSchemaRoot, undefined);
