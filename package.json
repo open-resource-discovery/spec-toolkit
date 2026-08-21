@@ -40,7 +40,7 @@
     "ajv": "8.20.0",
     "ajv-formats": "3.0.1",
     "commander": "14.0.3",
-    "comment-json": "4.6.2",
+    "comment-json": "5.0.0",
     "exceljs": "4.4.0",
     "fast-glob": "3.3.3",
     "fs-extra": "11.3.5",
