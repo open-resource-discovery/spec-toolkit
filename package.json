@@ -45,7 +45,7 @@
     "fast-glob": "3.3.3",
     "fs-extra": "11.3.5",
     "gfm-escape": "0.2.0",
-    "js-yaml": "4.2.0",
+    "js-yaml": "4.3.1",
     "json-schema-to-typescript": "15.0.4",
     "lodash": "4.18.1",
     "quicktype-core": "23.2.6",
