@@ -125,6 +125,7 @@ article .card {
 .markdown .optional,
 .markdown .deprecated,
 .markdown .feature-status-draft,
+.markdown .feature-status-proposed,
 .markdown .feature-status-alpha,
 .markdown .feature-status-beta,
 .markdown .feature-status-stable {
@@ -148,6 +149,9 @@ article .card {
 }
 .markdown .feature-status-draft {
   background: #7f7f7f;
+}
+.markdown .feature-status-proposed {
+  background: #d98a1f;
 }
 .markdown .feature-status-alpha {
   background: #e469b1;
