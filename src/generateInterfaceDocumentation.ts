@@ -11,7 +11,6 @@
 
 import path from "node:path";
 import fs from "fs-extra";
-import yaml from "js-yaml";
 import {
   documentationExtensionsOutputFolderName,
   documentationOutputFolderName,
@@ -31,6 +30,7 @@ import {
 import { log } from "./util/log.js";
 import { getMarkdownFrontMatter } from "./util/markdownTextHelper.js";
 import { validateSpecJsonSchema } from "./util/validation.js";
+import { loadYaml } from "./util/yaml.js";
 
 ////////////////////////////////////////////////////////////
 // JSON SCHEMA TO MARKDOWN                                //
@@ -69,7 +69,7 @@ export function jsonSchemaToDocumentation(configData: SpecToolkitConfigurationDo
     // Read JSON File
     const jsonSchemaFile = fs.readFileSync(path.join(process.cwd(), docConfig.sourceFilePath)).toString();
     // TODO: validate here before casting it as SpecJsonSchemaRoot, or probably even better validate outside of the for loop
-    const jsonSchemaFileParsed = yaml.load(jsonSchemaFile) as SpecJsonSchemaRoot;
+    const jsonSchemaFileParsed = loadYaml(jsonSchemaFile) as SpecJsonSchemaRoot;
 
     // The Spec JSON Schema based Specification
     const jsonSchemaRoot = preprocessSpecJsonSchema(jsonSchemaFileParsed);
@@ -82,7 +82,7 @@ export function jsonSchemaToDocumentation(configData: SpecToolkitConfigurationDo
       if (target) {
         const file = fs.readFileSync(target.sourceFilePath).toString();
         specTarget = {
-          extensionTarget: yaml.load(file) as SpecJsonSchemaRoot,
+          extensionTarget: loadYaml(file) as SpecJsonSchemaRoot,
           targetDocumentId: docConfig.targetDocumentId,
         };
       } else {

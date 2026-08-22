@@ -1,7 +1,7 @@
 import path from "node:path";
 import { jest } from "@jest/globals";
 import fs from "fs-extra";
-import yaml from "js-yaml";
+import * as yaml from "js-yaml";
 import { log } from "../../util/log.js";
 import type { JavaAnnotationsConfig } from "./configModel.js";
 import { generateModels } from "./generateJavaModels.js";
