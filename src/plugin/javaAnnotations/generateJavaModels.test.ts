@@ -124,34 +124,21 @@ describe("generateModels", () => {
   });
 
   it("logs an error when quicktype generation fails", async () => {
-    await jest.isolateModulesAsync(async () => {
-      jest.doMock("quicktype-core", () => ({
-        // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-        quicktype() {
-          throw new Error("Test-Failure");
-        },
-        JSONSchemaInput: jest.fn().mockImplementation(() => ({
-          addSource: jest.fn(async () => Promise.resolve(undefined)).mockResolvedValue(undefined),
-        })),
+    // Feed a schema with an unresolvable $ref so the real quicktype throws,
+    // exercising the catch block in generateModels.
+    const badSchemaPath = path.join(testDir, "brokenRef.schema.yaml");
+    fs.writeFileSync(
+      badSchemaPath,
+      yaml.dump({ type: "object", properties: { a: { $ref: "#/definitions/DoesNotExist" } } }),
+      "utf8",
+    );
+    const config: JavaAnnotationsConfig = {
+      packageAnnotations: "com.example.annotations",
+      modelPackage: "com.example.model",
+    };
 
-        FetchingJSONSchemaStore: jest.fn().mockImplementation(() => ({})),
-        InputData: jest.fn().mockImplementation(() => ({
-          addInput: jest.fn(),
-        })),
-      }));
+    await generateModels(config, badSchemaPath, outputDir);
 
-      const { log } = await import("../../util/log.js");
-      const errorSpyInIso = jest.spyOn(log, "error").mockReturnValue(undefined);
-
-      const { generateModels } = await import("./generateJavaModels.js");
-      const config: JavaAnnotationsConfig = {
-        packageAnnotations: "com.example.annotations",
-        modelPackage: "com.example.model",
-      };
-
-      await generateModels(config, path.join(testDir, "person.schema.yaml"), outputDir);
-
-      expect(errorSpyInIso).toHaveBeenCalledWith(expect.stringContaining("quicktype generation failed:"));
-    });
+    expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining("quicktype generation failed:"));
   });
 });

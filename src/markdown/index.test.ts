@@ -371,57 +371,59 @@ describe("test generateMarkdown", () => {
     // "should throw if **Type** is not a union of all oneOf types referenced"
 
     // TODO: re-enable object type testing when fixed
-    it.each([
-      /*"object"*/ "integer",
-      "number",
-      "boolean",
-      "string",
-    ])("should include correct type information - **Type: %s** and One of (oneOf values as list)", (testType) => {
-      const testSchema: SpecJsonSchemaRoot = {
-        $id: "http://example.com/schemas/test-schema",
-        title: "Test Schema",
-        type: "object",
-        description: "A sample schema for testing purposes.",
-        properties: {
-          property1: {
-            $ref: "#/definitions/Property1",
-            description: "Property 1 ref description",
+    it.each([/*"object"*/ "integer", "number", "boolean", "string"])(
+      "should include correct type information - **Type: %s** and One of (oneOf values as list)",
+      (testType) => {
+        const testSchema: SpecJsonSchemaRoot = {
+          $id: "http://example.com/schemas/test-schema",
+          title: "Test Schema",
+          type: "object",
+          description: "A sample schema for testing purposes.",
+          properties: {
+            property1: {
+              $ref: "#/definitions/Property1",
+              description: "Property 1 ref description",
+            },
           },
-        },
-        definitions: {
-          Property1: {
-            title: "Property 1 title",
-            description: "Property 1 description",
-            type: testType as SpecJsonSchemaTypeName,
-            oneOf: [{ $ref: "#/definitions/TypeA" }, { $ref: "#/definitions/TypeB" }, { $ref: "#/definitions/TypeC" }],
-          },
-          TypeA: {
-            type: "string",
-            title: "Type A title",
-            description: "Type A description",
-          },
-          TypeB: {
-            type: "number",
-            title: "Type B title",
-            description: "Type B description",
-          },
-          TypeC: {
-            type: "object",
-            title: "Type C title",
-            description: "Type C description",
-            properties: {
-              detail: {
-                type: "string",
-                title: "Detail",
-                description: "Detail description",
+          definitions: {
+            Property1: {
+              title: "Property 1 title",
+              description: "Property 1 description",
+              type: testType as SpecJsonSchemaTypeName,
+              oneOf: [
+                { $ref: "#/definitions/TypeA" },
+                { $ref: "#/definitions/TypeB" },
+                { $ref: "#/definitions/TypeC" },
+              ],
+            },
+            TypeA: {
+              type: "string",
+              title: "Type A title",
+              description: "Type A description",
+            },
+            TypeB: {
+              type: "number",
+              title: "Type B title",
+              description: "Type B description",
+            },
+            TypeC: {
+              type: "object",
+              title: "Type C title",
+              description: "Type C description",
+              properties: {
+                detail: {
+                  type: "string",
+                  title: "Detail",
+                  description: "Detail description",
+                },
               },
             },
           },
-        },
-      };
-      const result = generateMarkdown(testSchema, specId, "spec", undefined);
-      expect(result).toMatchSnapshot();
-    });
+        };
+        const result = generateMarkdown(testSchema, specId, "spec", undefined);
+        expect(result).toMatchSnapshot();
+      },
+    );
 
     // TODO: allOf value is not yet added as list in the output, need to adjust code first
     // TODO: **Type** should be concatenated via the and & operator
@@ -522,58 +524,59 @@ describe("test generateMarkdown", () => {
       `);
     });
 
-    it.each([
-      "object",
-      "integer",
-      "number",
-      "boolean",
-      "string",
-    ])("should include correct type information - **Type: %s** and All of", (testType) => {
-      const testSchema: SpecJsonSchemaRoot = {
-        $id: "http://example.com/schemas/test-schema",
-        title: "Test Schema",
-        type: "object",
-        description: "A sample schema for testing purposes.",
-        properties: {
-          property1: {
-            $ref: "#/definitions/Property1",
-            description: "Property 1 ref description",
+    it.each(["object", "integer", "number", "boolean", "string"])(
+      "should include correct type information - **Type: %s** and All of",
+      (testType) => {
+        const testSchema: SpecJsonSchemaRoot = {
+          $id: "http://example.com/schemas/test-schema",
+          title: "Test Schema",
+          type: "object",
+          description: "A sample schema for testing purposes.",
+          properties: {
+            property1: {
+              $ref: "#/definitions/Property1",
+              description: "Property 1 ref description",
+            },
           },
-        },
-        definitions: {
-          Property1: {
-            title: "Property 1 title",
-            description: "Property 1 description",
-            type: testType as SpecJsonSchemaTypeName,
-            allOf: [{ $ref: "#/definitions/TypeA" }, { $ref: "#/definitions/TypeB" }, { $ref: "#/definitions/TypeC" }],
-          },
-          TypeA: {
-            type: "string",
-            title: "Type A title",
-            description: "Type A description",
-          },
-          TypeB: {
-            type: "number",
-            title: "Type B title",
-            description: "Type B description",
-          },
-          TypeC: {
-            type: "object",
-            title: "Type C title",
-            description: "Type C description",
-            properties: {
-              detail: {
-                type: "string",
-                title: "Detail",
-                description: "Detail description",
+          definitions: {
+            Property1: {
+              title: "Property 1 title",
+              description: "Property 1 description",
+              type: testType as SpecJsonSchemaTypeName,
+              allOf: [
+                { $ref: "#/definitions/TypeA" },
+                { $ref: "#/definitions/TypeB" },
+                { $ref: "#/definitions/TypeC" },
+              ],
+            },
+            TypeA: {
+              type: "string",
+              title: "Type A title",
+              description: "Type A description",
+            },
+            TypeB: {
+              type: "number",
+              title: "Type B title",
+              description: "Type B description",
+            },
+            TypeC: {
+              type: "object",
+              title: "Type C title",
+              description: "Type C description",
+              properties: {
+                detail: {
+                  type: "string",
+                  title: "Detail",
+                  description: "Detail description",
+                },
               },
             },
           },
-        },
-      };
-      const result = generateMarkdown(testSchema, specId, "spec", undefined);
-      expect(result).toMatchSnapshot();
-    });
+        };
+        const result = generateMarkdown(testSchema, specId, "spec", undefined);
+        expect(result).toMatchSnapshot();
+      },
+    );
 
     // TODO: comment in below test when code is adjusted to support it:
     // The **Type** should be either primitive type when allOf referenced type primitive as well, or object type and allOf referenced object type as well otherwise it should throw error
@@ -928,57 +931,59 @@ describe("test generateMarkdown", () => {
       `);
     });
 
-    it.each([
-      /*"object"*/ "integer",
-      "number",
-      "boolean",
-      "string",
-    ])("should include correct type information - **Type: %s** and Any of", (testType) => {
-      const testSchema: SpecJsonSchemaRoot = {
-        $id: "http://example.com/schemas/test-schema",
-        title: "Test Schema",
-        type: "object",
-        description: "A sample schema for testing purposes.",
-        properties: {
-          property1: {
-            $ref: "#/definitions/Property1",
-            description: "Property 1 ref description",
+    it.each([/*"object"*/ "integer", "number", "boolean", "string"])(
+      "should include correct type information - **Type: %s** and Any of",
+      (testType) => {
+        const testSchema: SpecJsonSchemaRoot = {
+          $id: "http://example.com/schemas/test-schema",
+          title: "Test Schema",
+          type: "object",
+          description: "A sample schema for testing purposes.",
+          properties: {
+            property1: {
+              $ref: "#/definitions/Property1",
+              description: "Property 1 ref description",
+            },
           },
-        },
-        definitions: {
-          Property1: {
-            title: "Property 1 title",
-            description: "Property 1 description",
-            type: testType as SpecJsonSchemaTypeName,
-            anyOf: [{ $ref: "#/definitions/TypeA" }, { $ref: "#/definitions/TypeB" }, { $ref: "#/definitions/TypeC" }],
-          },
-          TypeA: {
-            type: "string",
-            title: "Type A title",
-            description: "Type A description",
-          },
-          TypeB: {
-            type: "number",
-            title: "Type B title",
-            description: "Type B description",
-          },
-          TypeC: {
-            type: "object",
-            title: "Type C title",
-            description: "Type C description",
-            properties: {
-              detail: {
-                type: "string",
-                title: "Detail",
-                description: "Detail description",
+          definitions: {
+            Property1: {
+              title: "Property 1 title",
+              description: "Property 1 description",
+              type: testType as SpecJsonSchemaTypeName,
+              anyOf: [
+                { $ref: "#/definitions/TypeA" },
+                { $ref: "#/definitions/TypeB" },
+                { $ref: "#/definitions/TypeC" },
+              ],
+            },
+            TypeA: {
+              type: "string",
+              title: "Type A title",
+              description: "Type A description",
+            },
+            TypeB: {
+              type: "number",
+              title: "Type B title",
+              description: "Type B description",
+            },
+            TypeC: {
+              type: "object",
+              title: "Type C title",
+              description: "Type C description",
+              properties: {
+                detail: {
+                  type: "string",
+                  title: "Detail",
+                  description: "Detail description",
+                },
               },
             },
           },
-        },
-      };
-      const result = generateMarkdown(testSchema, specId, "spec", undefined);
-      expect(result).toMatchSnapshot();
-    });
+        };
+        const result = generateMarkdown(testSchema, specId, "spec", undefined);
+        expect(result).toMatchSnapshot();
+      },
+    );
 
     it("should throw when 'oneOf' reference cannot be resolved", () => {
       const testSchema: SpecJsonSchemaRoot = {
