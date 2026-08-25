@@ -5,5 +5,7 @@ import { Logger } from "tslog";
  */
 export const log = new Logger({
   type: "pretty",
-  prettyLogTemplate: "{{hh}}:{{MM}}:{{ss}} {{logLevelName}} ",
+  pretty: {
+    template: "{{hh}}:{{MM}}:{{ss}} {{logLevelName}} ",
+  },
 });

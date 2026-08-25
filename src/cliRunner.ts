@@ -4,11 +4,11 @@ import { Ajv, type Schema } from "ajv";
 import addFormats from "ajv-formats";
 import { Command, Option } from "commander";
 import fs from "fs-extra";
-import yaml from "js-yaml";
 import * as packageJson from "../package.json" with { type: "json" };
 import { generate } from "./generate.js";
 import type { SpecToolkitConfigurationDocument } from "./generated/spec-toolkit-config/spec-v1/types/index.js";
 import registerPlugins from "./plugin/index.js";
+import { loadYaml } from "./util/yaml.js";
 
 interface CliOptions {
   config: string;
@@ -54,7 +54,7 @@ async function run(argv: CliOptions): Promise<void> {
   }
 
   try {
-    const configJsonSchema: Schema = yaml.load(
+    const configJsonSchema: Schema = loadYaml(
       fs.readFileSync(
         new URL("./generated/spec-toolkit-config/spec-v1/schemas/spec-toolkit-config.schema.json", import.meta.url),
         "utf-8",

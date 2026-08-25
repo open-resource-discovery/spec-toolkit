@@ -1,5 +1,4 @@
 import fs from "fs-extra";
-import yaml from "js-yaml";
 import type { JSONSchema4 } from "json-schema";
 import { compile as jsonSchemaToTypeScript } from "json-schema-to-typescript";
 import { schemasOutputFolderName, typesOutputFolderName } from "./generate.js";
@@ -14,6 +13,7 @@ import {
   removeDescriptionsFromRefPointers,
 } from "./util/jsonSchemaConversion.js";
 import { log } from "./util/log.js";
+import { loadYaml } from "./util/yaml.js";
 
 export async function generateTypeScriptDefinitions(configData: SpecToolkitConfigurationDocument): Promise<void> {
   let indexExportStatements = "";
@@ -25,7 +25,7 @@ export async function generateTypeScriptDefinitions(configData: SpecToolkitConfi
     if (docConfig.type === "spec") {
       const xSchemaFileName = `${docConfig.id}.schema.json`.split(".json").join(".x.json");
       const xSchemaFilePath = `${configData.outputPath}/${schemasOutputFolderName}/${xSchemaFileName}`;
-      let schema = yaml.load(fs.readFileSync(`${xSchemaFilePath}`).toString()) as SpecJsonSchemaRoot;
+      let schema = loadYaml(fs.readFileSync(`${xSchemaFilePath}`).toString()) as SpecJsonSchemaRoot;
 
       schema = convertRefToDocToStandardRef(schema);
       schema = convertOneOfEnum(schema);

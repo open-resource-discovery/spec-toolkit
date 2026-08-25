@@ -80,8 +80,8 @@ export function getJsonSchemaValidator(jsonSchema: SpecJsonSchemaRoot): Validate
     return preparedAjv.compile(jsonSchema);
   } catch (err) {
     log.error("JSON Schema Validation issue (ajv)");
-    log.error(err);
-    log.error(preparedAjv.errors);
+    log.error("Error:", err);
+    log.error("ajv errors:", preparedAjv.errors);
     throw new Error(`JSON Schema Validation issue (ajv): ${JSON.stringify((err as Error).message, null, 2)}`);
   }
 }
@@ -180,7 +180,7 @@ export function validateExamples(jsonSchemaObject: SpecJsonSchema, jsonSchemaRoo
       if (!valid) {
         log.error("--------------------------------------------------------------------------");
         log.error(`Example value "${example}" is invalid: \n ${JSON.stringify(jsonSchemaObject, null, 2)}`);
-        log.error(validate.errors?.[0].message);
+        log.error(validate.errors?.[0].message ?? "Unknown validation error");
         log.error("--------------------------------------------------------------------------");
         process.exit(1);
       }
@@ -203,7 +203,7 @@ export function validateDefault(jsonSchemaObject: SpecJsonSchema, jsonSchemaRoot
       log.error(
         `Default value "${jsonSchemaObject.default}" is invalid: \n ${JSON.stringify(jsonSchemaObject, null, 2)}`,
       );
-      log.error(validate.errors?.[0].message);
+      log.error(validate.errors?.[0].message ?? "Unknown validation error");
       log.error("--------------------------------------------------------------------------");
       process.exit(1);
     }

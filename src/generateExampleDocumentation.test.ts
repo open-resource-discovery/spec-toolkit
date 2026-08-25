@@ -1,7 +1,7 @@
 import path from "node:path";
 import { jest } from "@jest/globals";
 import fs from "fs-extra";
-import yaml from "js-yaml";
+import * as yaml from "js-yaml";
 import { generateExampleDocumentation } from "./generateExampleDocumentation.js";
 import type { SpecToolkitConfigurationDocument } from "./index.js";
 import { log } from "./util/log.js";

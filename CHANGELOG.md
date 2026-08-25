@@ -10,6 +10,11 @@ For a roadmap including expected timeline, please refer to [ROADMAP.md](./ROADMA
 
 ## [unreleased]
 
+## [0.8.2]
+
+- new feature: added `proposed` value to the `x-feature-status` enum for features that are specified but not yet implemented (#84)
+- chore: updated all dependencies (TypeScript 7, Biome 2.5, js-yaml 5, tslog 5, commander 15, quicktype-core 26, and others); replaced `ts-jest` with `@swc/jest` for the test transform
+
 ## [0.8.1]
 
 - fix: deduplicate `customTypeDefinitions` by name when merging, so shared referenced types (e.g. `Labels`) are only registered once even when multiple nested custom types reference the same definition

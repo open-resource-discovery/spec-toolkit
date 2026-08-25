@@ -2,12 +2,12 @@ import * as path from "node:path";
 import { parse } from "comment-json";
 import fg from "fast-glob";
 import fs from "fs-extra";
-import * as yaml from "js-yaml";
 import { documentationExamplesOutputFolderName, schemasOutputFolderName } from "./generate.js";
 import type { SpecToolkitConfigurationDocument } from "./generated/spec-toolkit-config/spec-v1/types/index.js";
 import type { SpecJsonSchemaRoot } from "./index.js";
 import { log } from "./util/log.js";
 import { getJsonSchemaValidator } from "./util/validation.js";
+import { loadYaml } from "./util/yaml.js";
 
 interface ExampleDocumentsDict {
   [fileName: string]: string;
@@ -30,7 +30,7 @@ export function generateExampleDocumentation(configData: SpecToolkitConfiguratio
       // for each json, jsonc example validate the example against the generated schema
       log.info(`Validate '${docConfig.id}' example files...`);
       const generatedJsonSchemaFilePath = `${configData.outputPath}/${schemasOutputFolderName}/${docConfig.id}.schema.json`;
-      const generatedJsonSchema = yaml.load(
+      const generatedJsonSchema = loadYaml(
         fs.readFileSync(path.join(process.cwd(), generatedJsonSchemaFilePath)).toString(),
       ) as SpecJsonSchemaRoot;
       for (const filePath of jsonExampleFilePaths) {
@@ -38,7 +38,7 @@ export function generateExampleDocumentation(configData: SpecToolkitConfiguratio
         if (filePath.endsWith(".jsonc")) {
           exampleFileContent = parse(fs.readFileSync(filePath).toString());
         } else if (filePath.endsWith(".json")) {
-          exampleFileContent = yaml.load(fs.readFileSync(filePath).toString());
+          exampleFileContent = loadYaml(fs.readFileSync(filePath).toString());
         } else {
           // this should never happen due to the glob pattern,
           // but just in case the pattern was extended and the file type handler war forgotten to be added here

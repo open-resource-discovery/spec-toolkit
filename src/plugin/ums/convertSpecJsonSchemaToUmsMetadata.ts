@@ -4,9 +4,9 @@
 // # TODO: Add ID for the Consumption Bundle (metadata relation)
 
 import fs from "fs-extra";
-import yaml from "js-yaml";
 import _ from "lodash";
 import { log } from "../../util/log.js";
+import { loadYaml } from "../../util/yaml.js";
 import type { UmsMetadataOverrides, UmsPluginConfig } from "./configModel.js";
 import {
   type Context,
@@ -258,7 +258,7 @@ export function jsonSchemaObjectToMetadata(schema: SpecJsonSchemaWithUmsSupport,
     } else {
       const analyze = Object.values(schema.patternProperties)[0].items || schema.patternProperties;
       if (analyze?.type !== "string") {
-        log.error(schema.patternProperties, analyze);
+        log.error("Unsupported patternProperties/additionalProperties:", schema.patternProperties, analyze);
         throw new Error(
           `${getPath(context)}: Unsupported additionalProperties type ${analyze?.type}. An object with patternProperties must have additionalProperties of type "string" or Array<string>.`,
         );
@@ -810,7 +810,7 @@ function applyOverrides(results: UmsMetadata[], config: UmsPluginConfig): UmsMet
     log.info(`Overrides detected.`);
     for (const overrideFile of config.overrides) {
       // TODO: validate file content before casting it as UmsMetadataOverrides
-      const overrideFileContent = yaml.load(fs.readFileSync(overrideFile, "utf-8")) as UmsMetadataOverrides;
+      const overrideFileContent = loadYaml(fs.readFileSync(overrideFile, "utf-8")) as UmsMetadataOverrides;
 
       for (const overrideContent of overrideFileContent.overrides) {
         const metadataType = overrideContent.type;
