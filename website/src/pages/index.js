@@ -66,7 +66,7 @@ export default function Home() {
               </div>
               <pre aria-hidden="true">
                 <code>
-                  <span>$schema:</span> spec.schema.json{"\n"}
+                  <span>$schema:</span> spec-v1/spec.schema.json#{"\n"}
                   <span>title:</span> Book{"\n"}
                   <span>type:</span> object{"\n"}
                   <span>properties:</span>
@@ -75,8 +75,7 @@ export default function Home() {
               </pre>
             </div>
             <div className={styles.connector}>
-              <span>spec-toolkit</span>
-              <i aria-hidden="true" />
+              <span className={styles.connectorLabel}>spec-toolkit</span>
             </div>
             <div className={styles.outputList}>
               {outputs.map((output) => (
@@ -105,7 +104,7 @@ export default function Home() {
           <div className={styles.capabilityList}>
             {capabilities.map((capability) => (
               <article className={styles.capability} key={capability.number}>
-                <span>{capability.number}</span>
+                <span className={styles.capabilityNumber}>{capability.number}</span>
                 <div>
                   <h3>{capability.title}</h3>
                   <p>{capability.description}</p>

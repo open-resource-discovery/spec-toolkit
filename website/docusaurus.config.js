@@ -155,7 +155,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} SAP SE. Made available under Apache License 2.0.`,
+        copyright: `Copyright © ${new Date().getFullYear()} SAP SE. Made available under Apache License 2.0.\n\nThis site is hosted by GitHub Pages. Please see the GitHub Privacy Statement for information about how GitHub processes your personal data.`,
       },
     }),
 };

@@ -36,8 +36,14 @@
   --toolkit-muted-text: #64748b;
   --toolkit-accent: #c85f43;
   --toolkit-accent-light: #f2a68f;
+  --toolkit-accent-surface: #fff7f3;
+  --toolkit-accent-border: #e3cbc2;
   --toolkit-border-color: #e2ddd9;
   --toolkit-border-strong: #d3cbc5;
+  --toolkit-code-background: #172554;
+  --toolkit-code-border: #253968;
+  --toolkit-code-text: #dce5f5;
+  --toolkit-section-background: #f4ede8;
 }
 
 @media (min-width: 997px) {
@@ -79,6 +85,20 @@
 
 .navbar__item.header-start-pill:hover {
   background: #0b1120;
+}
+
+.header-github-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.header-github-link::before {
+  width: 19px;
+  height: 19px;
+  background: currentcolor;
+  content: "";
+  mask: url("../../img/icons/github.svg") center / contain no-repeat;
 }
 
 .header-github-link svg[class*="iconExternalLink"] {
