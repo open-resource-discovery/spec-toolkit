@@ -98,7 +98,7 @@
   height: 19px;
   background: currentcolor;
   content: "";
-  mask: url("../../img/icons/github.svg") center / contain no-repeat;
+  mask: url("../img/icons/github.svg") center / contain no-repeat;
 }
 
 .header-github-link svg[class*="iconExternalLink"] {
