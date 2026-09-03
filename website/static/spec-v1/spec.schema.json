@@ -137,7 +137,7 @@
           "type": "boolean"
         },
         {
-          "type": "object"
+          "$ref": "#/definitions/SpecJsonSchemaTypeOneOf3"
         },
         {
           "type": "array"
@@ -693,6 +693,10 @@
           "$ref": "#/definitions/SpecExtensionJsonSchema"
         }
       ]
+    },
+    "SpecJsonSchemaTypeOneOf3": {
+      "type": "object",
+      "title": "SpecJsonSchemaTypeOneOf3"
     }
   }
 }

@@ -138,6 +138,9 @@ Such a specification writing process will be described below:
    }
    ```
 
+   Relative file references and HTTP(S) references are bundled automatically.
+   The generated schema contains only local `$ref` values.
+
 1. Execute the spec-toolkit CLI tool (check [prerequisite](https://github.com/open-resource-discovery/spec-toolkit/docs/spec-toolkit-config#prerequisite) first)
 
    ```bash

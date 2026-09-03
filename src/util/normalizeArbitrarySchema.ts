@@ -62,10 +62,24 @@ export function normalizeArbitrarySchema(schema: SpecJsonSchemaRoot): NormalizeR
   // Deep copy; never touch the input.
   const root = JSON.parse(JSON.stringify(schema)) as SpecJsonSchemaRoot & Record<string, unknown>;
   // spec-toolkit only understands `definitions` (not `$defs`); consolidate.
-  if ((root as Record<string, unknown>).$defs && !root.definitions) {
-    root.definitions = (root as Record<string, unknown>).$defs as Record<string, SpecJsonSchema>;
+  if ((root as Record<string, unknown>).$defs) {
+    root.definitions = {
+      ...(root.definitions || {}),
+      ...((root as Record<string, unknown>).$defs as Record<string, SpecJsonSchema>),
+    };
     delete (root as Record<string, unknown>).$defs;
   }
+
+  const rewriteDefinitionRefs = (node: unknown): void => {
+    if (!node || typeof node !== "object") return;
+    const schemaNode = node as Record<string, unknown>;
+    if (typeof schemaNode.$ref === "string" && schemaNode.$ref.startsWith("#/$defs/")) {
+      schemaNode.$ref = schemaNode.$ref.replace("#/$defs/", "#/definitions/");
+    }
+    for (const value of Object.values(schemaNode)) rewriteDefinitionRefs(value);
+  };
+  rewriteDefinitionRefs(root);
+
   if (!root.definitions) root.definitions = {};
   const defs = root.definitions as Record<string, SpecJsonSchema>;
   const taken = new Set<string>(Object.keys(defs));
@@ -75,6 +89,100 @@ export function normalizeArbitrarySchema(schema: SpecJsonSchemaRoot): NormalizeR
     warnings.push(msg);
     log.warn(msg);
   };
+
+  const resolveLocalPointer = (ref: string): unknown => {
+    if (!ref.startsWith("#/")) return undefined;
+    return ref
+      .slice(2)
+      .split("/")
+      .map((part) => part.replace(/~1/g, "/").replace(/~0/g, "~"))
+      .reduce<unknown>((value, part) => (value as Record<string, unknown> | undefined)?.[part], root);
+  };
+
+  const isResolvableAssociationTarget = (target: unknown): boolean => {
+    if (typeof target !== "string") return false;
+    const [, definitions, definitionName, propertyName] = target.split("/");
+    if (definitions !== "definitions" || !definitionName) return false;
+    const definition = root.definitions?.[definitionName];
+    return !!definition && (!propertyName || !!definition.properties?.[propertyName]);
+  };
+
+  const removeDanglingAssociationTargets = (node: unknown): void => {
+    if (!node || typeof node !== "object") return;
+    const schemaNode = node as Record<string, unknown>;
+    const associationTargets = schemaNode["x-association-target"];
+    if (Array.isArray(associationTargets)) {
+      const resolvableTargets = associationTargets.filter(isResolvableAssociationTarget);
+      if (resolvableTargets.length !== associationTargets.length) {
+        warn(
+          "Normalized: dangling x-association-target removed for documentation generation (authored file unchanged).",
+        );
+      }
+      if (resolvableTargets.length > 0) schemaNode["x-association-target"] = resolvableTargets;
+      else delete schemaNode["x-association-target"];
+    }
+    for (const value of Object.values(schemaNode)) removeDanglingAssociationTargets(value);
+  };
+  removeDanglingAssociationTargets(root);
+
+  const deepReferenceAliases = new Map<string, string>();
+  const rewriteDeepReferences = (node: unknown): void => {
+    if (!node || typeof node !== "object") return;
+    const schemaNode = node as Record<string, unknown>;
+    if (
+      typeof schemaNode.$ref === "string" &&
+      schemaNode.$ref.startsWith("#/") &&
+      !/^#\/definitions\/[^/]+$/.test(schemaNode.$ref)
+    ) {
+      const originalRef = schemaNode.$ref;
+      let aliasRef = deepReferenceAliases.get(originalRef);
+      if (!aliasRef) {
+        const target = resolveLocalPointer(originalRef);
+        if (target && typeof target === "object") {
+          const targetSchema = target as SpecJsonSchema;
+          const pointerParts = originalRef
+            .slice(2)
+            .split("/")
+            .filter((part) => !["properties", "items"].includes(part));
+          const name = uniqueName(
+            targetSchema.title ? pascalCase(targetSchema.title) : pascalCase(pointerParts.join(" ")),
+            taken,
+          );
+          aliasRef = `#/definitions/${name}`;
+          deepReferenceAliases.set(originalRef, aliasRef);
+          defs[name] = JSON.parse(JSON.stringify(targetSchema)) as SpecJsonSchema;
+          rewriteDeepReferences(defs[name]);
+          warn(
+            `Normalized: deep reference "${originalRef}" copied to ${aliasRef} for documentation generation (authored file unchanged).`,
+          );
+        }
+      }
+      if (aliasRef) schemaNode.$ref = aliasRef;
+    }
+    for (const value of Object.values(schemaNode)) rewriteDeepReferences(value);
+  };
+  rewriteDeepReferences(root);
+
+  for (const [definitionName, definition] of Object.entries(defs)) {
+    if (definition && typeof definition === "object" && !definition.title) {
+      definition.title = definitionName;
+      warn(
+        `Normalized: definition "${definitionName}" has no "title"; used its definition name for documentation generation (authored file unchanged).`,
+      );
+    }
+  }
+
+  const referencedObjects = new WeakSet<object>();
+  const collectReferencedObjects = (node: unknown): void => {
+    if (!node || typeof node !== "object") return;
+    const schemaNode = node as Record<string, unknown>;
+    if (typeof schemaNode.$ref === "string") {
+      const target = resolveLocalPointer(schemaNode.$ref);
+      if (target && typeof target === "object") referencedObjects.add(target);
+    }
+    for (const value of Object.values(schemaNode)) collectReferencedObjects(value);
+  };
+  collectReferencedObjects(root);
 
   const isObjectNode = (node: SpecJsonSchema): boolean =>
     !!node &&
@@ -176,7 +284,7 @@ export function normalizeArbitrarySchema(schema: SpecJsonSchemaRoot): NormalizeR
           if (isConstraintOnly(sub)) {
             return sub;
           }
-          const walked = walk(sub, pathParts.concat(`${key}${idx}`), false, false);
+          const walked = walk(sub, pathParts.concat(`${key}${idx}`), false, true);
           // A bare primitive branch (a scalar `type`, or a `const`/`enum` with
           // no shape of its own) renders inline fine; no need to hoist it.
           const isBarePrimitive =
@@ -209,7 +317,7 @@ export function normalizeArbitrarySchema(schema: SpecJsonSchemaRoot): NormalizeR
 
     // Hoist this node if it is an inline nested object (never the root, never a
     // direct definitions entry).
-    if (!atRoot && !isDefEntry && isObjectNode(node)) {
+    if (!atRoot && !isDefEntry && isObjectNode(node) && !referencedObjects.has(node)) {
       return hoist(node, pathParts, "inline nested object");
     }
     return node;
