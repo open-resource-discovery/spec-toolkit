@@ -8,7 +8,12 @@ import type { SpecJsonSchema, SpecJsonSchemaRoot } from "../generated/spec/spec-
 import { log } from "./log.js";
 
 // Prepare JSON Schema validator
-export const preparedAjv = new Ajv({ allErrors: true, allowUnionTypes: true, allowMatchingProperties: true });
+export const preparedAjv = new Ajv({
+  allErrors: true,
+  allowUnionTypes: true,
+  allowMatchingProperties: true,
+  strictSchema: false,
+});
 addFormats.default(preparedAjv);
 preparedAjv.addKeyword("x-recommended");
 preparedAjv.addKeyword("x-introduced-in-version");

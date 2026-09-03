@@ -3725,3 +3725,73 @@ export type BooleanCdsType = "cds.Boolean";
 export type StringCdsType = "cds.String";
 "
 `;
+
+exports[`CLI End-to-End Tests test 5: tolerant run with a non-convention-clean schema still generates docs 1`] = `
+"
+
+## Schema Definitions
+
+* The root schema of the document is [My Tolerant Spec](#my-tolerant-spec)
+* The interface is available as JSON Schema: [my-tolerant-spec.schema.json](https://example.com/my-tolerant-spec.schema.json).
+
+
+### My Tolerant Spec
+
+**Type**: Object(<a href="#my-tolerant-spec_name">name</a>, <a href="#my-tolerant-spec_metadata">metadata</a>, <a href="#my-tolerant-spec_config">config</a>, <a href="#my-tolerant-spec_value">value</a>, <a href="#my-tolerant-spec_target">target</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="my-tolerant-spec_name">name<br/><span className="mandatory">MANDATORY</span><a className="hash-link" href="#my-tolerant-spec_name" title="#my-tolerant-spec_name"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description">The resource name.</div>|
+|<div className="interface-property-name anchor" id="my-tolerant-spec_metadata">metadata<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#my-tolerant-spec_metadata" title="#my-tolerant-spec_metadata"></a></div>|<div className="interface-property-type">[Metadata](#metadata)</div>|<div className="interface-property-description">Free-form metadata about the resource.</div>|
+|<div className="interface-property-name anchor" id="my-tolerant-spec_config">config<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#my-tolerant-spec_config" title="#my-tolerant-spec_config"></a></div>|<div className="interface-property-type">[Config](#config)</div>|<div className="interface-property-description"></div>|
+|<div className="interface-property-name anchor" id="my-tolerant-spec_value">value<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#my-tolerant-spec_value" title="#my-tolerant-spec_value"></a></div>|<div className="interface-property-type">string \\| [ValueOneOf1](#valueoneof1)</div>|<div className="interface-property-description">A string shorthand or a structured value.</div>|
+|<div className="interface-property-name anchor" id="my-tolerant-spec_target">target<br/><span className="mandatory">MANDATORY</span><a className="hash-link" href="#my-tolerant-spec_target" title="#my-tolerant-spec_target"></a></div>|<div className="interface-property-type">[Target](#target)</div>|<div className="interface-property-description">What is executed.</div>|
+
+
+### MetadataLabels
+
+
+### Metadata
+
+Free-form metadata about the resource.
+
+**Type**: Object(<a href="#metadata_owner">owner</a>, <a href="#metadata_labels">labels</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="metadata_owner">owner<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#metadata_owner" title="#metadata_owner"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description"></div>|
+|<div className="interface-property-name anchor" id="metadata_labels">labels<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#metadata_labels" title="#metadata_labels"></a></div>|<div className="interface-property-type">[MetadataLabels](#metadatalabels)</div>|<div className="interface-property-description"></div>|
+
+
+### Config
+
+**Type**: Object(<a href="#config_timeoutseconds">timeoutSeconds</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="config_timeoutseconds">timeoutSeconds<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#config_timeoutseconds" title="#config_timeoutseconds"></a></div>|<div className="interface-property-type">integer</div>|<div className="interface-property-description"></div>|
+
+
+### ValueOneOf1
+
+**Type**: Object(<a href="#valueoneof1_amount">amount</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="valueoneof1_amount">amount<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#valueoneof1_amount" title="#valueoneof1_amount"></a></div>|<div className="interface-property-type">number</div>|<div className="interface-property-description"></div>|
+
+
+### Target
+
+What is executed.
+
+_This object has conditional requirements (JSON Schema \`if\`/\`then\`); see the source schema for the exact conditions._<br/>
+**Type**: Object(<a href="#target_type">type</a>, <a href="#target_id">id</a>)
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+|<div className="interface-property-name anchor" id="target_type">type<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#target_type" title="#target_type"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description"><hr/>**Allowed Values**: <ul><li>\`"agent"\`</li><li>\`"api"\`</li></ul></div>|
+|<div className="interface-property-name anchor" id="target_id">id<br/><span className="optional">OPTIONAL</span><a className="hash-link" href="#target_id" title="#target_id"></a></div>|<div className="interface-property-type">string</div>|<div className="interface-property-description"></div>|
+
+"
+`;

@@ -10,6 +10,7 @@
  */
 
 import path from "node:path";
+import { $RefParser } from "@apidevtools/json-schema-ref-parser";
 import fs from "fs-extra";
 import * as yaml from "js-yaml";
 import {
@@ -64,14 +65,30 @@ export interface DocumentationResult {
  * * The JSON Schema root schema object is a "Object"
  *
  */
-export function jsonSchemaToDocumentation(configData: SpecToolkitConfigurationDocument): void {
+export async function loadSpecJsonSchema(sourceFilePath: string): Promise<SpecJsonSchemaRoot> {
+  const resolvedSourceFilePath = path.resolve(process.cwd(), sourceFilePath);
+  const parsedSchema = yaml.load(fs.readFileSync(resolvedSourceFilePath).toString()) as SpecJsonSchemaRoot;
+  if (hasNonLocalReferences(parsedSchema)) {
+    const bundledSchema = (await $RefParser.bundle(resolvedSourceFilePath)) as unknown as SpecJsonSchemaRoot;
+    log.info(`${sourceFilePath} external references resolved and bundled.`);
+    return bundledSchema;
+  }
+  return parsedSchema;
+}
+
+function hasNonLocalReferences(node: unknown): boolean {
+  if (!node || typeof node !== "object") return false;
+  const value = node as Record<string, unknown>;
+  if (typeof value.$ref === "string" && !value.$ref.startsWith("#")) return true;
+  return Object.values(value).some(hasNonLocalReferences);
+}
+
+export async function jsonSchemaToDocumentation(configData: SpecToolkitConfigurationDocument): Promise<void> {
   // Iterate the files and generate the documentation
   for (const docConfig of configData.docsConfig) {
     // Read JSON File. path.resolve honors an absolute sourceFilePath as-is; a
     // relative one still resolves against the current working directory.
-    const jsonSchemaFile = fs.readFileSync(path.resolve(process.cwd(), docConfig.sourceFilePath)).toString();
-    // TODO: validate here before casting it as SpecJsonSchemaRoot, or probably even better validate outside of the for loop
-    const jsonSchemaFileParsed = yaml.load(jsonSchemaFile) as SpecJsonSchemaRoot;
+    const jsonSchemaFileParsed = await loadSpecJsonSchema(docConfig.sourceFilePath);
 
     // The Spec JSON Schema based Specification
     let jsonSchemaRoot = preprocessSpecJsonSchema(jsonSchemaFileParsed);

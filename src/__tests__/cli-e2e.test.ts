@@ -70,11 +70,7 @@ describe("CLI End-to-End Tests", () => {
       // expect this to never happen because above code should throw an error
       expect(1).toEqual(2);
     } catch (e) {
-      expect((e as spawnAsync.SpawnResult).stderr).toContain("Validation of Spec JSON Schema file");
-      expect((e as spawnAsync.SpawnResult).stderr).toContain("failed with errors");
-      expect((e as spawnAsync.SpawnResult).stderr).toContain(
-        'Invalid $ref \\"#/definitions/Meta\\", pointing to unknown definition.',
-      );
+      expect((e as spawnAsync.SpawnResult).stderr).toContain('Could not resolve $ref "#/definitions/Meta"');
     }
   });
 

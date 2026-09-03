@@ -243,3 +243,6 @@ Definitions of the specification document.
 ### Json Schema Definition
 
 
+
+### SpecJsonSchemaTypeOneOf3
+

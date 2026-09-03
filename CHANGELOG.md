@@ -10,6 +10,8 @@ For a roadmap including expected timeline, please refer to [ROADMAP.md](./ROADMA
 
 ## [unreleased]
 
+- new feature: relative file and HTTP(S) references are automatically bundled into the generated JSON Schema.
+  Bundled artifacts contain only local `$ref` values.
 - new feature: tolerant mode for arbitrary JSON Schemas. The Markdown documentation generator no longer rejects schemas that break the strong authoring conventions; instead it normalizes them and warns. Specifically:
   - inline nested objects and inline `oneOf`/`anyOf`/`allOf` branches that carry a shape are virtually hoisted into `#/definitions` (in memory; the authored file is never modified) via a new `normalizeArbitrarySchema` pass;
   - a node that has object keywords (`properties`/`patternProperties`/`additionalProperties`) but no `type` is treated as `type: object`;

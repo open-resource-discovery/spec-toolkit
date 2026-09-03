@@ -37,6 +37,7 @@
   },
   "homepage": "https://open-resource-discovery.github.io/spec-toolkit/",
   "dependencies": {
+    "@apidevtools/json-schema-ref-parser": "11.9.3",
     "ajv": "8.20.0",
     "ajv-formats": "3.0.1",
     "commander": "14.0.3",

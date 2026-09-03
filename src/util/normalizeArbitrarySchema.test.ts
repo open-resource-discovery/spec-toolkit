@@ -78,13 +78,25 @@ describe("normalizeArbitrarySchema", () => {
       type: "object",
       title: "Root",
       properties: { a: { type: "string" }, b: { type: "string" } },
-      allOf: [{ if: { properties: { a: { const: "x" } } }, then: { required: ["b"] } }],
+      allOf: [
+        {
+          if: { properties: { a: { const: "x" } } },
+          // biome-ignore lint/suspicious/noThenProperty: JSON Schema uses then as a standard keyword.
+          then: { required: ["b"] },
+        },
+      ],
       anyOf: [{ required: ["a"] }, { required: ["b"] }],
     } as unknown as SpecJsonSchemaRoot;
 
     const { schema: result } = normalizeArbitrarySchema(schema);
     // The if/then and required-only branches must NOT be hoisted into definitions.
-    expect(result.allOf).toEqual([{ if: { properties: { a: { const: "x" } } }, then: { required: ["b"] } }]);
+    expect(result.allOf).toEqual([
+      {
+        if: { properties: { a: { const: "x" } } },
+        // biome-ignore lint/suspicious/noThenProperty: JSON Schema uses then as a standard keyword.
+        then: { required: ["b"] },
+      },
+    ]);
     expect(result.anyOf).toEqual([{ required: ["a"] }, { required: ["b"] }]);
     expect(Object.keys(result.definitions!)).toHaveLength(0);
   });
@@ -99,7 +111,87 @@ describe("normalizeArbitrarySchema", () => {
 
     const { schema: result } = normalizeArbitrarySchema(schema);
     expect(result.definitions).toHaveProperty("Foo");
+    expect(result.properties!.foo).toEqual({ $ref: "#/definitions/Foo" });
     expect((result as Record<string, unknown>).$defs).toBeUndefined();
+  });
+
+  it("promotes deep local reference targets to named definitions", () => {
+    const schema = {
+      type: "object",
+      title: "Root",
+      properties: {
+        first: {
+          type: "object",
+          properties: {
+            value: { type: "string", minLength: 1 },
+            repeated: { $ref: "#/properties/first/properties/value" },
+          },
+        },
+      },
+    } as unknown as SpecJsonSchemaRoot;
+
+    const { schema: result, warnings } = normalizeArbitrarySchema(schema);
+    const promotedRef = (result.definitions!.First.properties!.repeated as SpecJsonSchemaRoot).$ref;
+
+    expect(promotedRef).toMatch(/^#\/definitions\//);
+    expect(result.definitions![promotedRef!.split("/").at(-1)!]).toMatchObject({ type: "string", minLength: 1 });
+    expect(warnings.some((warning) => warning.includes("deep reference"))).toBe(true);
+  });
+
+  it("uses definition names as missing titles", () => {
+    const schema = {
+      type: "object",
+      title: "Root",
+      definitions: { Address: { type: "object", properties: { city: { type: "string" } } } },
+      properties: { address: { $ref: "#/definitions/Address" } },
+    } as unknown as SpecJsonSchemaRoot;
+
+    const { schema: result } = normalizeArbitrarySchema(schema);
+
+    expect(result.definitions!.Address.title).toBe("Address");
+  });
+
+  it("removes association targets outside a bundled schema fragment", () => {
+    const schema = {
+      type: "object",
+      title: "Root",
+      properties: {
+        packageId: {
+          type: "string",
+          "x-association-target": ["#/definitions/Package/ordId"],
+        },
+      },
+      definitions: {},
+    } as unknown as SpecJsonSchemaRoot;
+
+    const { schema: result, warnings } = normalizeArbitrarySchema(schema);
+
+    expect(result.properties!.packageId).not.toHaveProperty("x-association-target");
+    expect(warnings.some((warning) => warning.includes("dangling x-association-target"))).toBe(true);
+  });
+
+  it("keeps association targets available in the bundled schema", () => {
+    const schema = {
+      type: "object",
+      title: "Root",
+      properties: {
+        packageId: {
+          type: "string",
+          "x-association-target": ["#/definitions/Package/ordId"],
+        },
+      },
+      definitions: {
+        Package: {
+          type: "object",
+          title: "Package",
+          properties: { ordId: { type: "string" } },
+        },
+      },
+    } as unknown as SpecJsonSchemaRoot;
+
+    const { schema: result } = normalizeArbitrarySchema(schema);
+
+    expect(result.properties!.packageId["x-association-target"]).toEqual(["#/definitions/Package/ordId"]);
   });
 
   it("does not mutate the input schema", () => {
