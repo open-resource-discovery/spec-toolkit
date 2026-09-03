@@ -2,38 +2,42 @@
 
 ## Code of Conduct
 
-All members of the project community must abide by the [SAP Open Source Code of Conduct](https://github.com/SAP/.github/blob/main/CODE_OF_CONDUCT.md).
-Only by respecting each other we can develop a productive, collaborative community.
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting [a project maintainer](.reuse/dep5).
+All members of the project community must follow the [SAP Open Source Code of Conduct](https://github.com/SAP/.github/blob/main/CODE_OF_CONDUCT.md).
+Respectful collaboration helps us maintain a productive community.
+Report abusive, harassing, or otherwise unacceptable behavior as described in the Code of Conduct.
 
 ## Engaging in Our Project
 
 We use GitHub to manage reviews of pull requests.
 
-- If you are a new contributor, see: [Steps to Contribute](#steps-to-contribute)
+- If you are a new contributor, read the [steps to contribute](#steps-to-contribute).
 
-- Before implementing your change, create an issue that describes the problem you would like to solve or the code that should be enhanced. Please note that you are willing to work on that issue.
+- Before implementing a change, create an issue that describes the problem or proposed enhancement.
+  Mention that you are willing to work on it.
 
-- The team will review the issue and decide whether it should be implemented as a pull request. In that case, they will assign the issue to you. If the team decides against picking up the issue, the team will post a comment with an explanation.
+- The team will review the issue and decide whether to accept a pull request.
+  If accepted, a maintainer will assign the issue to you.
+  If not, the team will explain the decision in a comment.
 
 ## Steps to Contribute
 
-Should you wish to work on an issue, please claim it first by commenting on the GitHub issue that you want to work on. This is to prevent duplicated efforts from other contributors on the same issue.
+Before working on an issue, leave a comment to claim it and avoid duplicating another contributor's work.
 
-If you have questions about one of the issues, please comment on them, and one of the maintainers will clarify.
+If you have questions about an issue, ask them in a comment so a maintainer can clarify.
 
 ## Contributing Code or Documentation
 
-You are welcome to contribute code in order to fix a bug or to implement a new feature that is logged as an issue.
+You are welcome to contribute code or documentation for an accepted issue.
 
-The following rule governs code contributions:
+The following rules apply to contributions:
 
-- Contributions must be licensed under the [Apache 2.0 License](./LICENSE).
-- Due to legal reasons, contributors will be asked to accept a Developer Certificate of Origin (DCO) when they create the first pull request to this project. This happens in an automated fashion during the submission process. SAP uses [the standard DCO text of the Linux Foundation](https://developercertificate.org/).
-- Contributions must follow our [guidelines on AI-generated code](https://github.com/SAP/.github/blob/main/CONTRIBUTING_USING_GENAI.md) in case you are using such tools.
+- Contributions must be licensed under the [Apache License 2.0](./LICENSE).
+- Contributors must accept the [Developer Certificate of Origin](https://developercertificate.org/) (DCO) when they create their first pull request.
+  This happens automatically during submission.
+- Contributions created with AI tools must follow the [guidelines for AI-generated code](https://github.com/SAP/.github/blob/main/CONTRIBUTING_USING_GENAI.md).
 
 ## Issues and Planning
 
 - We use GitHub issues to track bugs and enhancement requests.
 
-- Please provide as much context as possible when you open an issue. The information you provide must be comprehensive enough to reproduce that issue for the assignee.
+- Provide enough context for a maintainer to understand and reproduce the issue.
