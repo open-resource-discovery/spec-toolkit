@@ -28,7 +28,7 @@
     "@tsconfig/docusaurus": "2.0.9",
     "@ui5/webcomponents-base": "2.23.0",
     "@ui5/webcomponents-icons": "2.23.0",
-    "@ui5/webcomponents-react": "2.23.0",
+    "@ui5/webcomponents-react": "2.26.0",
     "classnames": "2.5.1",
     "clsx": "2.1.1",
     "prism-react-renderer": "2.4.1",
