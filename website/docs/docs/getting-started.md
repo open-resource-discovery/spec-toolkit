@@ -6,17 +6,17 @@ sidebar_collapsed: false
 
 # Getting Started
 
-While writing a JSON Schema specification the wish may arise to be able to make some separation of concerns, grouping by definitions categories, or reusing specific definitions.
-Some of the specification definitions may be governed by dedicated authors which have the business domain specific knowledge.
+While writing a JSON Schema specification, you may want to separate concerns, group definitions by category, or reuse definitions.
+Different authors may also maintain definitions for the domains they know best.
 
-This is the reason why spec-toolkit supports two types of files:
+Spec Toolkit therefore supports two types of source file:
 
-- JSON Schema specifications
-- _extensions_ for a JSON Schema specification that should be merged into JSON Schema specification. JSON Schema specifications _Extensions_ are _optional_ and intended to support advanced spec-toolkit use cases.
+- JSON Schema specifications; and
+- optional JSON Schema _extensions_ that are merged into a main specification for advanced use cases.
 
-Such a specification writing process will be described below:
+The following steps show a typical workflow.
 
-1. Start by writing a JSON Schema yaml file defining your interface. Example:
+1. Create a YAML file that defines your interface as JSON Schema.
 
    ```yaml
    $schema: "https://open-resource-discovery.github.io/spec-toolkit/spec-v1/spec.schema.json#"
@@ -31,12 +31,12 @@ Such a specification writing process will be described below:
        format: uri-reference
        description: |
          Link to the JSON Schema for this Bookstore document.
-         Adding this helps with automatic validation and code intelligence in some editors / IDEs.
+         This enables automatic validation and code intelligence in supported editors.
      $id:
        type: string
        format: uri-reference
        description: |
-         Optional URI for this document, that can acts as an ID or as location to retrieve the document.
+         Optional URI that identifies this document or locates it.
      title:
        type: string
        description: Descriptive title for the Bookstore.
@@ -44,7 +44,7 @@ Such a specification writing process will be described below:
        type: array
        description: Book items for the Bookstore.
        items:
-        $ref: "#/definitions/Book"
+         $ref: "#/definitions/Book"
        minItems: 1
    required:
      - books
@@ -56,7 +56,7 @@ Such a specification writing process will be described below:
        properties:
          author:
            type: string
-           description: The book author full name.
+           description: The book author's full name.
          genre:
            $ref: "#/definitions/Genre"
      Genre:
@@ -70,28 +70,29 @@ Such a specification writing process will be described below:
              - "comedy"
              - "action"
            description: |-
-             The book item genre type.
-             It's value is been used as a _discriminator_ to distinguish the matching book genre.
+             The book's genre.
+             Its value identifies the selected genre.
        required:
          - type
    ```
 
-1. _Optional (can be omitted for a simple use case)_ write a JSON Schema _extension_ yaml file that should be merged into the _main_ JSON Schema file. Example:
+1. Optionally, create a YAML extension file to merge additional definitions into the main JSON Schema.
 
    ```yaml
    $schema: "http://json-schema.org/draft-07/schema#"
    title: Author Document
-   description: This is the interface description of Author.
+   description: Describes an author.
    type: object
    definitions:
      Author:
        type: object
-       description: The definition defines how an author object shall be constructed.
+       description: Describes the structure of an author.
        properties:
          name:
            type: string
          birthDate:
-           type: date
+           type: string
+           format: date
          bankAccount:
            type: string
          contract:
@@ -105,11 +106,11 @@ Such a specification writing process will be described below:
          - Book
    ```
 
-1. Define a spec-toolkit configuration file so that the CLI tool can identify how to generate the documentation. Example:
+1. Create a Spec Toolkit configuration file that describes what to generate.
 
    ```jsonc
    {
-    "$schema": "https://open-resource-discovery.github.io/spec-toolkit/spec-v1/spec-toolkit-config.schema.json#",
+     "$schema": "https://open-resource-discovery.github.io/spec-toolkit/spec-v1/spec-toolkit-config.schema.json#",
      "outputPath": "src/generated/spec-v1",
      "docsConfig": [
        {
@@ -118,19 +119,19 @@ Such a specification writing process will be described below:
          "sourceFilePath": "./spec/v1/bookstore.schema.yaml",
          "mdFrontmatter": {
            "title": "Bookstore",
-           "description": "Describes the technical interface / schema for the Bookstore."
+           "description": "Describes the schema for the Bookstore."
          }
        },
        // highlight-start
-       // Optional part (can be omitted for a simple use case):
-       // specify how to merge the _extension_ JSON Schema into the _main_ JSON Schema and generate the documentation
+       // Optional for simple use cases:
+       // merge the extension into the main schema and generate its documentation
        {
          "type": "specExtension",
          "id": "spec-author",
          "sourceFilePath": "./spec/v1/author.schema.yaml",
          "mdFrontmatter": {
            "title": "Author",
-           "description": "Describes the technical interface / schema for the Author."
+           "description": "Describes the schema for the Author."
          }
        }
        // highlight-end
@@ -138,15 +139,15 @@ Such a specification writing process will be described below:
    }
    ```
 
-1. Execute the spec-toolkit CLI tool (check [prerequisite](https://github.com/open-resource-discovery/spec-toolkit/docs/spec-toolkit-config#prerequisite) first)
+1. Run Spec Toolkit after completing the [prerequisite](./spec-toolkit-config.md#prerequisite).
 
    ```bash
    npx @open-resource-discovery/spec-toolkit -c ./spec-toolkit.config.json
    ```
 
-1. Inspect the spec-toolkit CLI tool generated output and use it for further processing.
-   The tool generates 3 things:
+1. Inspect the generated output and use it in your documentation or build process.
+   Spec Toolkit generates three kinds of artifacts:
 
-   - markdown documentation files for each of the provided main spec and spec extension files
-   - JSON Schema files in `.json` format
-   - Typescript types interfaces
+   - Markdown documentation for each main specification and extension;
+   - JSON Schema files in `.json` format; and
+   - TypeScript interfaces.

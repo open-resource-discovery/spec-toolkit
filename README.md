@@ -1,29 +1,35 @@
 [![REUSE status](https://api.reuse.software/badge/github.com/open-resource-discovery/spec-toolkit)](https://api.reuse.software/info/github.com/open-resource-discovery/spec-toolkit)
 
-# Json Schema Specification Toolkit
+# JSON Schema Specification Toolkit
 
 ## About this project
 
-CLI tool to create JSON Schema specifications and automatically generate documentation (in markdown) out of the JSON Schema specifications.
+Spec Toolkit is a command-line tool for creating JSON Schema specifications and generating Markdown documentation from them.
 
-🌎 DOCUMENTATION: <https://open-resource-discovery.github.io/spec-toolkit/>
+Documentation: <https://open-resource-discovery.github.io/spec-toolkit/>
 
 ## Requirements and Setup
 
-🌎 Getting Started: <https://open-resource-discovery.github.io/spec-toolkit/docs/getting-started>
+Getting started: <https://open-resource-discovery.github.io/spec-toolkit/docs/getting-started>
 
 ## Support, Feedback, Contributing
 
-This project is open to feature requests/suggestions, bug reports etc. via [GitHub issues](https://github.com/open-resource-discovery/spec-toolkit/issues). Contribution and feedback are encouraged and always welcome. For more information about how to contribute, the project structure, as well as additional contribution information, see our [Contribution Guidelines](CONTRIBUTING.md).
+Use [GitHub issues](https://github.com/open-resource-discovery/spec-toolkit/issues) for feature requests, suggestions, and bug reports.
+Contributions and feedback are welcome.
+See the [contribution guidelines](CONTRIBUTING.md) for the project structure and contribution process.
 
-## Security / Disclosure
+## Security
 
-If you find any bug that may be a security problem, please follow our instructions at [in our security policy](https://github.com/open-resource-discovery/spec-toolkit/security/policy) on how to report it. Please do not create GitHub issues for security-related doubts or problems.
+Follow the [security policy](https://github.com/open-resource-discovery/spec-toolkit/security/policy) to report a potential vulnerability.
+Do not disclose security issues in public GitHub issues.
 
 ## Code of Conduct
 
-We as members, contributors, and leaders pledge to make participation in our community a harassment-free experience for everyone. By participating in this project, you agree to abide by its [Code of Conduct](https://github.com/SAP/.github/blob/main/CODE_OF_CONDUCT.md) at all times.
+Members, contributors, and leaders pledge to make participation in this community a harassment-free experience for everyone.
+By participating, you agree to follow the project's [Code of Conduct](https://github.com/SAP/.github/blob/main/CODE_OF_CONDUCT.md).
 
 ## Licensing
 
-Copyright 2025 SAP SE or an SAP affiliate company and spec-toolkit contributors. Please see our [LICENSE](LICENSE) for copyright and license information. Detailed information including third-party components and their licensing/copyright information is available [via the REUSE tool](https://api.reuse.software/info/github.com/open-resource-discovery/spec-toolkit).
+Copyright 2025 SAP SE or an SAP affiliate company and Spec Toolkit contributors.
+See [LICENSE](LICENSE) for copyright and license information.
+Third-party component and license details are available through the [REUSE tool](https://api.reuse.software/info/github.com/open-resource-discovery/spec-toolkit).

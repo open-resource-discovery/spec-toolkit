@@ -1,4 +1,20 @@
 :root {
+  --ifm-color-primary: #172554;
+  --ifm-color-primary-dark: #141f49;
+  --ifm-color-primary-darker: #111b41;
+  --ifm-color-primary-darkest: #0b112b;
+  --ifm-color-primary-light: #21336c;
+  --ifm-color-primary-lighter: #294080;
+  --ifm-color-primary-lightest: #36529d;
+  --ifm-link-color: #172554;
+  --ifm-background-color: #fff;
+  --ifm-card-background-color: #fff;
+  --ifm-color-emphasis-100: #f5f3f1;
+  --ifm-color-emphasis-200: #e9e5e2;
+  --ifm-color-emphasis-300: #d8d2cd;
+  --ifm-navbar-background-color: #faf9f5;
+  --ifm-footer-background-color: #f4f1ee;
+  --ifm-font-family-base: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --ifm-table-cell-padding: 0.5rem;
   --ifm-hr-margin-vertical: 0.5rem;
   --ifm-list-margin: 0.5rem;
@@ -13,6 +29,21 @@
   --ifm-h2-font-size: 1.8rem;
   --ifm-h4-font-size: 1.2rem;
   --ifm-h6-font-size: 1rem;
+  --toolkit-page-background: #faf9f5;
+  --toolkit-heading: #172554;
+  --toolkit-text: #0b1120;
+  --toolkit-body-text: #475569;
+  --toolkit-muted-text: #64748b;
+  --toolkit-accent: #c85f43;
+  --toolkit-accent-light: #f2a68f;
+  --toolkit-accent-surface: #fff7f3;
+  --toolkit-accent-border: #e3cbc2;
+  --toolkit-border-color: #e2ddd9;
+  --toolkit-border-strong: #d3cbc5;
+  --toolkit-code-background: #172554;
+  --toolkit-code-border: #253968;
+  --toolkit-code-text: #dce5f5;
+  --toolkit-section-background: #f4ede8;
 }
 
 @media (min-width: 997px) {
@@ -23,13 +54,55 @@
 
 .navbar__brand,
 .navbar__logo {
-  margin-right: 0;
+  margin-right: 0.55rem;
 }
 
 .navbar__logo img {
-  margin-left: -4px;
-  margin-top: -8px;
-  height: 48px;
+  height: 30px;
+}
+
+.navbar {
+  border-bottom: 1px solid var(--toolkit-border-color);
+  box-shadow: none;
+}
+
+.navbar__brand {
+  color: var(--toolkit-heading);
+  font-weight: 750;
+}
+
+.navbar__link:hover,
+.navbar__link--active {
+  color: var(--toolkit-heading);
+}
+
+.navbar__item.header-start-pill {
+  padding: 0.4rem 0.75rem;
+  border-radius: 8px;
+  background: var(--toolkit-heading);
+  color: #fff;
+}
+
+.navbar__item.header-start-pill:hover {
+  background: #0b1120;
+}
+
+.header-github-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.header-github-link::before {
+  width: 19px;
+  height: 19px;
+  background: currentcolor;
+  content: "";
+  mask: url("../img/icons/github.svg") center / contain no-repeat;
+}
+
+.header-github-link svg[class*="iconExternalLink"] {
+  display: none;
 }
 
 .navbar__search {
@@ -194,12 +267,17 @@ iframe {
 }
 
 .footer--dark {
-  --ifm-footer-background-color: #212121;
-  border-top: 6px solid #949494;
-  padding: 16px;
+  --ifm-footer-background-color: #f4f1ee;
+  --ifm-footer-color: var(--toolkit-body-text);
+  --ifm-footer-link-color: var(--toolkit-body-text);
+  --ifm-footer-link-hover-color: var(--toolkit-accent);
+  --ifm-footer-title-color: var(--toolkit-heading);
+  padding: 2.5rem max(1.5rem, calc((100vw - 1132px) / 2));
+  border-top: 1px solid var(--toolkit-border-color);
+  background: #f4f1ee;
 }
 .footer--dark .footer__copyright {
-  color: #8695a1;
+  color: var(--toolkit-muted-text);
   font-size: 0.85em;
 }
 
@@ -227,4 +305,26 @@ iframe {
   scroll-margin-top: 80px;
   min-width: 120px;
   max-width: 120px;
+}
+
+.theme-doc-markdown.markdown h1 {
+  color: var(--toolkit-heading);
+  letter-spacing: -0.03em;
+}
+
+.theme-doc-markdown.markdown h2,
+.theme-doc-markdown.markdown h3 {
+  color: var(--toolkit-heading);
+}
+
+.menu__link--active:not(.menu__link--sublist),
+.table-of-contents__link--active {
+  color: var(--toolkit-accent);
+}
+
+@media (max-width: 996px) {
+  .navbar__items--right > .header-start-pill,
+  .navbar__items--right > .header-github-link {
+    display: none;
+  }
 }

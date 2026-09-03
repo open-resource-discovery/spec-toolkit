@@ -3,60 +3,154 @@ title: Best Practices
 sidebar_position: 20
 ---
 
-## Best Practices and Paradigms for Writing Specs
+# Best Practices
 
-> TODO: This are just random thoughts right now, needs proper writing up.
+These recommendations combine general schema design principles with practical ways to use Spec Toolkit.
+If your specification belongs to an established ecosystem, follow that ecosystem's conventions first.
 
-### Paradigms
+## Keep one source of truth
 
-#### Decouple message format from protocol
+A specification usually has several representations: its schema, human-readable documentation, examples, and generated types.
+Maintaining the same information manually in several places causes those representations to drift apart.
 
-#### Validation is Key
+Choose one authoritative source and derive the others from it.
+Spec Toolkit supports a schema-first workflow in which a source schema generates Markdown documentation, distributable JSON Schema files, and TypeScript types.
+If your project is model-first, generate the source schema from the model before running Spec Toolkit.
 
-#### Lots of Examples
+Keep source schemas and `spec-toolkit.config.json` under version control.
+Treat files in the configured `outputPath` as generated artifacts, and document the command used to regenerate them.
+Use plugins when you need additional generated formats instead of maintaining parallel representations by hand.
 
-Provide many correct examples.
-Make sure to validate the examples against the spec so they never get inconsistent.
-Many developers start by copy'n'pasting examples and from there adjusting them until they achieve their goal.
-Keep this in mind when designing the examples that they will be effectively blueprints for others.
+## Validate early and keep examples executable
 
-#### Refer to and build on existing established Specs
+Validate documents before a system stores, transforms, or acts on them.
+Run validation in continuous integration and, where possible, provide feedback in the editor.
+JSON Schema validates document structure, but some rules require additional checks, such as relationships between fields or naming conventions.
 
-Where possible, extend and expand on existing well-established specifications.
+Provide both complete document examples and focused property examples.
+Set `examplesFolderPath` for a specification to include complete JSON or JSONC examples in the generated documentation.
+Spec Toolkit validates these files against the generated schema, so invalid examples fail generation instead of becoming misleading documentation.
 
-#### If in doubt, leave it out
+Use the generated JSON Schema URL in editors that support schema-based validation and completion.
+For YAML documents, configure an editor extension that can apply JSON Schema.
 
-If the need for a feature or how it's to be specified is unclear, better leave it out and add it later.
+## Prefer established conventions
 
-#### Do not Repeat Yourself (DRY)
+Reuse standard formats and ecosystem conventions before defining a custom representation.
+Standard representations are easier to understand and have existing parsers, validators, and editor support.
 
-While this principle is likely overstretched for programming projects, for specifications it really hits true.
-Almost nothing hurts a specification like inconsistencies.
+Spec Toolkit currently extends JSON Schema draft-07.
+Use supported draft-07 keywords and `$ref` definitions rather than relying on keywords from newer dialects.
+Check the [Spec Toolkit schema reference](./docs/spec.md) when choosing keywords.
 
-Therefore avoid duplicate information where possible. The spec-toolkit is built to help you with this.
+Model only cases that exist today.
+A published property or behavior is a promise to consumers, even when no implementation supports it yet.
+If future behavior must be documented, mark it with `x-feature-status: proposed` instead of presenting it as available.
 
-#### Don't get in the way of Business
+## Put structured meaning in the schema
 
-In the end, we're solving real-world problems and business use-cases.
-Technical perfection will not help if those are not met.
+Give every important object and property a clear `title` or `description`.
+Explain its meaning, when it should be used, and any units or constraints that its type does not make obvious.
+Spec Toolkit carries these annotations into generated documentation and editor hints.
 
-### Compatibility and Lifecycle
+Keep longer explanations in separate Markdown files.
+Use `sourceIntroFilePath` and `sourceOutroFilePath` to place that prose before or after generated reference content without duplicating the schema itself.
 
-#### Avoid incompatible Changes
+Use `x-property-order` when the most useful documentation order differs from the source order.
+Use `x-hide` sparingly for schema details that consumers need in the exported JSON Schema but that would distract in generated documentation.
 
-Think forward how to design the spec so you can add features later without introducing breaking changes.
-It's important to understand that what constitutes a breaking change may differ from the provider perspective and the consumer perspective.
+A plain `enum` cannot describe each value individually.
+When values need separate explanations, use branches with `const` and `description`.
 
-#### Robustness principle
+## Distinguish required, recommended, and defaulted values
 
-> "be conservative in what you send, be liberal in what you accept".
+Keep the required set small when omission can have a safe, predictable meaning.
+Use `required` for properties without which a document is invalid.
+Use `x-recommended` for important properties that should remain optional.
 
-The principle is also known as Postel's law, after Jon Postel, who used the wording in an early specification of TCP.
+Use the JSON Schema `default` keyword for a static default, but do not assume that a validator applies it automatically.
+Validation treats `default` as an annotation unless the consuming tool implements defaulting.
 
-Important to state what consumers have to accept as compatible, otherwise it is difficult to evolve the spec compatibly.
+Distinguish omitted values from `null`, empty collections, empty strings, zero, and `false`.
+Do not rely on a difference that the contract does not explain.
 
-### Hyrims Law
+## Define how unknown fields behave
 
-See [hyrumslaw.com](https://www.hyrumslaw.com/)
+Decide whether consumers reject, preserve, or discard properties that the schema does not describe.
+Consumers cannot infer this behavior from an open schema.
 
-Therefore it is important to be very precise what the consumer can rely on and what they can't.
+For objects with named, contract-defined properties, `additionalProperties: false` catches spelling mistakes and prevents accidental fields.
+Decide this policy early because closing an object later is a breaking change.
+
+An intentional map is different from a typed object.
+A map has user-defined keys, so keep it open and constrain its values with `additionalProperties` where possible.
+Do not use a map merely to postpone defining known fields.
+
+## Use extensions deliberately
+
+Keep extension properties separate from standard properties to prevent future name collisions.
+Spec Toolkit plugins use names such as `x-<pluginName>-<propertyName>` for plugin-specific annotations.
+Use the same convention consistently throughout a specification.
+
+By default, Spec Toolkit removes its own annotations and plugin annotations from the exported JSON Schema.
+Use `preservedCoreSpecificXProperties` or a plugin's `preservedPluginSpecificXProperties` only when downstream consumers need selected annotations.
+This keeps the published schema portable across standard JSON Schema tooling.
+
+For specifications maintained by separate authors, use a `specExtension` entry instead of copying definitions into multiple source files.
+Declare merge locations with `x-extension-points`, target them with `x-extension-targets`, and identify the main specification with `targetDocumentId`.
+Use this mechanism only when separate ownership justifies the additional structure.
+
+## Design for compatible evolution
+
+A change is backward compatible when documents that were valid before remain valid and keep the same meaning.
+Typical compatible changes include adding optional properties and improving descriptions.
+
+Typical breaking changes include:
+
+- adding a required property;
+- removing or renaming a property;
+- changing a property's type or meaning;
+- tightening a validation constraint;
+- closing an object that previously accepted unknown properties; and
+- adding a value to an enumeration that consumers treat as closed.
+
+Prefer additive changes and introduce a new major version for incompatible changes.
+Remember that documents often remain in source control or storage long after they were created.
+
+Use `x-introduced-in-version` and `x-deprecated-in-version` to expose lifecycle information in generated documentation.
+Add `x-deprecation-text` to explain why an element is deprecated and what should replace it.
+If consumers also need these annotations in the exported schema, include them in `preservedCoreSpecificXProperties`.
+
+Choose shapes that can grow.
+For example, model a relationship as an object when it may later need metadata, rather than as a bare string that cannot be extended compatibly.
+Avoid multiple ways to express the same fact because every representation becomes part of the compatibility surface.
+
+## Make unions unambiguous
+
+Avoid polymorphic values when one clear shape is sufficient.
+When several object shapes are necessary, give every variant a required discriminator such as `type` or `kind`.
+Assign a distinct `const` value to each variant and make the branches mutually exclusive.
+This makes the intended variant clear to readers, validators, and generated TypeScript types.
+
+## Constrain what you can guarantee
+
+Use constraints such as `minLength`, `maxLength`, `pattern`, `minimum`, and `required` when they express real guarantees.
+Do not invent constraints that implementations cannot uphold.
+Although relaxing a constraint usually widens the set of valid documents, consumers may still depend on the old limit, so document compatibility expectations clearly.
+
+Use standard `format` values where they improve documentation and tooling.
+Check whether your validator asserts formats, because JSON Schema implementations may treat them as annotations.
+Represent integers or decimals that can exceed the precision of common JSON number implementations as strings.
+
+Choose names that map cleanly to generated code.
+Names beginning with a letter and containing only letters, digits, and underscores work across most target languages.
+Apply casing and terminology consistently throughout related schemas.
+Generate the TypeScript output early to catch names or schema structures that produce awkward code.
+
+## Treat robustness as an explicit contract
+
+Do not interpret "be liberal in what you accept" as permission to ignore schema violations.
+Be liberal only where the contract explicitly allows extension or variation, and remain strict about its normative constraints.
+
+State what consumers may rely on and what may change.
+As [Hyrum's Law](https://www.hyrumslaw.com/) warns, consumers may otherwise depend on any observable behavior, including behavior the specification never intended to guarantee.
