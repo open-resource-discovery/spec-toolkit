@@ -52,7 +52,7 @@
     "tslog": "5.1.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.9",
+    "@biomejs/biome": "2.5.12",
     "@expo/spawn-async": "1.8.0",
     "@swc/core": "1.16.1",
     "@swc/jest": "0.2.39",
