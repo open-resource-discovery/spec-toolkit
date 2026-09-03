@@ -5,8 +5,8 @@ import { themes as prismThemes } from "prism-react-renderer";
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "Spec-Toolkit",
-  tagline: "Helping you to create JSON Schema based interface contracts and specifications.",
+  title: "Spec Toolkit",
+  tagline: "Create JSON Schema based interface contracts and specifications.",
   url: "https://open-resource-discovery.github.io",
   baseUrl: process.env.BASE_URL || "/spec-toolkit/",
   trailingSlash: false,
@@ -99,7 +99,7 @@ const config = {
         theme: { light: "neutral", dark: "forest" },
       },
       navbar: {
-        title: "",
+        title: "Spec Toolkit",
         logo: {
           alt: "Spec-toolkit Site Logo",
           src: "img/logo.svg",
@@ -123,9 +123,16 @@ const config = {
             to: "/faq",
           },
           {
+            to: "/docs/getting-started",
+            label: "Get started",
+            position: "right",
+            className: "header-start-pill",
+          },
+          {
             href: "https://github.com/open-resource-discovery/spec-toolkit",
             label: "GitHub",
             position: "right",
+            className: "header-github-link",
           },
         ],
       },
@@ -133,11 +140,22 @@ const config = {
         style: "dark",
         links: [
           {
-            label: "GitHub Repository",
-            to: "https://github.com/open-resource-discovery/spec-toolkit",
+            title: "Toolkit",
+            items: [
+              { label: "Documentation", to: "/docs" },
+              { label: "Best Practices", to: "/best-practices" },
+              { label: "FAQ", to: "/faq" },
+            ],
+          },
+          {
+            title: "Source",
+            items: [
+              { label: "GitHub repository", href: "https://github.com/open-resource-discovery/spec-toolkit" },
+              { label: "Report an issue", href: "https://github.com/open-resource-discovery/spec-toolkit/issues" },
+            ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} SAP SE. Made available under Apache License 2.0.\n\n This site is hosted by GitHub Pages. Please see the GitHub Privacy Statement for any information how GitHub processes your personal data.`,
+        copyright: `Copyright © ${new Date().getFullYear()} SAP SE. Made available under Apache License 2.0.`,
       },
     }),
 };
