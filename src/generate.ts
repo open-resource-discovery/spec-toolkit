@@ -43,7 +43,7 @@ export async function generate(
   log.info("--------------------------------------------------------------------------");
   log.info("GENERATE INTERFACE DOCUMENTATION (JSON-SCHEMA -> MD)");
   log.info("--------------------------------------------------------------------------");
-  jsonSchemaToDocumentation(configData);
+  await jsonSchemaToDocumentation(configData);
 
   log.info(" ");
   log.info("--------------------------------------------------------------------------");

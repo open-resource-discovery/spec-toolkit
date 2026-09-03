@@ -10,8 +10,9 @@ For a roadmap including expected timeline, please refer to [ROADMAP.md](./ROADMA
 
 ## [unreleased]
 
-
 - new feature: support object-level `anyOf` with `required`-only entries, expressing an "at least one of these properties must be present" constraint
+- new feature: relative file and HTTP(S) references are automatically bundled into the generated JSON Schema.
+  Bundled artifacts contain only local `$ref` values.
 
 ## [0.8.2]
 

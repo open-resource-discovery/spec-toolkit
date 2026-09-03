@@ -140,6 +140,9 @@ The following steps show a typical workflow.
    }
    ```
 
+   Relative file references and HTTP(S) references are bundled automatically.
+   The generated schema contains only local `$ref` values.
+
 1. Run Spec Toolkit after completing the [prerequisite](./spec-toolkit-config.md#prerequisite).
 
    ```bash
