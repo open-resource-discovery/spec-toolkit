@@ -1162,11 +1162,13 @@ exports[`CLI End-to-End Tests test 1: successful run with valid configuration an
  * This interface was referenced by \`Definitions\`'s JSON-Schema definition
  * via the \`patternProperty\` "^(?![@]|__|\\.|::).+$".
  */
-export type DefinitionEntry = ContextDefinition | EntityDefinition | ServiceDefinition | TypeDefinition;
+export type DefinitionEntry = DefinitionEntry1 & DefinitionEntry2;
+export type DefinitionEntry1 = ContextDefinition | EntityDefinition | ServiceDefinition | TypeDefinition;
 /**
  * In CSN it is possible to define Custom Types.
  */
-export type TypeDefinition = BooleanTypeDefinition | StringTypeDefinition;
+export type TypeDefinition = TypeDefinition1 & TypeDefinition2;
+export type TypeDefinition1 = BooleanTypeDefinition | StringTypeDefinition;
 
 /**
  * This is the interface description of CSN Interop Effective v1.
@@ -1282,7 +1284,7 @@ export interface FeaturesMetadata {
  *
  */
 export interface Definitions {
-  [k: string]: unknown | undefined;
+  [k: PrivatePropertyKey|AnnotationPropertyKey]: unknown;
 }
 /**
  * A context corresponds to a CAP CSN Namespace.
@@ -1307,7 +1309,7 @@ export interface ContextDefinition {
    * If a human readable title is needed, use the [@EndUserText.label](./extensions/end-user-text#endusertextlabel) annotation.
    */
   doc?: string;
-  [k: string]: unknown | undefined;
+  [k: PrivatePropertyKey|AnnotationPropertyKey]: unknown;
 }
 /**
  * Entity definition refers to the structured description of an object or concept.
@@ -1341,7 +1343,7 @@ export interface EntityDefinition {
     | boolean
     | unknown[]
     | {
-        [k: string]: unknown | undefined;
+        [k: PrivatePropertyKey|AnnotationPropertyKey]: unknown;
       };
   /**
    * Proper syntax element in ABAP CDS producing Custom CDS Entities
@@ -1352,7 +1354,7 @@ export interface EntityDefinition {
     | boolean
     | unknown[]
     | {
-        [k: string]: unknown | undefined;
+        [k: PrivatePropertyKey|AnnotationPropertyKey]: unknown;
       };
   /**
    * Proper syntax element in ABAP CDS producing CDS Table Functions.
@@ -1363,7 +1365,7 @@ export interface EntityDefinition {
     | boolean
     | unknown[]
     | {
-        [k: string]: unknown | undefined;
+        [k: PrivatePropertyKey|AnnotationPropertyKey]: unknown;
       };
   /**
    * Proper syntax element in ABAP CDS producing CDS  External Entities
@@ -1374,7 +1376,7 @@ export interface EntityDefinition {
     | boolean
     | unknown[]
     | {
-        [k: string]: unknown | undefined;
+        [k: string]: unknown;
       };
   /**
    * ABAP CDS Projection have the additional information of a provider contract
@@ -1385,7 +1387,7 @@ export interface EntityDefinition {
     | boolean
     | unknown[]
     | {
-        [k: string]: unknown | undefined;
+        [k: string]: unknown;
       };
   /**
    * ABAP CDS Root View Entities define a RAP Business Object.
@@ -1396,7 +1398,7 @@ export interface EntityDefinition {
     | boolean
     | unknown[]
     | {
-        [k: string]: unknown | undefined;
+        [k: string]: unknown;
       };
   /**
    * Special kind of analytical ABAP CDS Projection view.
@@ -1407,7 +1409,7 @@ export interface EntityDefinition {
     | boolean
     | unknown[]
     | {
-        [k: string]: unknown | undefined;
+        [k: string]: unknown;
       };
   /**
    * In the selection element list of a CDS view.
@@ -1418,7 +1420,7 @@ export interface EntityDefinition {
     | boolean
     | unknown[]
     | {
-        [k: string]: unknown | undefined;
+        [k: string]: unknown;
       };
   /**
    * When redirecting associations in ABAP CDS Projections with the additional keywords "to composition child", this indicates a Parent-Child-Composition an requires the redirection target to have a matching "to parent" association redefinition.
@@ -1429,7 +1431,7 @@ export interface EntityDefinition {
     | boolean
     | unknown[]
     | {
-        [k: string]: unknown | undefined;
+        [k: string]: unknown;
       };
   /**
    * When redirecting associations in ABAP CDS Projections with the additional keywords "to composition child", this indicates a Parent-Child-Composition an requires the redirection target to have a matching "to parent" association redefinition.
@@ -1440,7 +1442,7 @@ export interface EntityDefinition {
     | boolean
     | unknown[]
     | {
-        [k: string]: unknown | undefined;
+        [k: string]: unknown;
       };
   /**
    * Contains the SQL on condition as string
@@ -1451,9 +1453,9 @@ export interface EntityDefinition {
     | boolean
     | unknown[]
     | {
-        [k: string]: unknown | undefined;
+        [k: string]: unknown;
       };
-  [k: string]: unknown | undefined;
+  [k: string]: unknown;
 }
 /**
  * Dictionary of Element where the key is the name of the element and the value its definition.
@@ -1468,7 +1470,7 @@ export interface EntityDefinition {
  * - Not contain the substring \`::\` more than once.
  */
 export interface ElementDefinitions {
-  [k: string]: unknown | undefined;
+  [k: string]: unknown;
 }
 /**
  * Definition of an Element, as put into [Element Definitions](#element-definitions).
@@ -1482,7 +1484,7 @@ export interface ElementDefinitions {
  */
 export interface ElementEntry {
   type?: string;
-  [k: string]: unknown | undefined;
+  [k: string]: unknown;
 }
 /**
  * A CDS Service indicates that [Entities](#entity-definition) are exposed to outside consumers via an API.
@@ -1510,7 +1512,7 @@ export interface ServiceDefinition {
    * If a human readable title is needed, use the [@EndUserText.label](./extensions/end-user-text#endusertextlabel) annotation.
    */
   doc?: string;
-  [k: string]: unknown | undefined;
+  [k: string]: unknown;
 }
 /**
  * A type definition of type \`cds.Boolean\`.
@@ -1524,7 +1526,7 @@ export interface BooleanTypeDefinition {
    * The modeling artefact is a \`cds.Boolean\` type.
    */
   type: BooleanCdsType;
-  [k: string]: unknown | undefined;
+  [k: string]: unknown;
 }
 /**
  * A type definition of type \`cds.String\`.
@@ -1552,14 +1554,36 @@ export interface StringTypeDefinition {
    * It is not part of the standard CDS types, but can be used in custom definitions.
    */
   someNewProperty?: string;
-  [k: string]: unknown | undefined;
+  [k: string]: unknown;
+}
+export interface TypeDefinition2 {
+  /**
+   * The kind property is used when defining derived types.
+   * In this case \`Kind = "type"\` MUST be provided.
+   */
+  kind: TypeKind;
+  /**
+   * The CDS data type of the derived type.
+   *
+   * Custom types in CSN Interop Effective MUST always point to a \`cds.*\` type.
+   */
+  type: "cds.Boolean" | "cds.String";
+  [k: string]: unknown;
+}
+export interface DefinitionEntry2 {
+  /**
+   * The modeling artefact kind.
+   * It's value is been used as a _discriminator_ to distinguish the matching schema that should be further validated.
+   */
+  kind: "context" | "entity" | "service" | "type";
+  [k: string]: unknown;
 }
 /**
  * Dictionary of translated texts.
  *
  */
 export interface I18N {
-  [k: string]: unknown | undefined;
+  [k: string]: unknown;
 }
 /**
  * Language Text contains translations for one specific languages.
@@ -1578,7 +1602,7 @@ export interface I18N {
  * via the \`patternProperty\` "^[a-zA-Z]{2,8}(-[a-zA-Z0-9]{1,8}){0,2}$".
  */
 export interface LanguageTexts {
-  [k: string]: unknown | undefined;
+  [k: string]: unknown;
 }
 
 export type PrivatePropertyKey = \`__\${string}\`;
@@ -3205,7 +3229,8 @@ exports[`CLI End-to-End Tests test 4: successful run with valid configuration fi
  * This interface was referenced by \`Definitions\`'s JSON-Schema definition
  * via the \`patternProperty\` "^(?![@]|__|\\.|::).+$".
  */
-export type DefinitionEntry = ContextDefinition | EntityDefinition | ServiceDefinition | TypeDefinition;
+export type DefinitionEntry = DefinitionEntry1 & DefinitionEntry2;
+export type DefinitionEntry1 = ContextDefinition | EntityDefinition | ServiceDefinition | TypeDefinition;
 /**
  * Element reference to an element within the current entity.
  */
@@ -3216,11 +3241,12 @@ export type ElementReference = string;
  * It allows to associate a (set of) View/Entity that provides the "Value Help" for the annotated field or parameter.
  * This is achieved by either referencing the target view/entity of a modelled association or by directly establishing a relationship to view/entity that shall act as a value help provider.
  */
-export type Consumption = ConsumptionValueHelpDefinition[];
+export type ConsumptionValueHelpDefinition = ConsumptionValueHelpDefinition1[];
 /**
  * In CSN it is possible to define Custom Types.
  */
-export type TypeDefinition = BooleanTypeDefinition | StringTypeDefinition;
+export type TypeDefinition = TypeDefinition1 & TypeDefinition2;
+export type TypeDefinition1 = BooleanTypeDefinition | StringTypeDefinition;
 
 /**
  * This is the interface description of CSN Interop Effective v1.
@@ -3336,7 +3362,7 @@ export interface FeaturesMetadata {
  *
  */
 export interface Definitions {
-  [k: string]: unknown | undefined;
+  [k: PrivatePropertyKey|AnnotationPropertyKey]: unknown;
 }
 /**
  * A context corresponds to a CAP CSN Namespace.
@@ -3361,7 +3387,7 @@ export interface ContextDefinition {
    * If a human readable title is needed, use the [@EndUserText.label](./extensions/end-user-text#endusertextlabel) annotation.
    */
   doc?: string;
-  [k: string]: unknown | undefined;
+  [k: PrivatePropertyKey|AnnotationPropertyKey]: unknown;
 }
 /**
  * Entity definition refers to the structured description of an object or concept.
@@ -3395,7 +3421,7 @@ export interface EntityDefinition {
     | boolean
     | unknown[]
     | {
-        [k: string]: unknown | undefined;
+        [k: PrivatePropertyKey|AnnotationPropertyKey]: unknown;
       };
   /**
    * Proper syntax element in ABAP CDS producing Custom CDS Entities
@@ -3406,7 +3432,7 @@ export interface EntityDefinition {
     | boolean
     | unknown[]
     | {
-        [k: string]: unknown | undefined;
+        [k: PrivatePropertyKey|AnnotationPropertyKey]: unknown;
       };
   /**
    * Proper syntax element in ABAP CDS producing CDS Table Functions.
@@ -3417,7 +3443,7 @@ export interface EntityDefinition {
     | boolean
     | unknown[]
     | {
-        [k: string]: unknown | undefined;
+        [k: PrivatePropertyKey|AnnotationPropertyKey]: unknown;
       };
   /**
    * Proper syntax element in ABAP CDS producing CDS  External Entities
@@ -3428,7 +3454,7 @@ export interface EntityDefinition {
     | boolean
     | unknown[]
     | {
-        [k: string]: unknown | undefined;
+        [k: string]: unknown;
       };
   /**
    * ABAP CDS Projection have the additional information of a provider contract
@@ -3439,7 +3465,7 @@ export interface EntityDefinition {
     | boolean
     | unknown[]
     | {
-        [k: string]: unknown | undefined;
+        [k: string]: unknown;
       };
   /**
    * ABAP CDS Root View Entities define a RAP Business Object.
@@ -3450,7 +3476,7 @@ export interface EntityDefinition {
     | boolean
     | unknown[]
     | {
-        [k: string]: unknown | undefined;
+        [k: string]: unknown;
       };
   /**
    * Special kind of analytical ABAP CDS Projection view.
@@ -3461,7 +3487,7 @@ export interface EntityDefinition {
     | boolean
     | unknown[]
     | {
-        [k: string]: unknown | undefined;
+        [k: string]: unknown;
       };
   /**
    * In the selection element list of a CDS view.
@@ -3472,7 +3498,7 @@ export interface EntityDefinition {
     | boolean
     | unknown[]
     | {
-        [k: string]: unknown | undefined;
+        [k: string]: unknown;
       };
   /**
    * When redirecting associations in ABAP CDS Projections with the additional keywords "to composition child", this indicates a Parent-Child-Composition an requires the redirection target to have a matching "to parent" association redefinition.
@@ -3483,7 +3509,7 @@ export interface EntityDefinition {
     | boolean
     | unknown[]
     | {
-        [k: string]: unknown | undefined;
+        [k: string]: unknown;
       };
   /**
    * When redirecting associations in ABAP CDS Projections with the additional keywords "to composition child", this indicates a Parent-Child-Composition an requires the redirection target to have a matching "to parent" association redefinition.
@@ -3494,7 +3520,7 @@ export interface EntityDefinition {
     | boolean
     | unknown[]
     | {
-        [k: string]: unknown | undefined;
+        [k: string]: unknown;
       };
   /**
    * Contains the SQL on condition as string
@@ -3505,10 +3531,10 @@ export interface EntityDefinition {
     | boolean
     | unknown[]
     | {
-        [k: string]: unknown | undefined;
+        [k: string]: unknown;
       };
-  "@Consumption.valueHelpDefinition"?: Consumption;
-  [k: string]: unknown | undefined;
+  "@Consumption.valueHelpDefinition"?: ConsumptionValueHelpDefinition;
+  [k: string]: unknown;
 }
 /**
  * Dictionary of Element where the key is the name of the element and the value its definition.
@@ -3523,7 +3549,7 @@ export interface EntityDefinition {
  * - Not contain the substring \`::\` more than once.
  */
 export interface ElementDefinitions {
-  [k: string]: unknown | undefined;
+  [k: string]: unknown;
 }
 /**
  * Definition of an Element, as put into [Element Definitions](#element-definitions).
@@ -3537,10 +3563,10 @@ export interface ElementDefinitions {
  */
 export interface ElementEntry {
   type?: string;
-  [k: string]: unknown | undefined;
+  [k: string]: unknown;
 }
-export interface ConsumptionValueHelpDefinition {
-  entity?: ConsumptionValueHelpDefinition1;
+export interface ConsumptionValueHelpDefinition1 {
+  entity?: ConsumptionValueHelpDefinition2;
   /**
    * Additional bindings for filtering the value help result list.
    */
@@ -3555,7 +3581,7 @@ export interface ConsumptionValueHelpDefinition {
 /**
  * Value help defining view or entity.
  */
-export interface ConsumptionValueHelpDefinition1 {
+export interface ConsumptionValueHelpDefinition2 {
   /**
    * Name of the value help providing view or entity
    */
@@ -3579,14 +3605,14 @@ export interface AdditionalBinding {
    * Name of the field of the value help view or entity, which the annotated local field or parameter is bound to.
    */
   element?: string;
-  usage?: ConsumptionConsumptionValueHelpDefinitionAdditionalBinding;
+  usage?: ConsumptionConsumptionValueHelpDefinitionAdditionalBindingUsage;
 }
 /**
  * The binding may either specify an additional filter-criterion on the value help list (\`#FILTER\`), or an additional result mapping for the selected value help record (\`#RESULT\`) or a combination thereof (\`#FILTER_AND_RESULT\`).
  * If not specified explicitly the usage is \`#FILTER_AND_RESULT\`.
  * If distinctValues is set to true, additional bindings must specify the usage as \`#FILTER\`.
  */
-export interface ConsumptionConsumptionValueHelpDefinitionAdditionalBinding {
+export interface ConsumptionConsumptionValueHelpDefinitionAdditionalBindingUsage {
   /**
    * Provide the value in \`{ "#": "<value>" }\` enum notation.
    */
@@ -3618,7 +3644,7 @@ export interface ServiceDefinition {
    * If a human readable title is needed, use the [@EndUserText.label](./extensions/end-user-text#endusertextlabel) annotation.
    */
   doc?: string;
-  [k: string]: unknown | undefined;
+  [k: string]: unknown;
 }
 /**
  * A type definition of type \`cds.Boolean\`.
@@ -3632,9 +3658,9 @@ export interface BooleanTypeDefinition {
    * The modeling artefact is a \`cds.Boolean\` type.
    */
   type: BooleanCdsType;
-  "@Aggregation.default"?: Aggregation;
-  "@Consumption.valueHelpDefinition"?: Consumption;
-  [k: string]: unknown | undefined;
+  "@Aggregation.default"?: AggregationDefault;
+  "@Consumption.valueHelpDefinition"?: ConsumptionValueHelpDefinition;
+  [k: string]: unknown;
 }
 /**
  * The element shall per default be aggregated using the annotated SQL aggregate function.
@@ -3645,7 +3671,7 @@ export interface BooleanTypeDefinition {
  * > ℹ️ Note: There is an semantically equivalent annotation \`@DefaultAggregation\`, which is now obsolete.
  * > As consumers are not expected to interpret \`@DefaultAggregation\`, providers shall consistently adopt \`@Aggregation.default\` for interoperability.
  */
-export interface Aggregation {
+export interface AggregationDefault {
   /**
    * Provide the value in \`{ "#": "<value>" }\` enum notation.
    */
@@ -3677,16 +3703,40 @@ export interface StringTypeDefinition {
    * It is not part of the standard CDS types, but can be used in custom definitions.
    */
   someNewProperty?: string;
-  "@Aggregation.default"?: Aggregation;
-  "@Consumption.valueHelpDefinition"?: Consumption;
-  [k: string]: unknown | undefined;
+  "@Aggregation.default"?: AggregationDefault;
+  "@Consumption.valueHelpDefinition"?: ConsumptionValueHelpDefinition;
+  [k: string]: unknown;
+}
+export interface TypeDefinition2 {
+  /**
+   * The kind property is used when defining derived types.
+   * In this case \`Kind = "type"\` MUST be provided.
+   */
+  kind: TypeKind;
+  /**
+   * The CDS data type of the derived type.
+   *
+   * Custom types in CSN Interop Effective MUST always point to a \`cds.*\` type.
+   */
+  type: "cds.Boolean" | "cds.String";
+  "@Aggregation.default"?: AggregationDefault;
+  "@Consumption.valueHelpDefinition"?: ConsumptionValueHelpDefinition;
+  [k: string]: unknown;
+}
+export interface DefinitionEntry2 {
+  /**
+   * The modeling artefact kind.
+   * It's value is been used as a _discriminator_ to distinguish the matching schema that should be further validated.
+   */
+  kind: "context" | "entity" | "service" | "type";
+  [k: string]: unknown;
 }
 /**
  * Dictionary of translated texts.
  *
  */
 export interface I18N {
-  [k: string]: unknown | undefined;
+  [k: string]: unknown;
 }
 /**
  * Language Text contains translations for one specific languages.
@@ -3705,7 +3755,7 @@ export interface I18N {
  * via the \`patternProperty\` "^[a-zA-Z]{2,8}(-[a-zA-Z0-9]{1,8}){0,2}$".
  */
 export interface LanguageTexts {
-  [k: string]: unknown | undefined;
+  [k: string]: unknown;
 }
 
 export type PrivatePropertyKey = \`__\${string}\`;
