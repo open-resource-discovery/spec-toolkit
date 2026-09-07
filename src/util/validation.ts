@@ -1,3 +1,4 @@
+import { createRequire } from "node:module";
 import { Ajv, type ValidateFunction } from "ajv";
 import addFormats from "ajv-formats";
 import fs from "fs-extra";
@@ -7,7 +8,11 @@ import type { SpecJsonSchema, SpecJsonSchemaRoot } from "../generated/spec/spec-
 import { log } from "./log.js";
 
 // Prepare JSON Schema validator
-export const preparedAjv = new Ajv({ allErrors: true, allowUnionTypes: true, allowMatchingProperties: true });
+export const preparedAjv = new Ajv({
+  allErrors: true,
+  allowUnionTypes: true,
+  allowMatchingProperties: true,
+});
 addFormats.default(preparedAjv);
 preparedAjv.addKeyword("x-recommended");
 preparedAjv.addKeyword("x-introduced-in-version");
@@ -95,7 +100,14 @@ export function validateJsonSchema(
 ): ValidationResultEntry[] {
   const errors: ValidationResultEntry[] = [];
 
-  const jsonSchemaMeta = fs.readJSONSync("./node_modules/ajv/lib/refs/json-schema-draft-07.json") as SpecJsonSchemaRoot;
+  // Resolve the ajv draft-07 meta-schema relative to the installed `ajv`
+  // package rather than the current working directory, so the tool works no
+  // matter where it is invoked from (previously a hardcoded
+  // `./node_modules/ajv/...` path that only resolved from the repo root).
+  const require = createRequire(import.meta.url);
+  const jsonSchemaMeta = fs.readJSONSync(
+    require.resolve("ajv/lib/refs/json-schema-draft-07.json"),
+  ) as SpecJsonSchemaRoot;
   delete jsonSchemaMeta.$id;
 
   const validateMetaSchema = getJsonSchemaValidator(jsonSchemaMeta);

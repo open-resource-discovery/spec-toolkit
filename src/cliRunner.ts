@@ -39,7 +39,10 @@ function init(argv: string[]): void {
 
 async function run(argv: CliOptions): Promise<void> {
   let configData: unknown;
-  const configFilePath = path.join(process.cwd(), argv.config);
+  // Use path.resolve so an ABSOLUTE `-c` path is honored as-is; a relative path
+  // still resolves against the current working directory (backward compatible).
+  // Previously path.join(cwd, argv.config) mangled absolute paths.
+  const configFilePath = path.resolve(process.cwd(), argv.config);
 
   try {
     if (configFilePath.endsWith(".json")) {
