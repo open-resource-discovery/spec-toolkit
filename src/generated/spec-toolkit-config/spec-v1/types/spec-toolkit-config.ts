@@ -215,7 +215,7 @@ export interface PluginOptions {
    * If not provided, all plugin specific x- properties will be removed from the generated output JSON Schema.
    */
   preservedPluginSpecificXProperties?: string[];
-  [k: string]: unknown | undefined;
+  [k: string]: unknown;
 }
 
 export type SpecConfigType = SpecConfig | SpecExtensionConfig;

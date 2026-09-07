@@ -26,7 +26,7 @@ export type SpecJsonSchemaType = string | number | boolean | SpecJsonSchema | Sp
  */
 export type Example =
   | {
-      [k: string]: unknown | undefined;
+      [k: SpecToolkitPluginXxPropertyKey]: unknown;
     }
   | string
   | unknown[]
@@ -391,7 +391,7 @@ export interface SpecExtensionJsonSchema {
    * MUST start with `x-<pluginName>-` and can be used to extend the specification document with additional properties.
    *
    */
-  [k: SpecToolkitPluginXxPropertyKey]: unknown;
+  [k: string]: unknown;
 }
 /**
  * TODO: move this to spec-extension.schema.yaml
@@ -409,7 +409,7 @@ export interface XxPropertyRefToDoc {
    * URI reference to the referenced document.
    */
   ref: string;
-  [k: string]: unknown | undefined;
+  [k: string]: unknown;
 }
 /**
  * Custom TypeScript type that can be used in the document.

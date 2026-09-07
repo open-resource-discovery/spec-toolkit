@@ -43,12 +43,41 @@ export async function generateTypeScriptDefinitions(configData: SpecToolkitConfi
         schema = removeAllExtensionProperties(schema);
       }
 
+      // json-schema-to-typescript v16 formats tsType before returning the generated source.
+      // Our marker is intentionally not valid TypeScript because it carries the desired index-key
+      // type in a comment, so replace it with valid syntax before compiling and restore the key
+      // types in the resulting declarations below.
+      const keyTypeMarkers: string[] = [];
+      const replaceKeyTypeMarkers = (value: unknown): void => {
+        if (Array.isArray(value)) {
+          for (const item of value) {
+            replaceKeyTypeMarkers(item);
+          }
+          return;
+        }
+        if (!value || typeof value !== "object") {
+          return;
+        }
+        for (const [key, child] of Object.entries(value)) {
+          if (key === "tsType" && typeof child === "string") {
+            const marker = child.match(/^unknown \/\/ replaceKeyType_\{([^}]+)\}$/);
+            if (marker) {
+              keyTypeMarkers.push(marker[1]);
+              (value as Record<string, unknown>)[key] = "unknown";
+            }
+          } else {
+            replaceKeyTypeMarkers(child);
+          }
+        }
+      };
+      replaceKeyTypeMarkers(schema);
+
       const convertedDocumentSchema = schema as unknown as JSONSchema4;
 
       let definitions = await jsonSchemaToTypeScript(convertedDocumentSchema, `${docConfig.id}`, {
         unknownAny: true,
         bannerComment: "// AUTO-GENERATED definition files. Do not modify directly.\n\n",
-        strictIndexSignatures: true,
+        strictIndexSignatures: false,
         declareExternallyReferenced: true,
         inferStringEnumKeysFromValues: false,
       });
@@ -66,20 +95,8 @@ export async function generateTypeScriptDefinitions(configData: SpecToolkitConfi
         }
       }
 
-      // Post processing for all tsType "// replaceKeyType_" markings
-      const allPostProcessingReplacements: { oldValue: string; newValue: string }[] = [];
-      const allPostProcessingReplacementMatches = [...definitions.matchAll(/.*replaceKeyType_{(.*)}/gm)];
-      for (const match of allPostProcessingReplacementMatches) {
-        const replacementNewValue = `${match[0].replace("string", match[1]).split(";")[0]};`;
-        const indexStart = match.index;
-        const indexEnd = match.index + match[0].length;
-        allPostProcessingReplacements.push({
-          oldValue: definitions.substring(indexStart, indexEnd),
-          newValue: replacementNewValue,
-        });
-      }
-      for (const replacement of allPostProcessingReplacements) {
-        definitions = definitions.replace(replacement.oldValue, replacement.newValue);
+      for (const keyType of keyTypeMarkers) {
+        definitions = definitions.replace("[k: string]: unknown", `[k: ${keyType}]: unknown`);
       }
 
       fs.unlinkSync(xSchemaFilePath);
