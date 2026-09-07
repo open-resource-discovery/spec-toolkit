@@ -55,7 +55,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.5.12",
     "@expo/spawn-async": "1.8.0",
-    "@swc/core": "1.16.1",
+    "@swc/core": "1.16.2",
     "@swc/jest": "0.2.39",
     "@tsconfig/node22": "22.0.6",
     "@types/fs-extra": "11.0.4",
