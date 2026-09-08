@@ -74,6 +74,18 @@ const config = {
     ],
   ],
 
+  plugins: [
+    () => ({
+      name: "generated-files-module-type",
+      configureWebpack: () => ({
+        module: {
+          // The root package is ESM, but Docusaurus generates CommonJS-style modules under the site directory.
+          rules: [{ include: /website\/.*\.js$/, type: "javascript/auto" }],
+        },
+      }),
+    }),
+  ],
+
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
