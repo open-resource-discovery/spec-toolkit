@@ -79,7 +79,7 @@ export interface SpecJsonSchemaRoot {
   additionalProperties?: boolean;
   "x-custom-typescript-types"?: XxPropertyCustomTypeScriptType[];
   /**
-   * Optionally reorder an objects properties by this list. Unlisted properties will be appended in their original order.
+   * At the schema root, optionally reorder the generated definition sections by this list. Unlisted definitions will be appended in their original order.
    */
   "x-property-order"?: string[];
   /**
@@ -193,7 +193,7 @@ export interface SpecJsonSchema {
    */
   "x-pattern-properties-description"?: string;
   /**
-   * Optionally reorder an objects properties by this list. Unlisted properties will be appended in their original order.
+   * At the schema root, optionally reorder the generated definition sections by this list. Unlisted definitions will be appended in their original order.
    */
   "x-property-order"?: string[];
   /**
@@ -342,7 +342,7 @@ export interface SpecExtensionJsonSchema {
    */
   "x-pattern-properties-description"?: string;
   /**
-   * Optionally reorder an objects properties by this list. Unlisted properties will be appended in their original order.
+   * At the schema root, optionally reorder the generated definition sections by this list. Unlisted definitions will be appended in their original order.
    */
   "x-property-order"?: string[];
   /**

@@ -21,7 +21,7 @@
     "start": "npm run build && npm --prefix website run start --",
     "prebuild": "rimraf ./dist",
     "build": "tsc -p ./tsconfig.build.json",
-    "postbuild": "npm run postbuild-spec-toolkit-config && npm run postbuild-spec",
+    "postbuild": "mkdir -p website/docs/docs website/static/spec-v1 && npm run postbuild-spec-toolkit-config && npm run postbuild-spec",
     "postbuild-spec-toolkit-config": "node ./dist/cli.js -c ./spec-toolkit-config.config.json && cp ./src/generated/spec-toolkit-config/spec-v1/docs/spec-toolkit-config.md website/docs/docs/ && cp ./src/generated/spec-toolkit-config/spec-v1/schemas/* website/static/spec-v1/",
     "postbuild-spec": "node ./dist/cli.js -c ./spec.config.json && cp ./src/generated/spec/spec-v1/docs/spec.md website/docs/docs/ && cp ./src/generated/spec/spec-v1/schemas/* website/static/spec-v1/",
     "lint": "npm run biome",

@@ -42,7 +42,7 @@ properties:
     description: |-
       The output path where the generated files will be written to.
 
-      This is relative to the location of the configuration document.
+      Relative paths are resolved from the current working directory.
   docsConfig:
     type: array
     description: |-

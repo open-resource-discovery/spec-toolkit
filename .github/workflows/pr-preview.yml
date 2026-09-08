@@ -30,14 +30,14 @@ jobs:
 
       - name: Build preview
         if: github.event.action != 'closed'
-        working-directory: website
         env:
           PR_PREVIEW_NUMBER: ${{ github.event.pull_request.number }}
           BASE_URL: /pr-preview/spec-toolkit/pr-${{ github.event.pull_request.number }}/
         run: |
           set -euo pipefail
           npm ci
-          npm run build
+          npm --prefix website ci
+          npm --prefix website run build
 
       - name: PR preview
         uses: open-resource-discovery/pr-preview-action@main

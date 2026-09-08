@@ -79,7 +79,7 @@
     },
     "x-property-order": {
       "type": "array",
-      "description": "Optionally reorder an objects properties by this list. Unlisted properties will be appended in their original order.",
+      "description": "At the schema root, optionally reorder the generated definition sections by this list. Unlisted definitions will be appended in their original order.",
       "items": {
         "type": "string"
       }
@@ -380,7 +380,7 @@
         },
         "x-property-order": {
           "type": "array",
-          "description": "Optionally reorder an objects properties by this list. Unlisted properties will be appended in their original order.",
+          "description": "At the schema root, optionally reorder the generated definition sections by this list. Unlisted definitions will be appended in their original order.",
           "items": {
             "type": "string"
           }
@@ -634,7 +634,7 @@
         },
         "x-property-order": {
           "type": "array",
-          "description": "Optionally reorder an objects properties by this list. Unlisted properties will be appended in their original order.",
+          "description": "At the schema root, optionally reorder the generated definition sections by this list. Unlisted definitions will be appended in their original order.",
           "items": {
             "type": "string"
           }
