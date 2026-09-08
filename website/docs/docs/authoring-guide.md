@@ -374,6 +374,51 @@ Generation adds each targeted extension definition as a property of every base d
 It also includes extension definitions in the merged output schema.
 Definition names must therefore be unique across the base schema and all of its extensions.
 
+## Model polymorphic interfaces with `oneOf`
+
+Use `oneOf` with references to model an interface that has several distinct object variants.
+A required discriminator property with a different `const` in every variant makes the alternatives explicit and mutually exclusive.
+
+```yaml
+definitions:
+  Event:
+    title: Event
+    oneOf:
+      - $ref: "#/definitions/CreatedEvent"
+      - $ref: "#/definitions/DeletedEvent"
+  CreatedEvent:
+    title: Created event
+    type: object
+    required:
+      - type
+      - resourceId
+    properties:
+      type:
+        type: string
+        const: created
+        description: A resource was created.
+      resourceId:
+        type: string
+  DeletedEvent:
+    title: Deleted event
+    type: object
+    required:
+      - type
+      - resourceId
+    properties:
+      type:
+        type: string
+        const: deleted
+        description: A resource was deleted.
+      resourceId:
+        type: string
+```
+
+Spec Toolkit renders the `oneOf` alternatives as links to the variant definitions, where readers can see each discriminator value and the fields belonging to that variant.
+This is usually easier to understand than equivalent `if`/`then`/`else` validation.
+Use conditional validation when one object shape has conditional constraints, rather than when the schema represents distinct polymorphic types.
+Remember that `oneOf` requires exactly one matching branch, while `anyOf` permits more than one.
+
 ## Describe closed and extensible value sets
 
 Use `oneOf` with `const` when each allowed value needs its own description or lifecycle metadata.
@@ -383,12 +428,17 @@ Spec Toolkit renders these branches as a documented enum.
 releaseState:
   type: string
   oneOf:
-    - const: active
+    - title: Active
+      const: active
       description: Available for normal use.
-    - const: deprecated
+    - title: Deprecated
+      const: deprecated
       description: Supported for compatibility only.
       x-deprecated-in-version: "2.0.0"
 ```
+
+Each `const` branch can carry a `title`, `description`, and lifecycle annotations instead of providing only a bare value.
+Spec Toolkit includes the descriptions and supported lifecycle annotations in the generated allowed-values list.
 
 Use `anyOf` with documented `const` branches and a general string branch for an extensible value set.
 This pattern lets future producers add values without changing the schema.
