@@ -1,9 +1,9 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { jest } from "@jest/globals";
 import type { SpecJsonSchemaRoot } from "./generated/spec/spec-v1/types/index.js";
 import { loadSpecJsonSchema } from "./generateInterfaceDocumentation.js";
+import { afterEach, beforeEach, describe, expect, it, mock } from "./testHelpers/nodeTest.js";
 
 function collectRefs(node: unknown, refs: string[] = []): string[] {
   if (!node || typeof node !== "object") return refs;
@@ -53,7 +53,7 @@ describe("loadSpecJsonSchema", () => {
     const externalSchema = JSON.stringify({
       definitions: { External: { title: "External", type: "string", minLength: 1, "x-ums-type": "custom" } },
     });
-    const fetchSpy = jest.spyOn(globalThis, "fetch").mockResolvedValue(
+    const fetchSpy = mock.spyOn(globalThis, "fetch").mockResolvedValue(
       new Response(externalSchema, {
         status: 200,
         headers: { "Content-Type": "application/schema+json" },

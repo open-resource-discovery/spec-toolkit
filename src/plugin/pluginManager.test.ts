@@ -1,4 +1,5 @@
 import type { PluginConfigData } from "../generated/spec-toolkit-config/spec-v1/types/index.js";
+import { describe, expect, test } from "../testHelpers/nodeTest.js";
 import PluginManager from "./pluginManager.js";
 
 describe("PluginManager Tests", () => {
@@ -23,14 +24,12 @@ describe("PluginManager Tests", () => {
     try {
       await pluginManager.registerPlugin(plugin1);
     } catch (error) {
-      // error: '\x1b[31m\x1b[1mConfiguration error\x1b[22m:\x1b[39m\x1b[31m\x1b[39m\x1b[31mCould not locate module \x1b[1m./pathDoesNotExist/index.js\x1b[22m mapped as:\x1b[39m
-      expect((error as Error).message).toContain("Could not locate module");
-      expect((error as Error).message).toContain("./pathDoesNotExist/index.js");
+      expect((error as Error).message).toContain("pathDoesNotExist/index.js");
     }
     try {
       await pluginManager.registerPlugin(plugin2);
     } catch (error) {
-      expect((error as Error).message).toContain("Cannot find module 'doesNotExist' from 'src/plugin/pluginManager.ts");
+      expect((error as Error).message).toContain("doesNotExist");
     }
   });
 

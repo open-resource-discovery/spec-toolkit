@@ -1,5 +1,7 @@
 import * as fs from "node:fs";
 import spawnAsync from "@expo/spawn-async";
+import { expectTypeScriptToCompile } from "../testHelpers/expectTypeScriptToCompile.js";
+import { describe, expect, test } from "../testHelpers/nodeTest.js";
 
 describe("CLI End-to-End Tests", () => {
   const cliBin = "node";
@@ -35,6 +37,17 @@ describe("CLI End-to-End Tests", () => {
       expect(mdFileContent).toMatchSnapshot();
       expect(schemaFileContent).toMatchSnapshot();
       expect(typesFileContent).toMatchSnapshot();
+
+      const generatedSchema = JSON.parse(schemaFileContent) as {
+        definitions: Record<string, unknown>;
+        patternProperties: Record<string, unknown>;
+      };
+      expect(Object.hasOwn(generatedSchema.patternProperties, "^__.+$")).toBe(true);
+      expect(generatedSchema.definitions).toHaveProperty("DefinitionEntry");
+      expect(typesFileContent).toContain("export interface CSNInteropEffectiveDocument");
+      expect(typesFileContent).toMatch(/export type AnnotationPropertyKey = `@\$\{string\}`;/);
+      expect(mdFileContent).toContain("## CSN Interop Effective Document");
+      await expectTypeScriptToCompile("src/__tests__/generated/test1/my-spec-v1/types/my-spec.ts");
     } catch (e) {
       expect(e).toEqual("expect this to never happen because above code should not throw an error");
     }
@@ -100,7 +113,7 @@ describe("CLI End-to-End Tests", () => {
         .readFileSync("src/__tests__/generated/test4/my-spec-v1/docs/extensions/my-spec-extension-1.md")
         .toString();
       const mdFileContentExtension2 = fs
-        .readFileSync("src/__tests__/generated/test4/my-spec-v1/docs/extensions/my-spec-extension-1.md")
+        .readFileSync("src/__tests__/generated/test4/my-spec-v1/docs/extensions/my-spec-extension-2.md")
         .toString();
       const schemaFileContent = fs
         .readFileSync("src/__tests__/generated/test4/my-spec-v1/schemas/my-spec.schema.json")
@@ -109,7 +122,7 @@ describe("CLI End-to-End Tests", () => {
         .readFileSync("src/__tests__/generated/test4/my-spec-v1/schemas/my-spec-extension-1.schema.json")
         .toString();
       const schemaFileContentExtension2 = fs
-        .readFileSync("src/__tests__/generated/test4/my-spec-v1/schemas/my-spec-extension-1.schema.json")
+        .readFileSync("src/__tests__/generated/test4/my-spec-v1/schemas/my-spec-extension-2.schema.json")
         .toString();
       const typesFileContent = fs.readFileSync("src/__tests__/generated/test4/my-spec-v1/types/my-spec.ts").toString();
 
@@ -120,6 +133,26 @@ describe("CLI End-to-End Tests", () => {
       expect(schemaFileContentExtension1).toMatchSnapshot();
       expect(schemaFileContentExtension2).toMatchSnapshot();
       expect(typesFileContent).toMatchSnapshot();
+
+      const generatedSchema = JSON.parse(schemaFileContent) as {
+        definitions: Record<string, { properties?: Record<string, unknown> }>;
+      };
+      expect(Object.hasOwn(generatedSchema.definitions, "@Aggregation.default")).toBe(true);
+      expect(Object.hasOwn(generatedSchema.definitions, "@Consumption.valueHelpDefinition")).toBe(true);
+      expect(
+        Object.hasOwn(generatedSchema.definitions.BooleanTypeDefinition.properties ?? {}, "@Aggregation.default"),
+      ).toBe(true);
+      expect(
+        Object.hasOwn(
+          generatedSchema.definitions.EntityDefinition.properties ?? {},
+          "@Consumption.valueHelpDefinition",
+        ),
+      ).toBe(true);
+      expect(mdFileContentExtension1).toContain("@Aggregation.default");
+      expect(mdFileContentExtension2).toContain("@Consumption.valueHelpDefinition");
+      expect(typesFileContent).toContain('"@Aggregation.default"?:');
+      expect(typesFileContent).toContain('"@Consumption.valueHelpDefinition"?:');
+      await expectTypeScriptToCompile("src/__tests__/generated/test4/my-spec-v1/types/my-spec.ts");
     } catch (e) {
       expect(e).toEqual("expect this to never happen because above code should not throw an error");
     }

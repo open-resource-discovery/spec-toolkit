@@ -1,0 +1,11 @@
+exports[`CLI generalConfig tests > Test the generalConfig > tsTypeExportExcludeJsFileExtension > should append js file extension when generalConfig is missing at all 1`] = `
+"export * from \\"./my-spec.js\\";\\n"
+`;
+
+exports[`CLI generalConfig tests > Test the generalConfig > tsTypeExportExcludeJsFileExtension > should append js file extension when tsTypeExportExcludeJsFileExtension is set to false 1`] = `
+"export * from \\"./my-spec.js\\";\\n"
+`;
+
+exports[`CLI generalConfig tests > Test the generalConfig > tsTypeExportExcludeJsFileExtension > should successfully omit js file extension when tsTypeExportExcludeJsFileExtension is set to true 1`] = `
+"export * from \\"./my-spec\\";\\n"
+`;

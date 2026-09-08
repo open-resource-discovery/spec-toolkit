@@ -1,4 +1,5 @@
 import type { SpecJsonSchemaRoot } from "../generated/spec/spec-v1/types/index.js";
+import { describe, expect, it } from "../testHelpers/nodeTest.js";
 import { normalizeArbitrarySchema } from "./normalizeArbitrarySchema.js";
 
 describe("normalizeArbitrarySchema", () => {

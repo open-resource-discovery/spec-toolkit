@@ -3,6 +3,7 @@ import spawnAsync from "@expo/spawn-async";
 import fs from "fs-extra";
 import * as yaml from "js-yaml";
 import type { SpecToolkitConfigurationDocument } from "../generated/spec-toolkit-config/spec-v1/types/spec-toolkit-config.js";
+import { afterAll, beforeAll, describe, expect, test } from "../testHelpers/nodeTest.js";
 
 describe("CLI docsConfig tests", () => {
   const cliBin = "node";

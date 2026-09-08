@@ -1,0 +1,11 @@
+exports[`test generateExampleDocumentation > should generate md files for .json and .jsonc examples including intro/outro 1`] = `
+"This is an example introduction for example1.\\n## Example File:  example1\\n\\n\`\`\`json\\n{\\n            // this is a comment in jsonc\\n            \\"firstName\\": \\"John\\",\\n            \\"lastName\\": \\"Doe\\",\\n          }\\n\`\`\`\\n\\nThis is an example outro for example1."
+`;
+
+exports[`test generateExampleDocumentation > should generate md files for .json and .jsonc examples including intro/outro 2`] = `
+"This is an example introduction for example2.\\n## Example File:  example2\\n\\n\`\`\`json\\n{\\"firstName\\":\\"Jane\\",\\"lastName\\":\\"Smith\\"}\\n\`\`\`\\n\\nThis is an example outro for example2."
+`;
+
+exports[`test generateExampleDocumentation > should generate md files for .json and .jsonc examples including intro/outro 3`] = `
+"---\\ntitle: example3\\ndescription: Example documents for person.\\n---\\n\\n## Example File:  example3\\n\\n\`\`\`json\\n{\\"firstName\\":\\"Mary\\",\\"lastName\\":\\"Poppins\\"}\\n\`\`\`\\n"
+`;

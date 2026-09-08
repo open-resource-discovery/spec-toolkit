@@ -1,7 +1,7 @@
 import path from "node:path";
-import { jest } from "@jest/globals";
 import fs from "fs-extra";
 import * as yaml from "js-yaml";
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, mock } from "../../testHelpers/nodeTest.js";
 import { log } from "../../util/log.js";
 import type { JavaAnnotationsConfig } from "./configModel.js";
 import { generateModels } from "./generateJavaModels.js";
@@ -10,7 +10,7 @@ describe("generateModels", () => {
   const pluginDir = path.join(process.cwd(), "src", "plugin", "javaAnnotations");
   const testDir = path.join(pluginDir, "testData");
   const outputDir = path.join(pluginDir, "tmpOutput");
-  let errorSpy: ReturnType<typeof jest.spyOn>;
+  let errorSpy: ReturnType<typeof mock.spyOn>;
 
   beforeAll(() => {
     // Create test directory and write a valid JSON schema for Person
@@ -30,14 +30,14 @@ describe("generateModels", () => {
   });
 
   beforeEach(() => {
-    errorSpy = jest.spyOn(log, "error").mockReturnValue(undefined);
-    jest.spyOn(log, "debug").mockReturnValue(undefined);
+    errorSpy = mock.spyOn(log, "error").mockReturnValue(undefined);
+    mock.spyOn(log, "debug").mockReturnValue(undefined);
     fs.removeSync(outputDir);
   });
 
   afterEach(() => {
     // Restore all mocks after each test
-    jest.restoreAllMocks();
+    mock.restoreAll();
   });
 
   afterAll(() => {
@@ -46,45 +46,26 @@ describe("generateModels", () => {
   });
 
   it("generates Java files without errors and matches the snapshot", async () => {
-    await jest.isolateModulesAsync(async () => {
-      // Mock quicktype-core to delegate to actual implementation for this test
-      jest.doMock("quicktype-core", () => {
-        // biome-ignore lint/suspicious/noExplicitAny: mock setup requires any
-        const actual: any = jest.requireActual("quicktype-core");
-        return {
-          __esModule: true,
-          JSONSchemaInput: actual.JSONSchemaInput,
-          FetchingJSONSchemaStore: actual.FetchingJSONSchemaStore,
-          InputData: actual.InputData,
-          // delegate to real quicktype
-          // biome-ignore lint/suspicious/noExplicitAny: mock setup requires any
-          quicktype: (opts: any) => actual.quicktype(opts),
-        };
-      });
+    const config: JavaAnnotationsConfig = {
+      packageAnnotations: "com.example.annotations",
+      modelPackage: "com.example.model",
+    };
 
-      // Reload generateModels with mocked quicktype-core
-      const { generateModels: genSuccess } = await import("./generateJavaModels.js");
-      const config: JavaAnnotationsConfig = {
-        packageAnnotations: "com.example.annotations",
-        modelPackage: "com.example.model",
-      };
+    await generateModels(config, path.join(testDir, "person.schema.yaml"), outputDir);
 
-      await genSuccess(config, path.join(testDir, "person.schema.yaml"), outputDir);
+    const modelDir = path.join(outputDir, ...config.modelPackage.split("."));
+    expect(fs.existsSync(modelDir)).toBe(true);
 
-      const modelDir = path.join(outputDir, ...config.modelPackage.split("."));
-      expect(fs.existsSync(modelDir)).toBe(true);
+    const files = fs.readdirSync(modelDir).filter((f) => f.endsWith(".java"));
+    expect(files.length).toBeGreaterThan(0);
+    expect(files).toContain("PersonSchema.java");
 
-      const files = fs.readdirSync(modelDir).filter((f) => f.endsWith(".java"));
-      expect(files.length).toBeGreaterThan(0);
-      expect(files).toContain("PersonSchema.java");
+    const generated: Record<string, string> = {};
+    for (const file of files) {
+      generated[file] = fs.readFileSync(path.join(modelDir, file), "utf8");
+    }
 
-      const generated: Record<string, string> = {};
-      for (const file of files) {
-        generated[file] = fs.readFileSync(path.join(modelDir, file), "utf8");
-      }
-
-      expect(generated).toMatchSnapshot();
-    });
+    expect(generated).toMatchSnapshot();
   });
 
   it("logs an error when the schema file does not exist", async () => {

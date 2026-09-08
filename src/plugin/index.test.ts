@@ -1,5 +1,5 @@
-import { jest } from "@jest/globals";
 import type { SpecToolkitConfigurationDocument } from "../generated/spec-toolkit-config/spec-v1/types/index.js";
+import { afterEach, describe, expect, it, mock } from "../testHelpers/nodeTest.js";
 import { ajvPreservedPluginSpecificXPropertiesList } from "../util/jsonSchemaConversion.js";
 import { preparedAjv } from "../util/validation.js";
 import registerPlugins from "./index.js";
@@ -9,14 +9,14 @@ describe("registerPlugins tests", () => {
   const initialAllowed = [...ajvPreservedPluginSpecificXPropertiesList];
 
   afterEach(() => {
-    jest.resetAllMocks();
+    mock.restoreAll();
   });
 
   it("registers plugin with its specific plugin x- properties to the preparedAjv", async () => {
-    const registerSpy = jest
+    const registerSpy = mock
       .spyOn(PluginManager.prototype, "registerPlugin")
       .mockResolvedValue(["x-plugin1-foo-property", "x-plugin1-bar-property"]);
-    const addKeywordSpy = jest.spyOn(preparedAjv, "addKeyword");
+    const addKeywordSpy = mock.spyOn(preparedAjv, "addKeyword");
 
     const config: SpecToolkitConfigurationDocument = {
       plugins: [{ packageName: "plugin1" }],
@@ -33,6 +33,7 @@ describe("registerPlugins tests", () => {
   });
 
   it("adds configured preservedPluginSpecificXProperties to the prepared Ajv ajvPreservedPluginSpecificXPropertiesList", async () => {
+    mock.spyOn(PluginManager.prototype, "registerPlugin").mockResolvedValue([]);
     const config: SpecToolkitConfigurationDocument = {
       plugins: [
         { packageName: "plugin1", options: { preservedPluginSpecificXProperties: ["x-plugin1-foo-property"] } },
@@ -55,8 +56,8 @@ describe("registerPlugins tests", () => {
   });
 
   it("does nothing when no plugins are present in the configuration", async () => {
-    const registerSpy = jest.spyOn(PluginManager.prototype, "registerPlugin");
-    const addKeywordSpy = jest.spyOn(preparedAjv, "addKeyword");
+    const registerSpy = mock.spyOn(PluginManager.prototype, "registerPlugin");
+    const addKeywordSpy = mock.spyOn(preparedAjv, "addKeyword");
 
     const config: SpecToolkitConfigurationDocument = {
       plugins: [
