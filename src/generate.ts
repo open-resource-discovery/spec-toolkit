@@ -75,7 +75,7 @@ export async function generate(
       if (pluginInstance && typeof pluginInstance.generate === "function") {
         const allMainSpecSourceFilePaths = [];
         for (const docConfig of configData.docsConfig) {
-          if (docConfig.type === "spec") {
+          if (docConfig.type === "spec" || docConfig.type === "specExtension") {
             allMainSpecSourceFilePaths.push(docConfig.sourceFilePath);
           }
         }

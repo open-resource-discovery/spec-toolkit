@@ -37,7 +37,7 @@ export function generateSimplifiedDefinitionsTable(documentSchema: SpecJsonSchem
   const ordTable: OrdSimplifiedTableFormat[] = [];
   for (const jsonSchemaObjectId in documentSchema.definitions) {
     const jsonSchemaObject = documentSchema.definitions[jsonSchemaObjectId] as JSONSchema7;
-    const entityName = getEntityName(jsonSchemaObject);
+    const entityName = getEntityName(jsonSchemaObject, jsonSchemaObjectId);
     const requiredList = jsonSchemaObject.required;
     if (jsonSchemaObject.properties) {
       for (const propertyName in jsonSchemaObject.properties) {
@@ -56,14 +56,17 @@ export function generateSimplifiedDefinitionsTable(documentSchema: SpecJsonSchem
   return ordTable;
 }
 
-function getEntityName(jsonSchemaObject: JSONSchema7): string {
+function getEntityName(jsonSchemaObject: JSONSchema7, fallbackId: string): string {
   if (jsonSchemaObject.title && typeof jsonSchemaObject.title === "string") {
     return jsonSchemaObject.title;
   }
-  throw new Error(`Entity has no title: ${JSON.stringify(jsonSchemaObject, null, 2)}`);
+  return fallbackId;
 }
 
 function getPropertyType(property: JSONSchema7Object, propertyName: string): string {
+  if (!property) {
+    return "unknown";
+  }
   if (typeof property.type === "string" && property.type === "array") {
     const items = property.items as JSONSchema7;
     return `array<${detectJsonSchemaObjType(items, propertyName)}>`;
@@ -71,7 +74,10 @@ function getPropertyType(property: JSONSchema7Object, propertyName: string): str
   return detectJsonSchemaObjType(property, propertyName);
 }
 
-function detectJsonSchemaObjType(jsonSchemaObj: JSONSchema7Object | JSONSchema7, propertyName: string): string {
+function detectJsonSchemaObjType(jsonSchemaObj: JSONSchema7Object | JSONSchema7, _propertyName: string): string {
+  if (!jsonSchemaObj) {
+    return "unknown";
+  }
   if (jsonSchemaObj.$ref && typeof jsonSchemaObj.$ref === "string") {
     return getJsonSchemaObjTypeFromRef(jsonSchemaObj.$ref);
   } else if (typeof jsonSchemaObj.type === "string") {
@@ -85,11 +91,11 @@ function detectJsonSchemaObjType(jsonSchemaObj: JSONSchema7Object | JSONSchema7,
         if (obj.$ref && typeof obj.$ref === "string") {
           return getJsonSchemaObjTypeFromRef(obj.$ref);
         }
-        throw new Error(`${propertyName} anyOf has no $ref: ${JSON.stringify(jsonSchemaObj, null, 2)}`);
+        return "unknown";
       })
       .join("|");
   }
-  throw new Error(`JSONSchemaObj ${propertyName} has no type: ${JSON.stringify(jsonSchemaObj, null, 2)}`);
+  return "unknown";
 }
 
 function getJsonSchemaObjTypeFromRef(ref: string): string {
