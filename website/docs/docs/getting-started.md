@@ -6,6 +6,8 @@ sidebar_collapsed: false
 
 # Getting Started
 
+For a complete project walkthrough, including YAML reuse, associations, extension vocabularies, examples, and plugins, see the [Authoring Guide](./authoring-guide.md).
+
 While writing a JSON Schema specification, you may want to separate concerns, group definitions by category, or reuse definitions.
 Different authors may also maintain definitions for the domains they know best.
 
@@ -53,6 +55,8 @@ The following steps show a typical workflow.
    definitions:
      Book:
        type: object
+       x-extension-points:
+         - Book
        properties:
          author:
            type: string
@@ -108,7 +112,7 @@ The following steps show a typical workflow.
 
 1. Create a Spec Toolkit configuration file that describes what to generate.
 
-   ```jsonc
+   ```json
    {
      "$schema": "https://open-resource-discovery.github.io/spec-toolkit/spec-v1/spec-toolkit-config.schema.json#",
      "outputPath": "src/generated/spec-v1",
@@ -122,19 +126,16 @@ The following steps show a typical workflow.
            "description": "Describes the schema for the Bookstore."
          }
        },
-       // highlight-start
-       // Optional for simple use cases:
-       // merge the extension into the main schema and generate its documentation
        {
          "type": "specExtension",
          "id": "spec-author",
          "sourceFilePath": "./spec/v1/author.schema.yaml",
+         "targetDocumentId": "spec-bookstore",
          "mdFrontmatter": {
            "title": "Author",
            "description": "Describes the schema for the Author."
          }
        }
-       // highlight-end
      ]
    }
    ```

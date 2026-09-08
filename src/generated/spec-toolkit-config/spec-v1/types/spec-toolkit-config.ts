@@ -25,7 +25,7 @@ export interface SpecToolkitConfigurationDocument {
   /**
    * The output path where the generated files will be written to.
    *
-   * This is relative to the location of the configuration document.
+   * Relative paths are resolved from the current working directory.
    */
   outputPath: string;
   /**

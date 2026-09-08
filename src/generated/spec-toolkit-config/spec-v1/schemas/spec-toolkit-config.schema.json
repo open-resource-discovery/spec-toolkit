@@ -31,7 +31,7 @@
     },
     "outputPath": {
       "type": "string",
-      "description": "The output path where the generated files will be written to.\n\nThis is relative to the location of the configuration document."
+      "description": "The output path where the generated files will be written to.\n\nRelative paths are resolved from the current working directory."
     },
     "docsConfig": {
       "type": "array",
