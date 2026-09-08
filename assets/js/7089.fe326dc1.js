@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunk_open_resource_discovery_spec_toolkit=globalThis.webpackChunk_open_resource_discovery_spec_toolkit||[]).push([[7089],{7089(e,c,o){o.d(c,{createArchitectureServices:()=>r.S});var r=o(5796);o(4954)}}]);
