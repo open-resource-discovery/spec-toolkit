@@ -36,8 +36,7 @@ jobs:
         run: |
           set -euo pipefail
           npm ci
-          npm --prefix website ci
-          npm --prefix website run build
+          npm run build:website
 
       - name: PR preview
         uses: open-resource-discovery/pr-preview-action@main

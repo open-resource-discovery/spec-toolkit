@@ -8,11 +8,9 @@
       "!node_modules",
       "!website/build",
       "!website/.docusaurus",
-      "!website/node_modules",
       "!src/__tests__/generated",
       "!src/generated",
-      "!package-lock.json",
-      "!website/package-lock.json"
+      "!package-lock.json"
     ]
   },
   "formatter": {
