@@ -71,12 +71,15 @@ export function normalizeArbitrarySchema(schema: SpecJsonSchemaRoot, options: No
   const defs = root.definitions as Record<string, SpecJsonSchema>;
   const taken = new Set<string>(Object.keys(defs));
   const warnings: string[] = [];
+  let strictViolationCount = 0;
   const inferredObjectNodes: SpecJsonSchema[] = [];
 
-  const warn = (msg: string): void => {
+  const warn = (msg: string, strictViolation = true): void => {
     warnings.push(msg);
-    if (options.strict) log.error(msg);
-    else log.warn(msg);
+    if (options.strict && strictViolation) {
+      strictViolationCount += 1;
+      log.error(msg);
+    } else log.warn(msg);
   };
 
   // spec-toolkit only understands `definitions` (not `$defs`). Merge both
@@ -143,6 +146,7 @@ export function normalizeArbitrarySchema(schema: SpecJsonSchemaRoot, options: No
       if (resolvableTargets.length !== associationTargets.length) {
         warn(
           "Normalized: dangling x-association-target removed for documentation generation (authored file unchanged).",
+          false,
         );
       }
       if (resolvableTargets.length > 0) record["x-association-target"] = resolvableTargets;
@@ -240,6 +244,14 @@ export function normalizeArbitrarySchema(schema: SpecJsonSchemaRoot, options: No
     node.const === undefined &&
     (node.required !== undefined || node.if !== undefined || node.then !== undefined || node.else !== undefined);
 
+  const isRequiredOnlyConstraint = (node: SpecJsonSchema): boolean =>
+    !!node &&
+    typeof node === "object" &&
+    !Array.isArray(node) &&
+    Object.keys(node).length === 1 &&
+    Array.isArray(node.required) &&
+    node.required.length > 0;
+
   const hoist = (node: SpecJsonSchema, pathParts: string[], reason: string): SpecJsonSchema => {
     const base = node.title ? pascalCase(node.title) : pascalCase(pathParts.filter(Boolean).join(" ")) || "Object";
     const name = uniqueName(base, taken);
@@ -320,6 +332,8 @@ export function normalizeArbitrarySchema(schema: SpecJsonSchemaRoot, options: No
     for (const key of ["allOf", "anyOf", "oneOf"] as const) {
       const branches = node[key];
       if (Array.isArray(branches)) {
+        const isSupportedRequiredOnlyAnyOf =
+          key === "anyOf" && branches.length > 0 && branches.every(isRequiredOnlyConstraint);
         node[key] = branches.map((sub: SpecJsonSchema, idx: number) => {
           // A pure constraint branch (conditional requiredness, no shape) is
           // left in place; the renderer surfaces it as a condition note.
@@ -328,7 +342,7 @@ export function normalizeArbitrarySchema(schema: SpecJsonSchemaRoot, options: No
             // conditions whose `then` selects a definition by $ref. Only the
             // conditional-requiredness fallback is tolerant-only.
             const isSupportedConditionalRef = key === "allOf" && !!sub.if && !!sub.then?.$ref;
-            if (options.strict && !isSupportedConditionalRef) {
+            if (options.strict && !isSupportedConditionalRef && !isSupportedRequiredOnlyAnyOf) {
               warn(
                 `Strict mode: inline ${key} constraint branch at "${pathParts.join(".") || "(root)"}" is unsupported.`,
               );
@@ -386,8 +400,11 @@ export function normalizeArbitrarySchema(schema: SpecJsonSchemaRoot, options: No
 
   const walked = walk(root as unknown as SpecJsonSchema, [], true, false) as unknown as SpecJsonSchemaRoot;
   walked.definitions = defs;
-  if (options.strict && warnings.length > 0) {
-    throw new Error(`Strict schema mode rejected ${warnings.length} unsupported schema construct(s).`);
+  if (options.strict && strictViolationCount > 0) {
+    throw new Error(
+      `Strict schema mode rejected ${strictViolationCount} unsupported schema construct(s). ` +
+        'Set "generalConfig.schemaMode" to "tolerant" to normalize supported deviations and continue generation.',
+    );
   }
   return { schema: walked, warnings, inferredObjectNodes };
 }

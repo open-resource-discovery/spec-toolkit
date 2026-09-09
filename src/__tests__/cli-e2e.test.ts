@@ -167,7 +167,7 @@ describe("CLI End-to-End Tests", () => {
     const configFile = "./src/__tests__/testData/valid/test6-my-strict-spec-config.json";
 
     await expect(spawnAsync(cliBin, [cliScriptPath, "-c", configFile])).rejects.toMatchObject({
-      stderr: expect.stringContaining("Strict schema mode rejected"),
+      stderr: expect.stringContaining('Set "generalConfig.schemaMode" to "tolerant"'),
     });
   });
 });

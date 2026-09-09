@@ -170,6 +170,36 @@ describe("normalizeArbitrarySchema", () => {
     expect(result.properties!.packageId["x-association-target"]).toEqual(["#/definitions/Package/id"]);
   });
 
+  it("warns instead of failing strict mode for dangling association targets", () => {
+    const schema = {
+      type: "object",
+      properties: {
+        packageId: {
+          type: "string",
+          "x-association-target": ["#/definitions/Missing/id"],
+        },
+      },
+    } as unknown as SpecJsonSchemaRoot;
+
+    const { schema: result, warnings } = normalizeArbitrarySchema(schema, { strict: true });
+
+    expect(result.properties!.packageId["x-association-target"]).toBeUndefined();
+    expect(warnings).toEqual([expect.stringContaining("dangling x-association-target")]);
+  });
+
+  it("accepts object-level required-only anyOf constraints in strict mode", () => {
+    const schema = {
+      type: "object",
+      properties: { a: { type: "string" }, b: { type: "string" } },
+      anyOf: [{ required: ["a"] }, { required: ["b"] }],
+    } as unknown as SpecJsonSchemaRoot;
+
+    const { schema: result, warnings } = normalizeArbitrarySchema(schema, { strict: true });
+
+    expect(result.anyOf).toEqual([{ required: ["a"] }, { required: ["b"] }]);
+    expect(warnings).toHaveLength(0);
+  });
+
   it("does not mutate the input schema", () => {
     const schema = {
       type: "object",
@@ -202,7 +232,7 @@ describe("normalizeArbitrarySchema", () => {
     } as unknown as SpecJsonSchemaRoot;
 
     expect(() => normalizeArbitrarySchema(schema, { strict: true })).toThrow(
-      "Strict schema mode rejected 1 unsupported schema construct(s).",
+      'Strict schema mode rejected 1 unsupported schema construct(s). Set "generalConfig.schemaMode" to "tolerant"',
     );
   });
 
