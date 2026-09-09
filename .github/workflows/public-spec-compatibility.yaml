@@ -1,0 +1,103 @@
+name: Public specification compatibility
+
+on:
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "17 5 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: public-spec-compatibility-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  generate:
+    name: Generate ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: ORD
+            repository: open-resource-discovery/specification
+          - name: CSN Interop
+            repository: SAP/csn-interop-specification
+    steps:
+      - name: Checkout Spec Toolkit
+        uses: actions/checkout@v7
+        with:
+          path: spec-toolkit
+          persist-credentials: false
+
+      - name: Checkout ${{ matrix.name }}
+        uses: actions/checkout@v7
+        with:
+          repository: ${{ matrix.repository }}
+          path: consumer
+          persist-credentials: false
+
+      - name: Record consumer revision and mode
+        id: consumer
+        working-directory: consumer
+        run: |
+          echo "revision=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "mode=$(jq -r '.generalConfig.schemaMode // "strict (default)"' spec-toolkit.config.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Install Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: |
+            spec-toolkit/package-lock.json
+            consumer/package-lock.json
+
+      - name: Build candidate package
+        working-directory: spec-toolkit
+        run: |
+          npm ci
+          npm run build
+
+      - name: Install ${{ matrix.name }} dependencies and link candidate
+        working-directory: consumer
+        run: |
+          npm ci
+          npm link ../spec-toolkit --no-save --ignore-scripts
+
+      - name: Generate ${{ matrix.name }} in ${{ steps.consumer.outputs.mode }} mode
+        working-directory: consumer
+        run: |
+          echo "Repository: ${{ matrix.repository }}"
+          echo "Mode: ${{ steps.consumer.outputs.mode }}"
+          echo "Command: npm run generate"
+          npm run generate
+
+      - name: Record generated output
+        working-directory: consumer
+        # XLSX ZIP metadata includes generation timestamps, so compare deterministic outputs only.
+        run: find src/generated -type f ! -name '*.xlsx' -print0 | sort -z | xargs -0 -r sha256sum > "$RUNNER_TEMP/generated-first.sha256"
+
+      - name: Regenerate ${{ matrix.name }}
+        working-directory: consumer
+        run: npm run generate
+
+      - name: Check deterministic generated output
+        working-directory: consumer
+        run: |
+          find src/generated -type f ! -name '*.xlsx' -print0 | sort -z | xargs -0 -r sha256sum > "$RUNNER_TEMP/generated-second.sha256"
+          diff -u "$RUNNER_TEMP/generated-first.sha256" "$RUNNER_TEMP/generated-second.sha256"
+
+      - name: Summarize compatibility run
+        if: always()
+        run: |
+          echo "## ${{ matrix.name }} compatibility" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Input | Value |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| --- | --- |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Repository | \`${{ matrix.repository }}\` |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Revision | \`${{ steps.consumer.outputs.revision }}\` |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Schema mode | \`${{ steps.consumer.outputs.mode }}\` |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Command | \`npm run generate\` |" >> "$GITHUB_STEP_SUMMARY"

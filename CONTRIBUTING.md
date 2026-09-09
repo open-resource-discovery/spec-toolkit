@@ -41,3 +41,14 @@ The following rules apply to contributions:
 - We use GitHub issues to track bugs and enhancement requests.
 
 - Provide enough context for a maintainer to understand and reproduce the issue.
+
+## Downstream Compatibility
+
+The public specification compatibility workflow runs the checked-in generation commands from the ORD and CSN Interop repositories against the candidate Spec Toolkit package.
+It runs for pull requests, on a weekly schedule, and on demand without publishing the package or accessing private repositories.
+The workflow generates each specification twice and compares deterministic outputs, excluding XLSX files whose ZIP metadata contains generation timestamps.
+
+Spec Toolkit maintainers own the initial triage when this workflow fails.
+Use the repository revision, schema mode, and command in the workflow summary to reproduce the failure and determine whether it is a toolkit regression or downstream drift.
+Fix toolkit regressions before merging the responsible change.
+For downstream drift, open or link an issue in the affected public repository and coordinate the compatible change before updating this workflow.
