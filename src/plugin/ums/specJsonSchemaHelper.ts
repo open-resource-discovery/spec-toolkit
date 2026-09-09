@@ -25,7 +25,8 @@ export interface Context {
 
 /**
  * Detects whether an object schema has an object-level `anyOf` where every entry contains only a `required`
- * array. This represents the "at least one of these properties must be present" constraint pattern.
+ * array with one property. This represents the "at least one of these properties must be present" constraint
+ * pattern.
  *
  * Example:
  * ```yaml
@@ -41,7 +42,7 @@ export function isObjectLevelAnyOfRequired(schema: SpecJsonSchemaWithUmsSupport)
   }
   return schema.anyOf.every((entry) => {
     const keys = Object.keys(entry);
-    return keys.length === 1 && keys[0] === "required" && Array.isArray(entry.required) && entry.required.length > 0;
+    return keys.length === 1 && keys[0] === "required" && Array.isArray(entry.required) && entry.required.length === 1;
   });
 }
 
@@ -153,7 +154,7 @@ export function checkForUnsupportedFeatures(schema: SpecJsonSchemaWithUmsSupport
       );
     } else {
       log.error(
-        `${getPath(context)}: Unsupported object-level anyOf detected. Only anyOf entries with a single "required" array are supported at the object level.`,
+        `${getPath(context)}: Unsupported object-level anyOf detected. Only anyOf entries that each require one property are supported at the object level.`,
         schema.anyOf,
       );
     }

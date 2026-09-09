@@ -65,15 +65,40 @@ export interface DocumentationResult {
  * * The JSON Schema root schema object is a "Object"
  *
  */
-export async function loadSpecJsonSchema(sourceFilePath: string): Promise<SpecJsonSchemaRoot> {
+export async function loadSpecJsonSchema(sourceFilePath: string, strictMode = true): Promise<SpecJsonSchemaRoot> {
   const resolvedSourceFilePath = path.resolve(process.cwd(), sourceFilePath);
   const parsedSchema = loadYaml(fs.readFileSync(resolvedSourceFilePath).toString()) as SpecJsonSchemaRoot;
-  if (hasNonLocalReferences(parsedSchema)) {
-    const bundledSchema = (await $RefParser.bundle(resolvedSourceFilePath)) as unknown as SpecJsonSchemaRoot;
-    log.info(`${sourceFilePath} external references resolved and bundled.`);
-    return bundledSchema;
+  if (!hasNonLocalReferences(parsedSchema)) {
+    return parsedSchema;
   }
-  return parsedSchema;
+
+  // Validate the authored schema before bundling. Otherwise, the normalization
+  // needed for inlined external references could also normalize unrelated
+  // authored constructs and conceal a strict-mode violation.
+  if (strictMode) normalizeArbitrarySchema(parsedSchema, { strict: true });
+
+  let bundledSchema: SpecJsonSchemaRoot;
+  try {
+    bundledSchema = (await $RefParser.bundle(resolvedSourceFilePath)) as unknown as SpecJsonSchemaRoot;
+  } catch (err) {
+    // A single unreachable/invalid external reference would otherwise abort the
+    // whole run with a raw ref-parser stack. Point at the offending file instead.
+    throw new Error(`Failed to bundle external references of "${resolvedSourceFilePath}": ${(err as Error).message}`);
+  }
+
+  // `$RefParser.bundle` inlines external content at the referencing location and
+  // rewrites further references to that JSON Pointer (e.g. `#/properties/...`),
+  // rather than minting `#/definitions/<Name>` entries. The renderer, validator
+  // and TypeScript generator only understand `#/definitions/<Name>`, so hoist the
+  // bundled artifacts into definitions here. This normalization only rewrites the
+  // structures bundling itself introduced; it does not relax strict-mode
+  // validation of the authored schema, which still runs on the result.
+  const { schema, warnings } = normalizeArbitrarySchema(bundledSchema, { strict: false });
+  if (warnings.length > 0) {
+    log.info(`${sourceFilePath}: ${warnings.length} bundled reference(s) hoisted into #/definitions.`);
+  }
+  log.info(`${sourceFilePath} external references resolved and bundled.`);
+  return schema;
 }
 
 function hasNonLocalReferences(node: unknown): boolean {
@@ -86,9 +111,10 @@ function hasNonLocalReferences(node: unknown): boolean {
 export async function jsonSchemaToDocumentation(configData: SpecToolkitConfigurationDocument): Promise<void> {
   // Iterate the files and generate the documentation
   for (const docConfig of configData.docsConfig) {
+    const strictMode = (configData.generalConfig?.schemaMode ?? "strict") === "strict";
     // Read JSON File. path.resolve honors an absolute sourceFilePath as-is; a
     // relative one still resolves against the current working directory.
-    const jsonSchemaFileParsed = await loadSpecJsonSchema(docConfig.sourceFilePath);
+    const jsonSchemaFileParsed = await loadSpecJsonSchema(docConfig.sourceFilePath, strictMode);
 
     // The Spec JSON Schema based Specification
     let jsonSchemaRoot = preprocessSpecJsonSchema(jsonSchemaFileParsed);
@@ -98,7 +124,6 @@ export async function jsonSchemaToDocumentation(configData: SpecToolkitConfigura
     // composition branches into #/definitions, add missing object `type`),
     // warning on each rewrite instead of rejecting the schema. Schemas already
     // authored to the conventions pass through unchanged.
-    const strictMode = (configData.generalConfig?.schemaMode ?? "strict") === "strict";
     const normalized = normalizeArbitrarySchema(jsonSchemaRoot, { strict: strictMode });
     if (!strictMode) jsonSchemaRoot = normalized.schema;
     if (normalized.warnings.length > 0) {
