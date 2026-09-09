@@ -6,15 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) rules,
 but omits the **patch** level in the spec version number.
 
-For a roadmap including expected timeline, please refer to [ROADMAP.md](./ROADMAP.md)
-
 ## [unreleased]
 
 ## [0.9.0]
 
 - new feature: support object-level `anyOf` with `required`-only entries, expressing an "at least one of these properties must be present" constraint (#71)
-- new feature: relative file and HTTP(S) references are automatically bundled into the generated JSON Schema.
-  Bundled artifacts contain only local `$ref` values (#94).
+- new feature: relative file and HTTP(S) references are automatically bundled into the generated JSON Schema, so the bundled artifact contains only local `$ref` values (#94).
+  Bundling inlines external content at the referencing location; when a reference resolves to an inline object or a non-`#/definitions` pointer, tolerant mode (`generalConfig.schemaMode: tolerant`) is needed to hoist it into `#/definitions` for documentation and TypeScript generation.
+  In the default strict mode such references are rejected like any other schema that deviates from the authoring conventions.
 - new feature: opt-in tolerant mode for arbitrary JSON Schemas.
   Existing strict schema handling remains the default, and validation errors point to `generalConfig.schemaMode: tolerant` when opting into normalization is appropriate.
   Set `generalConfig.schemaMode` to `tolerant` to normalize and warn about schemas that break the strong authoring conventions.
