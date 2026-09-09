@@ -149,4 +149,24 @@ describe("loadSpecJsonSchema", () => {
 
     await expect(loadSpecJsonSchema(rootPath)).rejects.toThrow(/Failed to bundle external references of .*root\.json/);
   });
+
+  it("does not let bundling conceal an authored strict-mode violation", async () => {
+    const externalPath = path.join(testDirectory, "external.json");
+    const rootPath = path.join(testDirectory, "root.json");
+    fs.writeFileSync(externalPath, JSON.stringify({ title: "External", type: "string" }));
+    fs.writeFileSync(
+      rootPath,
+      JSON.stringify({
+        title: "Root",
+        type: "object",
+        properties: {
+          imported: { $ref: "./external.json" },
+          authoredInline: { type: "object", properties: { value: { type: "string" } } },
+        },
+        definitions: {},
+      }),
+    );
+
+    await expect(loadSpecJsonSchema(rootPath)).rejects.toThrow("Strict schema mode rejected");
+  });
 });

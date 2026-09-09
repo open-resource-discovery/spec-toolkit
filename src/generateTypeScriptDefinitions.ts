@@ -15,6 +15,16 @@ import {
 import { log } from "./util/log.js";
 import { loadYaml } from "./util/yaml.js";
 
+function removeFilesIfPresent(...filePaths: string[]): void {
+  for (const filePath of filePaths) {
+    try {
+      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+    } catch {
+      // Cleanup is best effort and must not hide the generation error.
+    }
+  }
+}
+
 export async function generateTypeScriptDefinitions(configData: SpecToolkitConfigurationDocument): Promise<void> {
   let indexExportStatements = "";
 
@@ -87,11 +97,7 @@ export async function generateTypeScriptDefinitions(configData: SpecToolkitConfi
         if ((configData.generalConfig?.schemaMode ?? "strict") === "strict") {
           // Strict mode aborts the run, but still remove the temporary schema
           // file so a failed run does not leave `.x.json` artifacts behind.
-          try {
-            if (fs.existsSync(xSchemaFilePath)) fs.unlinkSync(xSchemaFilePath);
-          } catch {
-            // ignore
-          }
+          removeFilesIfPresent(xSchemaFilePath);
           throw err;
         }
         // Tolerant mode: TypeScript type generation via json-schema-to-typescript
@@ -103,12 +109,7 @@ export async function generateTypeScriptDefinitions(configData: SpecToolkitConfi
           `Skipping TypeScript type generation for "${docConfig.id}": ${(err as Error).message}. The Markdown documentation was still generated.`,
         );
         // Best-effort cleanup of temporary and stale outputs.
-        try {
-          if (fs.existsSync(xSchemaFilePath)) fs.unlinkSync(xSchemaFilePath);
-          if (fs.existsSync(typesFile)) fs.unlinkSync(typesFile);
-        } catch {
-          // ignore
-        }
+        removeFilesIfPresent(xSchemaFilePath, typesFile);
         continue;
       }
 

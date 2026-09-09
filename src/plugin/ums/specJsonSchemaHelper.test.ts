@@ -3,7 +3,7 @@ import { isObjectLevelAnyOfRequired } from "./specJsonSchemaHelper.js";
 import type { SpecJsonSchemaWithUmsSupport } from "./types.js";
 
 describe("isObjectLevelAnyOfRequired", () => {
-  it("returns true when every anyOf branch is a non-empty required-only entry", () => {
+  it("returns true when every anyOf branch requires exactly one property", () => {
     const schema = {
       type: "object",
       anyOf: [{ required: ["ordId"] }, { required: ["url"] }, { required: ["correlationIds"] }],
@@ -40,6 +40,15 @@ describe("isObjectLevelAnyOfRequired", () => {
     const schema = {
       type: "object",
       anyOf: [{ required: ["ordId"] }, { required: [] }],
+    } as SpecJsonSchemaWithUmsSupport;
+
+    expect(isObjectLevelAnyOfRequired(schema)).toBe(false);
+  });
+
+  it("returns false when a branch requires multiple properties", () => {
+    const schema = {
+      type: "object",
+      anyOf: [{ required: ["ordId", "url"] }, { required: ["correlationIds"] }],
     } as SpecJsonSchemaWithUmsSupport;
 
     expect(isObjectLevelAnyOfRequired(schema)).toBe(false);

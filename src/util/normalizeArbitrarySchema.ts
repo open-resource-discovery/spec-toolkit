@@ -197,7 +197,12 @@ export function normalizeArbitrarySchema(schema: SpecJsonSchemaRoot, options: No
   rewriteDeepReferences(root);
 
   for (const [definitionName, definition] of Object.entries(defs)) {
-    if (definition && typeof definition === "object" && !definition.title) {
+    if (
+      definition &&
+      typeof definition === "object" &&
+      !definition.title &&
+      (!definition.$ref || definition.$ref.startsWith("#"))
+    ) {
       definition.title = definitionName;
       warn(
         `Normalized: definition "${definitionName}" has no "title"; used its definition name for documentation generation (authored file unchanged).`,
@@ -250,7 +255,7 @@ export function normalizeArbitrarySchema(schema: SpecJsonSchemaRoot, options: No
     !Array.isArray(node) &&
     Object.keys(node).length === 1 &&
     Array.isArray(node.required) &&
-    node.required.length > 0;
+    node.required.length === 1;
 
   const hoist = (node: SpecJsonSchema, pathParts: string[], reason: string): SpecJsonSchema => {
     const base = node.title ? pascalCase(node.title) : pascalCase(pathParts.filter(Boolean).join(" ")) || "Object";

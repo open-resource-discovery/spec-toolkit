@@ -65,12 +65,17 @@ export interface DocumentationResult {
  * * The JSON Schema root schema object is a "Object"
  *
  */
-export async function loadSpecJsonSchema(sourceFilePath: string): Promise<SpecJsonSchemaRoot> {
+export async function loadSpecJsonSchema(sourceFilePath: string, strictMode = true): Promise<SpecJsonSchemaRoot> {
   const resolvedSourceFilePath = path.resolve(process.cwd(), sourceFilePath);
   const parsedSchema = loadYaml(fs.readFileSync(resolvedSourceFilePath).toString()) as SpecJsonSchemaRoot;
   if (!hasNonLocalReferences(parsedSchema)) {
     return parsedSchema;
   }
+
+  // Validate the authored schema before bundling. Otherwise, the normalization
+  // needed for inlined external references could also normalize unrelated
+  // authored constructs and conceal a strict-mode violation.
+  if (strictMode) normalizeArbitrarySchema(parsedSchema, { strict: true });
 
   let bundledSchema: SpecJsonSchemaRoot;
   try {
@@ -106,9 +111,10 @@ function hasNonLocalReferences(node: unknown): boolean {
 export async function jsonSchemaToDocumentation(configData: SpecToolkitConfigurationDocument): Promise<void> {
   // Iterate the files and generate the documentation
   for (const docConfig of configData.docsConfig) {
+    const strictMode = (configData.generalConfig?.schemaMode ?? "strict") === "strict";
     // Read JSON File. path.resolve honors an absolute sourceFilePath as-is; a
     // relative one still resolves against the current working directory.
-    const jsonSchemaFileParsed = await loadSpecJsonSchema(docConfig.sourceFilePath);
+    const jsonSchemaFileParsed = await loadSpecJsonSchema(docConfig.sourceFilePath, strictMode);
 
     // The Spec JSON Schema based Specification
     let jsonSchemaRoot = preprocessSpecJsonSchema(jsonSchemaFileParsed);
@@ -118,7 +124,6 @@ export async function jsonSchemaToDocumentation(configData: SpecToolkitConfigura
     // composition branches into #/definitions, add missing object `type`),
     // warning on each rewrite instead of rejecting the schema. Schemas already
     // authored to the conventions pass through unchanged.
-    const strictMode = (configData.generalConfig?.schemaMode ?? "strict") === "strict";
     const normalized = normalizeArbitrarySchema(jsonSchemaRoot, { strict: strictMode });
     if (!strictMode) jsonSchemaRoot = normalized.schema;
     if (normalized.warnings.length > 0) {

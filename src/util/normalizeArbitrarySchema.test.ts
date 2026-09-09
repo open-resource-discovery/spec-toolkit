@@ -201,6 +201,16 @@ describe("normalizeArbitrarySchema", () => {
     expect(warnings).toHaveLength(0);
   });
 
+  it("rejects multi-property required branches in strict mode", () => {
+    const schema = {
+      type: "object",
+      properties: { a: { type: "string" }, b: { type: "string" }, c: { type: "string" } },
+      anyOf: [{ required: ["a", "b"] }, { required: ["c"] }],
+    } as unknown as SpecJsonSchemaRoot;
+
+    expect(() => normalizeArbitrarySchema(schema, { strict: true })).toThrow("Strict schema mode rejected");
+  });
+
   it("does not mutate the input schema", () => {
     const schema = {
       type: "object",
