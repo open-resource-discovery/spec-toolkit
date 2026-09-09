@@ -14,23 +14,58 @@ export const preparedAjv = new Ajv({
   allowMatchingProperties: true,
 });
 addFormats.default(preparedAjv);
-preparedAjv.addKeyword("x-recommended");
-preparedAjv.addKeyword("x-introduced-in-version");
-preparedAjv.addKeyword("x-deprecated-in-version");
-preparedAjv.addKeyword("x-deprecation-text");
-preparedAjv.addKeyword("x-feature-status");
-preparedAjv.addKeyword("x-pattern-properties-description");
-preparedAjv.addKeyword("x-property-order");
-preparedAjv.addKeyword("x-association-target");
-preparedAjv.addKeyword("x-hide");
-preparedAjv.addKeyword("x-extension-targets");
-preparedAjv.addKeyword("x-extension-points");
-preparedAjv.addKeyword("x-header-level");
-preparedAjv.addKeyword("x-ref-to-doc");
-preparedAjv.addKeyword("x-abstract");
+const registeredExtensionKeywords = new Set([
+  "x-recommended",
+  "x-introduced-in-version",
+  "x-deprecated-in-version",
+  "x-deprecation-text",
+  "x-feature-status",
+  "x-pattern-properties-description",
+  "x-property-order",
+  "x-association-target",
+  "x-hide",
+  "x-extension-targets",
+  "x-extension-points",
+  "x-header-level",
+  "x-ref-to-doc",
+  "x-abstract",
+]);
+for (const keyword of registeredExtensionKeywords) preparedAjv.addKeyword(keyword);
 
 // JSON Schema -> TypeScript conversion
 preparedAjv.addKeyword("tsType");
+
+/**
+ * Temporarily register vendor extension keywords while a tolerant schema is
+ * compiled by Ajv. Strict mode continues to reject unregistered keywords, and
+ * the registrations are removed afterwards so one generation run cannot
+ * weaken validation in a later run in the same process.
+ */
+export function withExtensionKeywordsRegistered<T>(jsonSchema: SpecJsonSchemaRoot, callback: () => T): T {
+  const addedKeywords: string[] = [];
+
+  function visit(value: unknown): void {
+    if (!value || typeof value !== "object") return;
+    for (const [key, child] of Object.entries(value)) {
+      if (key.startsWith("x-") && !registeredExtensionKeywords.has(key)) {
+        preparedAjv.addKeyword(key);
+        registeredExtensionKeywords.add(key);
+        addedKeywords.push(key);
+      }
+      visit(child);
+    }
+  }
+
+  visit(jsonSchema);
+  try {
+    return callback();
+  } finally {
+    for (const keyword of addedKeywords) {
+      preparedAjv.removeKeyword(keyword);
+      registeredExtensionKeywords.delete(keyword);
+    }
+  }
+}
 
 export interface ValidationResult {
   errors: ValidationResultEntry[];

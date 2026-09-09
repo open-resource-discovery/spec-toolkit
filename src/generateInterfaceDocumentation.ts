@@ -31,7 +31,7 @@ import {
 import { log } from "./util/log.js";
 import { getMarkdownFrontMatter } from "./util/markdownTextHelper.js";
 import { normalizeArbitrarySchema } from "./util/normalizeArbitrarySchema.js";
-import { validateSpecJsonSchema } from "./util/validation.js";
+import { validateSpecJsonSchema, withExtensionKeywordsRegistered } from "./util/validation.js";
 import { loadYaml } from "./util/yaml.js";
 
 ////////////////////////////////////////////////////////////
@@ -150,21 +150,22 @@ export async function jsonSchemaToDocumentation(configData: SpecToolkitConfigura
       }
     }
 
-    // Validate JSON Schema to be a valid JSON Schema document
-    validateSpecJsonSchema(jsonSchemaRoot, docConfig.sourceFilePath);
-
     const mdFrontmatter = getMarkdownFrontMatter(docConfig.mdFrontmatter);
     const introText = readTextFromFile(docConfig.sourceIntroFilePath);
     const outroText = readTextFromFile(docConfig.sourceOutroFilePath);
-    const text = generateMarkdown(
-      jsonSchemaRoot,
-      docConfig.id,
-      docConfig.type,
-      specTarget,
-      mdFrontmatter,
-      introText,
-      outroText,
-    );
+    const generate = (): string => {
+      validateSpecJsonSchema(jsonSchemaRoot, docConfig.sourceFilePath);
+      return generateMarkdown(
+        jsonSchemaRoot,
+        docConfig.id,
+        docConfig.type,
+        specTarget,
+        mdFrontmatter,
+        introText,
+        outroText,
+      );
+    };
+    const text = strictMode ? generate() : withExtensionKeywordsRegistered(jsonSchemaRoot, generate);
 
     // Write Markdown Documentation
     let filePath = "";
