@@ -73,14 +73,35 @@ export async function generateTypeScriptDefinitions(configData: SpecToolkitConfi
       replaceKeyTypeMarkers(schema);
 
       const convertedDocumentSchema = schema as unknown as JSONSchema4;
-
-      let definitions = await jsonSchemaToTypeScript(convertedDocumentSchema, `${docConfig.id}`, {
-        unknownAny: true,
-        bannerComment: "// AUTO-GENERATED definition files. Do not modify directly.\n\n",
-        strictIndexSignatures: false,
-        declareExternallyReferenced: true,
-        inferStringEnumKeysFromValues: false,
-      });
+      const typesFile = `${process.cwd()}/${configData.outputPath}/${typesOutputFolderName}/${docConfig.id}.ts`;
+      let definitions: string;
+      try {
+        definitions = await jsonSchemaToTypeScript(convertedDocumentSchema, `${docConfig.id}`, {
+          unknownAny: true,
+          bannerComment: "// AUTO-GENERATED definition files. Do not modify directly.\n\n",
+          strictIndexSignatures: false,
+          declareExternallyReferenced: true,
+          inferStringEnumKeysFromValues: false,
+        });
+      } catch (err) {
+        if ((configData.generalConfig?.schemaMode ?? "strict") === "strict") throw err;
+        // Tolerant mode: TypeScript type generation via json-schema-to-typescript
+        // cannot always handle arbitrary JSON Schema (e.g. inline if/then/else
+        // conditionals). Warn and skip the TS types for this schema rather than
+        // aborting the whole run — the Markdown interface docs (already written)
+        // are the primary artifact and are unaffected.
+        log.warn(
+          `Skipping TypeScript type generation for "${docConfig.id}": ${(err as Error).message}. The Markdown documentation was still generated.`,
+        );
+        // Best-effort cleanup of temporary and stale outputs.
+        try {
+          if (fs.existsSync(xSchemaFilePath)) fs.unlinkSync(xSchemaFilePath);
+          if (fs.existsSync(typesFile)) fs.unlinkSync(typesFile);
+        } catch {
+          // ignore
+        }
+        continue;
+      }
 
       // Clean up unnecessary "This interface was referenced..." mentions
       definitions = definitions.replace(/ {3}\*\n {3}\* This interface was referenced by (.*)\n(.*)\n/gm, "");
@@ -102,7 +123,6 @@ export async function generateTypeScriptDefinitions(configData: SpecToolkitConfi
       fs.unlinkSync(xSchemaFilePath);
       log.info(`Cleanup temporary file ${xSchemaFilePath}`);
 
-      const typesFile = `${process.cwd()}/${configData.outputPath}/${typesOutputFolderName}/${docConfig.id}.ts`;
       await fs.outputFile(typesFile, definitions);
       log.info(`Result: ${typesFile}`);
       if (configData.generalConfig?.tsTypeExportExcludeJsFileExtension) {

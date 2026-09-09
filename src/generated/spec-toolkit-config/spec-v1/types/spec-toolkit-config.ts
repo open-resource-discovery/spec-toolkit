@@ -46,6 +46,12 @@ export interface SpecToolkitConfigurationDocument {
  */
 export interface GeneralConfig {
   /**
+   * Controls how schemas outside the spec-toolkit authoring conventions are handled.
+   * In `strict` mode, unsupported constructs fail generation.
+   * In `tolerant` mode, renderable deviations are normalized with warnings and unsupported TypeScript output is skipped per schema.
+   */
+  schemaMode?: "strict" | "tolerant";
+  /**
    * If set to `true`, the generated TypeScript types will exclude the `.js` file extension in the export statements.
    * The '.js' file extension is useful for compatibility with Node.js ESM modules but in Node.js commonjs modules it is not needed.
    */

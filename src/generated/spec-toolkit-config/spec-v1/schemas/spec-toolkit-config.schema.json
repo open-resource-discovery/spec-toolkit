@@ -66,6 +66,15 @@
       "type": "object",
       "description": "This is the general configuration for the spec-toolkit.\nThis is optional and can be omitted if no general configuration is needed.",
       "properties": {
+        "schemaMode": {
+          "type": "string",
+          "enum": [
+            "strict",
+            "tolerant"
+          ],
+          "default": "strict",
+          "description": "Controls how schemas outside the spec-toolkit authoring conventions are handled.\nIn `strict` mode, unsupported constructs fail generation.\nIn `tolerant` mode, renderable deviations are normalized with warnings and unsupported TypeScript output is skipped per schema."
+        },
         "tsTypeExportExcludeJsFileExtension": {
           "type": "boolean",
           "default": true,

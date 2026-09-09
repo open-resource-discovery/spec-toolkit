@@ -13,6 +13,20 @@ For a roadmap including expected timeline, please refer to [ROADMAP.md](./ROADMA
 - new feature: support object-level `anyOf` with `required`-only entries, expressing an "at least one of these properties must be present" constraint
 - new feature: relative file and HTTP(S) references are automatically bundled into the generated JSON Schema.
   Bundled artifacts contain only local `$ref` values.
+- new feature: tolerant mode for arbitrary JSON Schemas.
+  Set `generalConfig.schemaMode` to `tolerant` to normalize and warn about schemas that break the strong authoring conventions.
+  The default `strict` mode reports those constructs as errors and fails generation.
+  Specifically:
+  - inline nested objects and inline `oneOf`/`anyOf`/`allOf` branches that carry a shape are virtually hoisted into `#/definitions` (in memory; the authored file is never modified) via a new `normalizeArbitrarySchema` pass;
+  - a node that has object keywords (`properties`/`patternProperties`/`additionalProperties`) but no `type` is treated as `type: object`;
+  - `allOf` `if`/`then` conditionals expressing conditional requiredness are surfaced as a note rather than erroring;
+  - a node with no recognizable construct is rendered as a free-form value instead of throwing.
+  Schemas already authored to the conventions avoid structural rewrites beyond internal renderer bookkeeping.
+- fix: in tolerant mode, TypeScript type generation for a single schema that `json-schema-to-typescript` cannot handle (e.g. inline `if`/`then`/`else` conditionals) is skipped with a warning instead of aborting the whole run.
+  The Markdown documentation is still produced.
+  Strict mode keeps conversion failures fatal.
+- fix: the ajv draft-07 meta-schema is resolved relative to the installed `ajv` package (via `require.resolve`) instead of a hardcoded `./node_modules/ajv/...` path, so the tool works regardless of the current working directory.
+- fix: absolute `-c` config paths and absolute `sourceFilePath` values are honored as-is (`path.resolve` instead of `path.join(process.cwd(), ...)`), while relative paths remain CWD-relative (backward compatible).
 
 ## [0.8.2]
 

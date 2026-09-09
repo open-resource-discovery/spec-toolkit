@@ -30,6 +30,7 @@ import {
 } from "./util/jsonSchemaConversion.js";
 import { log } from "./util/log.js";
 import { getMarkdownFrontMatter } from "./util/markdownTextHelper.js";
+import { normalizeArbitrarySchema } from "./util/normalizeArbitrarySchema.js";
 import { validateSpecJsonSchema } from "./util/validation.js";
 import { loadYaml } from "./util/yaml.js";
 
@@ -90,7 +91,21 @@ export async function jsonSchemaToDocumentation(configData: SpecToolkitConfigura
     const jsonSchemaFileParsed = await loadSpecJsonSchema(docConfig.sourceFilePath);
 
     // The Spec JSON Schema based Specification
-    const jsonSchemaRoot = preprocessSpecJsonSchema(jsonSchemaFileParsed);
+    let jsonSchemaRoot = preprocessSpecJsonSchema(jsonSchemaFileParsed);
+
+    // Tolerant mode: normalize arbitrary JSON Schemas into the shape the
+    // renderer and validator expect (hoist inline objects and inline
+    // composition branches into #/definitions, add missing object `type`),
+    // warning on each rewrite instead of rejecting the schema. Schemas already
+    // authored to the conventions pass through unchanged.
+    const strictMode = (configData.generalConfig?.schemaMode ?? "strict") === "strict";
+    const normalized = normalizeArbitrarySchema(jsonSchemaRoot, { strict: strictMode });
+    if (!strictMode) jsonSchemaRoot = normalized.schema;
+    if (normalized.warnings.length > 0) {
+      log.warn(
+        `${docConfig.sourceFilePath}: ${normalized.warnings.length} schema normalization(s) applied for documentation generation (see warnings above).`,
+      );
+    }
     log.info(`${docConfig.sourceFilePath} loaded and prepared.`);
 
     // Read extension target file if given
@@ -135,6 +150,10 @@ export async function jsonSchemaToDocumentation(configData: SpecToolkitConfigura
     }
     fs.outputFileSync(filePath, text);
     log.info(`Written: ${filePath}`);
+
+    // Missing object types are inferred only to help the documentation renderer.
+    // Remove them before writing the generated schema so its validation semantics stay unchanged.
+    for (const node of normalized.inferredObjectNodes) delete node.type;
 
     writeSpecJsonSchemaFiles(
       `${getOutputPath()}/${schemasOutputFolderName}/${docConfig.id}.schema.json`,
