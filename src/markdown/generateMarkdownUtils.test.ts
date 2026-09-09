@@ -58,6 +58,26 @@ describe("test utils functions", () => {
       `);
     });
 
+    it("should escape pipe characters in markdown links within table cells", () => {
+      jsonSchemaObject.properties!.testObjectProperty1.description =
+        "See [ORD Specification | Open Resource Discovery](https://open-resource-discovery.org/spec-v1).";
+
+      const result = jsonSchemaToMd(jsonSchemaObject, jsonSchemaRoot, undefined);
+
+      expect(result).toContain(
+        "[ORD Specification \\| Open Resource Discovery](https://open-resource-discovery.org/spec-v1)",
+      );
+    });
+
+    it("should preserve pipe characters already escaped for a markdown table", () => {
+      jsonSchemaObject.properties!.testObjectProperty1.description = "The value is `string \\| number`.";
+
+      const result = jsonSchemaToMd(jsonSchemaObject, jsonSchemaRoot, undefined);
+
+      expect(result).toContain("The value is `string \\| number`.");
+      expect(result).not.toContain("The value is `string \\\\| number`.");
+    });
+
     it("should render a proposed feature-status badge", () => {
       jsonSchemaObject["x-feature-status"] = "proposed";
       const result = jsonSchemaToMd(jsonSchemaObject, jsonSchemaRoot, undefined);
