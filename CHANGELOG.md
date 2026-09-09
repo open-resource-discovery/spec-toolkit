@@ -27,7 +27,7 @@ For a roadmap including expected timeline, please refer to [ROADMAP.md](./ROADMA
 - fix: in tolerant mode, TypeScript type generation for a single schema that `json-schema-to-typescript` cannot handle (e.g. inline `if`/`then`/`else` conditionals) is skipped with a warning instead of aborting the whole run.
   The Markdown documentation is still produced.
   Strict mode keeps conversion failures fatal (#83).
-- fix: the ajv draft-07 meta-schema is resolved relative to the installed `ajv` package (via `require.resolve`) instead of a hardcoded `./node_modules/ajv/...` path, so the tool works regardless of the current working directory (#83).
+- fix: schema validation works when the CLI is run outside the project directory (#83).
 - fix: absolute `-c` config paths and absolute `sourceFilePath` values are honored as-is (`path.resolve` instead of `path.join(process.cwd(), ...)`), while relative paths remain CWD-relative (#83).
 - fix: the tabular plugin supports specification extensions and emits `unknown` for unsupported or incomplete shapes instead of aborting generation (#73).
 - fix: render `x-deprecated-in-version` and `x-deprecation-text` at the object-definition level so deprecation information is shown for object and primitive definitions (#81).
