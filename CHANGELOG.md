@@ -12,12 +12,11 @@ For a roadmap including expected timeline, please refer to [ROADMAP.md](./ROADMA
 
 ## [0.9.0]
 
-- breaking: strict schema handling is now the default and fails generation when documentation normalization would be required or TypeScript conversion fails.
-  The error points to `generalConfig.schemaMode: tolerant` when opting into normalization is appropriate (#83).
 - new feature: support object-level `anyOf` with `required`-only entries, expressing an "at least one of these properties must be present" constraint (#71)
 - new feature: relative file and HTTP(S) references are automatically bundled into the generated JSON Schema.
   Bundled artifacts contain only local `$ref` values (#94).
-- new feature: tolerant mode for arbitrary JSON Schemas.
+- new feature: opt-in tolerant mode for arbitrary JSON Schemas.
+  Existing strict schema handling remains the default, and validation errors point to `generalConfig.schemaMode: tolerant` when opting into normalization is appropriate.
   Set `generalConfig.schemaMode` to `tolerant` to normalize and warn about schemas that break the strong authoring conventions.
   Specifically:
   - inline nested objects and inline `oneOf`/`anyOf`/`allOf` branches that carry a shape are virtually hoisted into `#/definitions` (in memory; the authored file is never modified) via a new `normalizeArbitrarySchema` pass;
