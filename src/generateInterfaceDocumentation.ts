@@ -68,12 +68,32 @@ export interface DocumentationResult {
 export async function loadSpecJsonSchema(sourceFilePath: string): Promise<SpecJsonSchemaRoot> {
   const resolvedSourceFilePath = path.resolve(process.cwd(), sourceFilePath);
   const parsedSchema = loadYaml(fs.readFileSync(resolvedSourceFilePath).toString()) as SpecJsonSchemaRoot;
-  if (hasNonLocalReferences(parsedSchema)) {
-    const bundledSchema = (await $RefParser.bundle(resolvedSourceFilePath)) as unknown as SpecJsonSchemaRoot;
-    log.info(`${sourceFilePath} external references resolved and bundled.`);
-    return bundledSchema;
+  if (!hasNonLocalReferences(parsedSchema)) {
+    return parsedSchema;
   }
-  return parsedSchema;
+
+  let bundledSchema: SpecJsonSchemaRoot;
+  try {
+    bundledSchema = (await $RefParser.bundle(resolvedSourceFilePath)) as unknown as SpecJsonSchemaRoot;
+  } catch (err) {
+    // A single unreachable/invalid external reference would otherwise abort the
+    // whole run with a raw ref-parser stack. Point at the offending file instead.
+    throw new Error(`Failed to bundle external references of "${resolvedSourceFilePath}": ${(err as Error).message}`);
+  }
+
+  // `$RefParser.bundle` inlines external content at the referencing location and
+  // rewrites further references to that JSON Pointer (e.g. `#/properties/...`),
+  // rather than minting `#/definitions/<Name>` entries. The renderer, validator
+  // and TypeScript generator only understand `#/definitions/<Name>`, so hoist the
+  // bundled artifacts into definitions here. This normalization only rewrites the
+  // structures bundling itself introduced; it does not relax strict-mode
+  // validation of the authored schema, which still runs on the result.
+  const { schema, warnings } = normalizeArbitrarySchema(bundledSchema, { strict: false });
+  if (warnings.length > 0) {
+    log.info(`${sourceFilePath}: ${warnings.length} bundled reference(s) hoisted into #/definitions.`);
+  }
+  log.info(`${sourceFilePath} external references resolved and bundled.`);
+  return schema;
 }
 
 function hasNonLocalReferences(node: unknown): boolean {

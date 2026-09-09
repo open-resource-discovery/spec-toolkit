@@ -600,6 +600,19 @@ export function getObjectDescriptionTable(
     text += "Any of the following: \n";
     text += anyOfReferenceHandling(jsonSchemaObject, jsonSchemaRoot);
     text += "<br/>\n";
+  } else if (jsonSchemaObject.anyOf && isObjectLevelAnyOfRequired(jsonSchemaObject)) {
+    // Object-level `anyOf` where every branch is a `required`-only entry
+    // expresses an "at least one of these properties must be present"
+    // constraint. The individual properties stay optional in the table, so
+    // surface the constraint explicitly instead of dropping it.
+    const requiredProperties = [
+      ...new Set(jsonSchemaObject.anyOf.flatMap((entry) => (Array.isArray(entry.required) ? entry.required : []))),
+    ];
+    if (requiredProperties.length > 0) {
+      text += `_At least one of the following properties must be present: ${requiredProperties
+        .map((propertyName) => `\`${propertyName}\``)
+        .join(", ")}._<br/>\n`;
+    }
   }
 
   if (jsonSchemaObject.oneOf) {

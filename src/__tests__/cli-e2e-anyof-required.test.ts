@@ -109,6 +109,10 @@ describe("CLI e2e: anyOf with required-only entries", () => {
       expect(mdFileContent).toContain("correlationIds");
       // Should NOT contain "Any of the following" since the required-only pattern is not a $ref composition
       expect(mdFileContent).not.toContain("Any of the following");
+      // Should surface the "at least one of" constraint expressed by the object-level anyOf
+      expect(mdFileContent).toContain(
+        "At least one of the following properties must be present: `ordId`, `url`, `correlationIds`",
+      );
 
       // Verify generated JSON Schema preserves the anyOf structure
       const schemaFileContent = fs

@@ -84,7 +84,16 @@ export async function generateTypeScriptDefinitions(configData: SpecToolkitConfi
           inferStringEnumKeysFromValues: false,
         });
       } catch (err) {
-        if ((configData.generalConfig?.schemaMode ?? "strict") === "strict") throw err;
+        if ((configData.generalConfig?.schemaMode ?? "strict") === "strict") {
+          // Strict mode aborts the run, but still remove the temporary schema
+          // file so a failed run does not leave `.x.json` artifacts behind.
+          try {
+            if (fs.existsSync(xSchemaFilePath)) fs.unlinkSync(xSchemaFilePath);
+          } catch {
+            // ignore
+          }
+          throw err;
+        }
         // Tolerant mode: TypeScript type generation via json-schema-to-typescript
         // cannot always handle arbitrary JSON Schema (e.g. inline if/then/else
         // conditionals). Warn and skip the TS types for this schema rather than
