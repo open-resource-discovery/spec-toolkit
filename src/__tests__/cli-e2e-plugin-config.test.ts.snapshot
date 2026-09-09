@@ -1,0 +1,3 @@
+exports[`CLI plugin config tests > Test the plugin config > plugin packageName > should successfully preserve plugin specific x- properties in the output JSON schema if configured 1`] = `
+"{\\n  \\"description\\": \\"JSON Schema with custom (x-) properties\\",\\n  \\"$schema\\": \\"http://json-schema.org/draft-07/schema#\\",\\n  \\"title\\": \\"Person\\",\\n  \\"type\\": \\"object\\",\\n  \\"x-ums-type\\": \\"root\\",\\n  \\"properties\\": {\\n    \\"firstName\\": {\\n      \\"type\\": \\"string\\"\\n    },\\n    \\"lastName\\": {\\n      \\"type\\": \\"string\\"\\n    }\\n  },\\n  \\"required\\": [\\n    \\"firstName\\",\\n    \\"lastName\\"\\n  ],\\n  \\"definitions\\": {}\\n}"
+`;

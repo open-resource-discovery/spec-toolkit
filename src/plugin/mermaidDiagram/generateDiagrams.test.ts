@@ -1,15 +1,11 @@
-import { jest } from "@jest/globals";
 import fs from "fs-extra";
 import * as yaml from "js-yaml";
 import type { JSONSchema7 } from "json-schema";
+import { describe, expect, it } from "../../testHelpers/nodeTest.js";
 import { MermaidDiagram } from "./mermaidClass.js";
 
 describe("test generateDiagrams", () => {
   describe("test generateEntityRelationshipModel", () => {
-    afterEach(() => {
-      jest.clearAllMocks();
-    });
-
     it("should get correct entity relationship model", async () => {
       const jsonSchemaDocumentRoot = yaml.load(
         (await fs.readFile(`./src/plugin/mermaidDiagram/testData/testDiagramDocumentSchema.yaml`)).toString(),

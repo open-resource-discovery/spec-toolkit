@@ -1,9 +1,9 @@
 import path from "node:path";
-import { jest } from "@jest/globals";
 import fs from "fs-extra";
 import * as yaml from "js-yaml";
 import { generateExampleDocumentation } from "./generateExampleDocumentation.js";
 import type { SpecToolkitConfigurationDocument } from "./index.js";
+import { afterEach, beforeEach, describe, expect, mock, test } from "./testHelpers/nodeTest.js";
 import { log } from "./util/log.js";
 
 describe("test generateExampleDocumentation", () => {
@@ -114,8 +114,8 @@ describe("test generateExampleDocumentation", () => {
     const configFilePath = tmpTestData.concat("/config.json");
     fs.writeFileSync(configFilePath, JSON.stringify(config), "utf8");
 
-    const spyOnLogInfo = jest.spyOn(log, "info");
-    const spyOnFsOutputFileSync = jest.spyOn(fs, "outputFileSync");
+    const spyOnLogInfo = mock.spyOn(log, "info");
+    const spyOnFsOutputFileSync = mock.spyOn(fs, "outputFileSync");
 
     generateExampleDocumentation(config);
 
@@ -154,8 +154,8 @@ describe("test generateExampleDocumentation", () => {
     fs.writeFileSync(path.join(examplesDir, "example2.json"), JSON.stringify(example), "utf8");
     fs.writeFileSync(path.join(examplesDir, "example2.outro.md"), exampleOutro, "utf8");
 
-    const spyOnLogError = jest.spyOn(log, "error");
-    const spyOnProcessExit = jest.spyOn(process, "exit").mockImplementation(() => undefined as never);
+    const spyOnLogError = mock.spyOn(log, "error");
+    const spyOnProcessExit = mock.spyOn(process, "exit").mockImplementation(() => undefined as never);
 
     generateExampleDocumentation(config);
 

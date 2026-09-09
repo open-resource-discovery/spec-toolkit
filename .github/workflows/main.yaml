@@ -42,13 +42,22 @@ jobs:
         run: npm ci
 
       - name: Tests
-        run: npm run test
+        if: matrix.node-version == '22'
+        run: |
+          mkdir -p reports/node-test
+          npm run test -- --test-reporter=spec --test-reporter-destination=stdout --test-reporter=junit --test-reporter-destination=reports/node-test/junit.xml
+
+      - name: Tests with coverage
+        if: matrix.node-version == '24'
+        run: |
+          mkdir -p reports/node-test
+          npm run test:coverage -- --test-reporter=spec --test-reporter-destination=stdout --test-reporter=junit --test-reporter-destination=reports/node-test/junit.xml
 
       - uses: actions/upload-artifact@v7 # upload test results
         if: success() || failure() # run this step even if previous step failed
         with:
           name: test-results-node${{ matrix.node-version }}
-          path: reports/jest-coverage/junit.xml
+          path: reports/node-test/junit.xml
 
   build:
     name: Build job

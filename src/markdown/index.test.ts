@@ -1,5 +1,5 @@
-import { jest } from "@jest/globals";
 import type { SpecJsonSchemaRoot, SpecJsonSchemaTypeName } from "../generated/spec/spec-v1/types/index.js";
+import { describe, expect, it, mock } from "../testHelpers/nodeTest.js";
 import { log } from "../util/log.js";
 import { generateMarkdown } from "./index.js";
 
@@ -1167,8 +1167,8 @@ describe("test generateMarkdown", () => {
         },
       };
 
-      const spyOnLogError = jest.spyOn(log, "error");
-      const spyOnProcessExit = jest.spyOn(process, "exit").mockImplementation(() => undefined as never);
+      const spyOnLogError = mock.spyOn(log, "error");
+      const spyOnProcessExit = mock.spyOn(process, "exit").mockImplementation(() => undefined as never);
 
       generateMarkdown(testSchema, specId, "spec", undefined);
 
@@ -1198,8 +1198,8 @@ describe("test generateMarkdown", () => {
         },
       };
 
-      const spyOnLogError = jest.spyOn(log, "error");
-      const spyOnProcessExit = jest.spyOn(process, "exit").mockImplementation(() => undefined as never);
+      const spyOnLogError = mock.spyOn(log, "error");
+      const spyOnProcessExit = mock.spyOn(process, "exit").mockImplementation(() => undefined as never);
 
       generateMarkdown(testSchema, specId, "spec", undefined);
 

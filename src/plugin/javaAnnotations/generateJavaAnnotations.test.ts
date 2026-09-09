@@ -1,7 +1,7 @@
 import path from "node:path";
-import { jest } from "@jest/globals";
 import fs from "fs-extra";
 import * as yaml from "js-yaml";
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, mock } from "../../testHelpers/nodeTest.js";
 import { log } from "../../util/log.js";
 import type { JavaAnnotationsConfig } from "./configModel.js";
 import { generateAnnotations } from "./generateJavaAnnotations.js";
@@ -10,20 +10,20 @@ describe("generateAnnotations", () => {
   const pluginDir = path.join(process.cwd(), "src", "plugin", "javaAnnotations");
   const testDir = path.join(pluginDir, "testData");
   const outputDir = path.join(pluginDir, "tmpOutput");
-  let errorSpy: ReturnType<typeof jest.spyOn>;
+  let errorSpy: ReturnType<typeof mock.spyOn>;
 
   beforeAll(() => {
     fs.ensureDirSync(testDir);
   });
 
   beforeEach(() => {
-    errorSpy = jest.spyOn(log, "error").mockReturnValue(undefined);
-    jest.spyOn(log, "info").mockReturnValue(undefined);
+    errorSpy = mock.spyOn(log, "error").mockReturnValue(undefined);
+    mock.spyOn(log, "info").mockReturnValue(undefined);
     fs.removeSync(outputDir);
   });
 
   afterEach(() => {
-    jest.restoreAllMocks();
+    mock.restoreAll();
   });
 
   afterAll(() => {
