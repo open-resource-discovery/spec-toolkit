@@ -1,6 +1,7 @@
 import type { SpecJsonSchemaRoot, SpecJsonSchemaTypeName } from "../generated/spec/spec-v1/types/index.js";
 import { describe, expect, it, mock } from "../testHelpers/nodeTest.js";
 import { log } from "../util/log.js";
+import { createValidationContext } from "../util/validation.js";
 import { generateMarkdown } from "./index.js";
 
 describe("test generateMarkdown", () => {
@@ -1143,6 +1144,27 @@ describe("test generateMarkdown", () => {
   });
 
   describe("test validation", () => {
+    it("should validate and render root examples once", () => {
+      const testSchema: SpecJsonSchemaRoot = {
+        $id: "http://example.com/schemas/root-examples",
+        title: "Root Examples",
+        type: "object",
+        properties: {
+          name: { type: "string", title: "Name" },
+        },
+        required: ["name"],
+        examples: [{ name: "Ada" }],
+      };
+
+      const result = generateMarkdown(testSchema, specId, "spec", undefined, undefined, undefined, undefined, {
+        validation: createValidationContext(),
+      });
+
+      expect(result).toContain("## Complete Examples");
+      expect(result).not.toContain("###### Example Values:");
+      expect(result.match(/"name": "Ada"/g)?.length).toBe(1);
+    });
+
     it("should throw on wrong example provided", () => {
       const testSchema: SpecJsonSchemaRoot = {
         $id: "http://example.com/schemas/test-schema",

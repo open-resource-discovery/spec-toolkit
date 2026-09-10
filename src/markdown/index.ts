@@ -74,7 +74,7 @@ export function generateMarkdown(
   // If main spec: Create root document entry point
   if (specType === "spec") {
     text += `\n\n### ${jsonSchemaRoot.title}\n\n`;
-    text += getObjectDescriptionTable(jsonSchemaRoot, jsonSchemaRoot, undefined, options);
+    text += getObjectDescriptionTable(jsonSchemaRoot, jsonSchemaRoot, undefined, options, false);
   }
   // If extension: Create extension property overview table
   else if (specType === "specExtension") {
