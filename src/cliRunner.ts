@@ -1,5 +1,4 @@
 import { readFileSync } from "node:fs";
-import path from "node:path";
 import { Ajv, type Schema } from "ajv";
 import addFormats from "ajv-formats";
 import { Command, Option } from "commander";
@@ -7,19 +6,51 @@ import fs from "fs-extra";
 import * as packageJson from "../package.json" with { type: "json" };
 import { generate } from "./generate.js";
 import type { SpecToolkitConfigurationDocument } from "./generated/spec-toolkit-config/spec-v1/types/index.js";
+import { createGenerationContext, resolveConfiguredPath } from "./generationContext.js";
 import registerPlugins from "./plugin/index.js";
 import { loadYaml } from "./util/yaml.js";
 
-interface CliOptions {
+export interface CliOptions {
   config: string;
 }
 
 const DEFAULT_CONFIG_FILE_NAME = "./spec-toolkit.config.json";
 
-/**
- * Executes the CLI with additional command line arguments (argv)
- */
-function init(argv: string[]): void {
+export function loadConfiguration(configFilePath: string): unknown {
+  if (!configFilePath.endsWith(".json")) {
+    throw new Error(`Unsupported file extension: ${configFilePath}. Should be ".json"`);
+  }
+  return JSON.parse(readFileSync(configFilePath, "utf-8"));
+}
+
+export function validateConfiguration(configData: unknown, configFilePath: string): SpecToolkitConfigurationDocument {
+  const configJsonSchema = loadYaml(
+    fs.readFileSync(
+      new URL("./generated/spec-toolkit-config/spec-v1/schemas/spec-toolkit-config.schema.json", import.meta.url),
+      "utf-8",
+    ),
+  ) as Schema;
+  const ajvInstance = new Ajv({ allErrors: true, allowUnionTypes: true, allowMatchingProperties: true });
+  addFormats.default(ajvInstance);
+  const validateSpecToolkitConfig = ajvInstance.compile<SpecToolkitConfigurationDocument>(configJsonSchema);
+
+  if (!validateSpecToolkitConfig(configData)) {
+    throw new Error(
+      `Validation of Config JSON Schema file "${configFilePath}" failed with errors:\n ${JSON.stringify(validateSpecToolkitConfig.errors, null, 2)}`,
+    );
+  }
+  return configData;
+}
+
+export async function run(options: CliOptions, workingDirectory = process.cwd()): Promise<void> {
+  const configFilePath = resolveConfiguredPath(options.config, workingDirectory);
+  const configData = validateConfiguration(loadConfiguration(configFilePath), configFilePath);
+  const pluginManager = await registerPlugins(configData);
+  await generate(configData, pluginManager, createGenerationContext(configData, workingDirectory));
+}
+
+/** Executes the CLI with additional command-line arguments. */
+export async function init(argv: string[]): Promise<void> {
   const configFilePath = new Option(
     "-c, --config <configFilePath>",
     `path to spec-toolkit config file (default: ${DEFAULT_CONFIG_FILE_NAME})`,
@@ -32,54 +63,7 @@ function init(argv: string[]): void {
     .usage("[options]")
     .description("Generates schema based interface documentation")
     .addOption(configFilePath)
-    .action(run);
+    .action(async () => run(program.opts<CliOptions>()));
 
-  program.parse(argv);
+  await program.parseAsync(argv);
 }
-
-async function run(argv: CliOptions): Promise<void> {
-  let configData: unknown;
-  // Use path.resolve so an ABSOLUTE `-c` path is honored as-is; a relative path
-  // still resolves against the current working directory (backward compatible).
-  // Previously path.join(cwd, argv.config) mangled absolute paths.
-  const configFilePath = path.resolve(process.cwd(), argv.config);
-
-  try {
-    if (configFilePath.endsWith(".json")) {
-      const configFileContent = readFileSync(configFilePath, "utf-8");
-      configData = JSON.parse(configFileContent);
-    } else {
-      throw new Error(`Unsupported file extension: ${configFilePath}. Should be ".json"`);
-    }
-  } catch (error) {
-    process.stderr.write(`[error]: ${error}\n\n`);
-    process.exit(1);
-  }
-
-  try {
-    const configJsonSchema: Schema = loadYaml(
-      fs.readFileSync(
-        new URL("./generated/spec-toolkit-config/spec-v1/schemas/spec-toolkit-config.schema.json", import.meta.url),
-        "utf-8",
-      ),
-    ) as Schema;
-
-    const ajvInstance = new Ajv({ allErrors: true, allowUnionTypes: true, allowMatchingProperties: true });
-    addFormats.default(ajvInstance);
-    const validateSpecToolkitConfig = ajvInstance.compile<SpecToolkitConfigurationDocument>(configJsonSchema);
-    if (validateSpecToolkitConfig(configData)) {
-      const pluginManager = await registerPlugins(configData);
-
-      await generate(configData, pluginManager);
-    } else {
-      throw new Error(
-        `Validation of Config JSON Schema file "${configFilePath}" failed with errors:\n ${JSON.stringify(validateSpecToolkitConfig.errors, null, 2)}`,
-      );
-    }
-  } catch (error) {
-    process.stderr.write(`${["\x1b[91m", error, "\x1b[39m", "\n\n"].join("")}` /*`${error}\n\n`*/);
-    process.exit(1);
-  }
-}
-
-export { init };

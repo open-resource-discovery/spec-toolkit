@@ -65,9 +65,11 @@ describe("CLI End-to-End Tests", () => {
       // expect this to never happen because above code should throw an error
       expect(1).toEqual(2);
     } catch (e) {
-      expect((e as spawnAsync.SpawnResult).stderr).toContain("Validation of Config JSON Schema file");
-      expect((e as spawnAsync.SpawnResult).stderr).toContain("failed with errors");
-      expect((e as spawnAsync.SpawnResult).stderr).toContain("must have required property 'outputPath'");
+      const result = e as spawnAsync.SpawnResult;
+      expect(result.status).toBe(1);
+      expect(result.stderr).toContain("Validation of Config JSON Schema file");
+      expect(result.stderr).toContain("failed with errors");
+      expect(result.stderr).toContain("must have required property 'outputPath'");
     }
   });
 
@@ -83,11 +85,11 @@ describe("CLI End-to-End Tests", () => {
       // expect this to never happen because above code should throw an error
       expect(1).toEqual(2);
     } catch (e) {
-      expect((e as spawnAsync.SpawnResult).stderr).toContain("Validation of Spec JSON Schema file");
-      expect((e as spawnAsync.SpawnResult).stderr).toContain("failed with errors");
-      expect((e as spawnAsync.SpawnResult).stderr).toContain(
-        'Invalid $ref \\"#/definitions/Meta\\", pointing to unknown definition.',
-      );
+      const result = e as spawnAsync.SpawnResult;
+      expect(result.status).toBe(1);
+      expect(result.stderr).toContain("Validation of Spec JSON Schema file");
+      expect(result.stderr).toContain("failed with errors");
+      expect(result.stderr).toContain('Invalid $ref \\"#/definitions/Meta\\", pointing to unknown definition.');
     }
   });
 

@@ -1,9 +1,14 @@
 import fs from "fs-extra";
 import type { JSONSchema4 } from "json-schema";
 import { compile as jsonSchemaToTypeScript } from "json-schema-to-typescript";
-import { schemasOutputFolderName, typesOutputFolderName } from "./generate.js";
 import type { SpecJsonSchemaRoot } from "./generated/spec/spec-v1/types/index.js";
 import type { SpecToolkitConfigurationDocument } from "./generated/spec-toolkit-config/spec-v1/types/index.js";
+import {
+  createGenerationContext,
+  type GenerationContext,
+  schemasOutputFolderName,
+  typesOutputFolderName,
+} from "./generationContext.js";
 import {
   convertAllOfWithIfThenDiscriminatorToOneOf,
   convertAnyOfEnum,
@@ -12,7 +17,7 @@ import {
   removeAllExtensionProperties,
   removeDescriptionsFromRefPointers,
 } from "./util/jsonSchemaConversion.js";
-import { log } from "./util/log.js";
+import { log, logWritten } from "./util/log.js";
 import { loadYaml } from "./util/yaml.js";
 
 function removeFilesIfPresent(...filePaths: string[]): void {
@@ -25,7 +30,10 @@ function removeFilesIfPresent(...filePaths: string[]): void {
   }
 }
 
-export async function generateTypeScriptDefinitions(configData: SpecToolkitConfigurationDocument): Promise<void> {
+export async function generateTypeScriptDefinitions(
+  configData: SpecToolkitConfigurationDocument,
+  context: GenerationContext = createGenerationContext(configData),
+): Promise<void> {
   let indexExportStatements = "";
 
   for (const docConfig of configData.docsConfig) {
@@ -34,7 +42,7 @@ export async function generateTypeScriptDefinitions(configData: SpecToolkitConfi
     // it does not make sense to have typescript types generated out of fragment files
     if (docConfig.type === "spec") {
       const xSchemaFileName = `${docConfig.id}.schema.json`.split(".json").join(".x.json");
-      const xSchemaFilePath = `${configData.outputPath}/${schemasOutputFolderName}/${xSchemaFileName}`;
+      const xSchemaFilePath = context.outputPath(schemasOutputFolderName, xSchemaFileName);
       let schema = loadYaml(fs.readFileSync(`${xSchemaFilePath}`).toString()) as SpecJsonSchemaRoot;
 
       schema = convertRefToDocToStandardRef(schema);
@@ -83,7 +91,7 @@ export async function generateTypeScriptDefinitions(configData: SpecToolkitConfi
       replaceKeyTypeMarkers(schema);
 
       const convertedDocumentSchema = schema as unknown as JSONSchema4;
-      const typesFile = `${process.cwd()}/${configData.outputPath}/${typesOutputFolderName}/${docConfig.id}.ts`;
+      const typesFile = context.outputPath(typesOutputFolderName, `${docConfig.id}.ts`);
       let definitions: string;
       try {
         definitions = await jsonSchemaToTypeScript(convertedDocumentSchema, `${docConfig.id}`, {
@@ -131,10 +139,10 @@ export async function generateTypeScriptDefinitions(configData: SpecToolkitConfi
       }
 
       fs.unlinkSync(xSchemaFilePath);
-      log.info(`Cleanup temporary file ${xSchemaFilePath}`);
+      log.debug(`Removed temporary file: ${context.displayPath(xSchemaFilePath)}`);
 
       await fs.outputFile(typesFile, definitions);
-      log.info(`Result: ${typesFile}`);
+      logWritten(context.displayPath(typesFile));
       if (configData.generalConfig?.tsTypeExportExcludeJsFileExtension) {
         indexExportStatements += `export * from "./${docConfig.id}";\n`;
       } else {
@@ -143,6 +151,7 @@ export async function generateTypeScriptDefinitions(configData: SpecToolkitConfi
     }
   }
 
-  const indexFilePath = `${process.cwd()}/${configData.outputPath}/${typesOutputFolderName}/index.ts`;
+  const indexFilePath = context.outputPath(typesOutputFolderName, "index.ts");
   fs.outputFileSync(indexFilePath, indexExportStatements);
+  logWritten(context.displayPath(indexFilePath));
 }

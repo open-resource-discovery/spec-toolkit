@@ -1,117 +1,119 @@
-import path from "node:path";
 import fs from "fs-extra";
-import { schemasOutputFolderName } from "./generate.js";
 import type { SpecExtensionJsonSchema, SpecJsonSchemaRoot } from "./generated/spec/spec-v1/types/index.js";
-import type { SpecToolkitConfigurationDocument } from "./generated/spec-toolkit-config/spec-v1/types/index.js";
+import type {
+  SpecConfig,
+  SpecExtensionConfig,
+  SpecToolkitConfigurationDocument,
+} from "./generated/spec-toolkit-config/spec-v1/types/index.js";
 import { writeSpecJsonSchemaFiles } from "./generateInterfaceDocumentation.js";
-import { log } from "./util/log.js";
+import { createGenerationContext, type GenerationContext, schemasOutputFolderName } from "./generationContext.js";
+import { log, logWritten } from "./util/log.js";
 import { validateSpecJsonSchema } from "./util/validation.js";
 import { loadYaml } from "./util/yaml.js";
 
-export function mergeSpecExtensions(configData: SpecToolkitConfigurationDocument): void {
-  for (const docConfig1 of configData.docsConfig) {
-    if (docConfig1.type === "spec") {
-      const targetDocumentFilePath = `${configData.outputPath}/${schemasOutputFolderName}/${docConfig1.id}.schema.json`;
-      const jsonSchemaFile = fs.readFileSync(path.join(process.cwd(), targetDocumentFilePath)).toString();
-      const targetDocument = loadYaml(jsonSchemaFile) as SpecJsonSchemaRoot;
+type ExtensionPoints = Record<string, string[]>;
 
-      const specExtensions: string[] = [];
-      for (const docConfig2 of configData.docsConfig) {
-        if (docConfig2.type === "specExtension" && docConfig2.targetDocumentId === docConfig1.id) {
-          specExtensions.push(docConfig2.sourceFilePath);
-        }
+export function findSpecExtensions(
+  docsConfig: SpecToolkitConfigurationDocument["docsConfig"],
+  targetDocumentId: string,
+): SpecExtensionConfig[] {
+  return docsConfig.filter(
+    (docConfig): docConfig is SpecExtensionConfig =>
+      docConfig.type === "specExtension" && docConfig.targetDocumentId === targetDocumentId,
+  );
+}
+
+export function findExtensionPoints(targetDocument: SpecJsonSchemaRoot): ExtensionPoints {
+  const extensionPoints: ExtensionPoints = {};
+
+  for (const [definitionName, definition] of Object.entries(targetDocument.definitions)) {
+    for (const extensionPoint of definition["x-extension-points"] ?? []) {
+      const definitions = extensionPoints[extensionPoint] ?? [];
+      if (!definitions.includes(definitionName)) {
+        definitions.push(definitionName);
+      }
+      extensionPoints[extensionPoint] = definitions;
+    }
+  }
+
+  return extensionPoints;
+}
+
+export function mergeExtension(
+  targetDocument: SpecJsonSchemaRoot,
+  specExtension: SpecJsonSchemaRoot,
+  extensionPoints: ExtensionPoints,
+): void {
+  for (const [definitionName, definition] of Object.entries(specExtension.definitions)) {
+    const extensionDefinition = definition as SpecExtensionJsonSchema;
+    if (extensionDefinition["x-ref-to-doc"]) {
+      definition.$ref = extensionDefinition["x-ref-to-doc"].ref;
+    }
+
+    if (targetDocument.definitions[definitionName]) {
+      throw new Error(`Cannot merge spec extension definition ${definitionName} as the name is already taken.`);
+    }
+    targetDocument.definitions[definitionName] = definition;
+  }
+
+  for (const [definitionName, definition] of Object.entries(specExtension.definitions)) {
+    const extensionDefinition = definition as SpecExtensionJsonSchema;
+    for (const extensionTarget of extensionDefinition["x-extension-targets"] ?? []) {
+      const targetDefinitions = extensionPoints[extensionTarget];
+      if (!targetDefinitions) {
+        throw new Error(`Extension Point "${extensionTarget}" is not defined in target document`);
       }
 
-      log.info("Detecting Extension Points in target document");
-      // Preparation: Detect and remember extension points
-      // key: Extension Point Name
-      // value: Array<Definition name in JSON Schema>
-      const extensionPointsMap: { [extensionPointName: string]: string[] } = {};
-
-      for (const definitionName in targetDocument.definitions) {
-        const definition = targetDocument.definitions[definitionName];
-
-        if (definition["x-extension-points"]) {
-          for (const extensionPoint of definition["x-extension-points"]) {
-            if (!extensionPointsMap[extensionPoint]) {
-              extensionPointsMap[extensionPoint] = [definitionName];
-            } else {
-              if (!extensionPointsMap[extensionPoint].includes(definitionName)) {
-                extensionPointsMap[extensionPoint].push(definitionName);
-              }
-            }
-          }
+      for (const targetDefinitionName of targetDefinitions) {
+        const properties = targetDocument.definitions[targetDefinitionName].properties;
+        if (!properties) {
+          throw new Error(`Definition "${targetDefinitionName}" in target document must be an object with properties`);
         }
+        if (properties[definitionName]) {
+          throw new Error(
+            `Definition "${targetDefinitionName}" in target document already has property "${definitionName}"`,
+          );
+        }
+        properties[definitionName] = { $ref: `#/definitions/${definitionName}` };
       }
+    }
+  }
+}
 
-      for (const specExtensionFile of specExtensions) {
-        log.info(`Merging ${specExtensionFile}`);
+function mergeExtensionsIntoDocument(
+  configData: SpecToolkitConfigurationDocument,
+  docConfig: SpecConfig,
+  context: GenerationContext,
+): void {
+  const targetDocumentFilePath = context.outputPath(schemasOutputFolderName, `${docConfig.id}.schema.json`);
+  const targetDocument = loadYaml(fs.readFileSync(targetDocumentFilePath).toString()) as SpecJsonSchemaRoot;
+  const extensionPoints = findExtensionPoints(targetDocument);
 
-        const fileText = fs.readFileSync(specExtensionFile).toString();
-        const specExtension = loadYaml(fileText) as SpecJsonSchemaRoot;
+  log.info(`Detected ${Object.keys(extensionPoints).length} extension point(s) in ${docConfig.id}.`);
+  for (const specExtensionConfig of findSpecExtensions(configData.docsConfig, docConfig.id)) {
+    log.info(`Merging extension: ${specExtensionConfig.sourceFilePath}`);
+    const fileText = fs.readFileSync(context.resolvePath(specExtensionConfig.sourceFilePath)).toString();
+    mergeExtension(targetDocument, loadYaml(fileText) as SpecJsonSchemaRoot, extensionPoints);
+  }
 
-        // Replace x-ref-to-doc with real $ref links
-        for (const definitionName in specExtension.definitions) {
-          const definition = specExtension.definitions[definitionName];
-          const castedDefinition = definition as SpecExtensionJsonSchema;
-          if (castedDefinition["x-ref-to-doc"]) {
-            definition.$ref = castedDefinition["x-ref-to-doc"].ref;
-          }
-        }
+  validateSpecJsonSchema(targetDocument, docConfig.sourceFilePath);
+  writeSpecJsonSchemaFiles(
+    targetDocumentFilePath,
+    targetDocument,
+    configData.generalConfig?.preservedCoreSpecificXProperties,
+    true,
+    context.displayPath(targetDocumentFilePath),
+  );
+  logWritten(context.displayPath(targetDocumentFilePath));
+}
 
-        // Now merge the JSON Schema definitions
-        for (const definitionName in specExtension.definitions) {
-          const definition = specExtension.definitions[definitionName];
-
-          if (targetDocument.definitions[definitionName]) {
-            throw new Error(`Cannot merge spec extension definition ${definitionName} as the name is already taken.`);
-          }
-
-          targetDocument.definitions[definitionName] = definition;
-        }
-
-        // Create the $refs in the extension points to the extensions
-        for (const definitionName in specExtension.definitions) {
-          const definition = specExtension.definitions[definitionName];
-
-          const castedDefinition = definition as SpecExtensionJsonSchema;
-          if (castedDefinition["x-extension-targets"]) {
-            for (const extensionTarget of castedDefinition["x-extension-targets"]) {
-              if (!extensionPointsMap[extensionTarget]) {
-                throw new Error(`Extension Point "${extensionTarget}" is not defined in target document`);
-              }
-
-              for (const targetDefinition of extensionPointsMap[extensionTarget]) {
-                if (!targetDocument.definitions[targetDefinition].properties) {
-                  throw new Error(
-                    `Definition "${targetDefinition}" in target document must be an object with properties`,
-                  );
-                }
-                if (targetDocument.definitions[targetDefinition].properties[definitionName]) {
-                  throw new Error(
-                    `Definition "${targetDefinition}" in target document already has property "${definitionName}"`,
-                  );
-                }
-                targetDocument.definitions[targetDefinition].properties[definitionName] = {
-                  $ref: `#/definitions/${definitionName}`,
-                };
-              }
-            }
-          }
-        }
-      }
-
-      // Validate resulting JSON Schema document
-      validateSpecJsonSchema(targetDocument, docConfig1.sourceFilePath);
-
-      writeSpecJsonSchemaFiles(
-        targetDocumentFilePath,
-        targetDocument,
-        configData.generalConfig?.preservedCoreSpecificXProperties,
-        true,
-      );
-
-      log.info(`Written: ${targetDocumentFilePath}`);
+export function mergeSpecExtensions(
+  configData: SpecToolkitConfigurationDocument,
+  context: GenerationContext = createGenerationContext(configData),
+): void {
+  for (const docConfig of configData.docsConfig) {
+    if (docConfig.type === "spec") {
+      mergeExtensionsIntoDocument(configData, docConfig, context);
     }
   }
 }

@@ -14,6 +14,10 @@ export type SpecTarget = {
   extensionTarget: SpecJsonSchemaRoot;
 };
 
+export interface MarkdownGenerationOptions {
+  documentationOutputPath?: string;
+}
+
 /**
  * Generate Markdown file content documentation from a JSON Schema.
  *
@@ -34,6 +38,7 @@ export function generateMarkdown(
   mdFrontmatter?: string,
   sourceIntroContent?: string,
   sourceOutroContent?: string,
+  options: MarkdownGenerationOptions = {},
 ): string {
   // Write Header Information
   let text = mdFrontmatter ? mdFrontmatter : "";
@@ -67,7 +72,7 @@ export function generateMarkdown(
   // If main spec: Create root document entry point
   if (specType === "spec") {
     text += `\n\n### ${jsonSchemaRoot.title}\n\n`;
-    text += getObjectDescriptionTable(jsonSchemaRoot, jsonSchemaRoot, undefined);
+    text += getObjectDescriptionTable(jsonSchemaRoot, jsonSchemaRoot, undefined, options);
   }
   // If extension: Create extension property overview table
   else if (specType === "specExtension") {
@@ -85,7 +90,12 @@ export function generateMarkdown(
     for (const definitionName of finalPropertyOrder) {
       const definition = jsonSchemaRoot.definitions[definitionName];
       if (definition) {
-        text += jsonSchemaToMd(definition, jsonSchemaRoot, specType === "specExtension" ? specTarget : undefined);
+        text += jsonSchemaToMd(
+          definition,
+          jsonSchemaRoot,
+          specType === "specExtension" ? specTarget : undefined,
+          options,
+        );
       } else {
         throw new Error(
           `Array item definition "${definitionName}" used in x-property-order was not found in the existing definitions block of the JSON Schema.`,

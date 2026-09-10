@@ -9,17 +9,18 @@
  * * Add **Type**: consistently for non-object Definition entries
  */
 
-import path from "node:path";
 import { $RefParser } from "@apidevtools/json-schema-ref-parser";
 import fs from "fs-extra";
-import {
-  documentationExtensionsOutputFolderName,
-  documentationOutputFolderName,
-  getOutputPath,
-  schemasOutputFolderName,
-} from "./generate.js";
 import type { SpecJsonSchemaRoot } from "./generated/spec/spec-v1/types/index.js";
 import type { SpecToolkitConfigurationDocument } from "./generated/spec-toolkit-config/spec-v1/types/index.js";
+import {
+  createGenerationContext,
+  documentationExtensionsOutputFolderName,
+  documentationOutputFolderName,
+  type GenerationContext,
+  resolveConfiguredPath,
+  schemasOutputFolderName,
+} from "./generationContext.js";
 import { generateMarkdown, type SpecTarget } from "./markdown/index.js";
 import { readTextFromFile } from "./model/config.js";
 import {
@@ -28,7 +29,7 @@ import {
   removeDescriptionsFromRefPointers,
   removeSomeExtensionProperties,
 } from "./util/jsonSchemaConversion.js";
-import { log } from "./util/log.js";
+import { log, logWritten } from "./util/log.js";
 import { getMarkdownFrontMatter } from "./util/markdownTextHelper.js";
 import { normalizeArbitrarySchema } from "./util/normalizeArbitrarySchema.js";
 import { validateSpecJsonSchema, withExtensionKeywordsRegistered } from "./util/validation.js";
@@ -65,8 +66,12 @@ export interface DocumentationResult {
  * * The JSON Schema root schema object is a "Object"
  *
  */
-export async function loadSpecJsonSchema(sourceFilePath: string, strictMode = true): Promise<SpecJsonSchemaRoot> {
-  const resolvedSourceFilePath = path.resolve(process.cwd(), sourceFilePath);
+export async function loadSpecJsonSchema(
+  sourceFilePath: string,
+  strictMode = true,
+  workingDirectory = process.cwd(),
+): Promise<SpecJsonSchemaRoot> {
+  const resolvedSourceFilePath = resolveConfiguredPath(sourceFilePath, workingDirectory);
   const parsedSchema = loadYaml(fs.readFileSync(resolvedSourceFilePath).toString()) as SpecJsonSchemaRoot;
   if (!hasNonLocalReferences(parsedSchema)) {
     return parsedSchema;
@@ -108,13 +113,20 @@ function hasNonLocalReferences(node: unknown): boolean {
   return Object.values(value).some(hasNonLocalReferences);
 }
 
-export async function jsonSchemaToDocumentation(configData: SpecToolkitConfigurationDocument): Promise<void> {
+export async function jsonSchemaToDocumentation(
+  configData: SpecToolkitConfigurationDocument,
+  context: GenerationContext = createGenerationContext(configData),
+): Promise<void> {
   // Iterate the files and generate the documentation
   for (const docConfig of configData.docsConfig) {
     const strictMode = (configData.generalConfig?.schemaMode ?? "strict") === "strict";
     // Read JSON File. path.resolve honors an absolute sourceFilePath as-is; a
     // relative one still resolves against the current working directory.
-    const jsonSchemaFileParsed = await loadSpecJsonSchema(docConfig.sourceFilePath, strictMode);
+    const jsonSchemaFileParsed = await loadSpecJsonSchema(
+      docConfig.sourceFilePath,
+      strictMode,
+      context.workingDirectory,
+    );
 
     // The Spec JSON Schema based Specification
     let jsonSchemaRoot = preprocessSpecJsonSchema(jsonSchemaFileParsed);
@@ -138,7 +150,7 @@ export async function jsonSchemaToDocumentation(configData: SpecToolkitConfigura
     if (docConfig.type === "specExtension") {
       const target = configData.docsConfig.find((config) => config.id === docConfig.targetDocumentId);
       if (target) {
-        const file = fs.readFileSync(target.sourceFilePath).toString();
+        const file = fs.readFileSync(context.resolvePath(target.sourceFilePath)).toString();
         specTarget = {
           extensionTarget: loadYaml(file) as SpecJsonSchemaRoot,
           targetDocumentId: docConfig.targetDocumentId,
@@ -151,8 +163,8 @@ export async function jsonSchemaToDocumentation(configData: SpecToolkitConfigura
     }
 
     const mdFrontmatter = getMarkdownFrontMatter(docConfig.mdFrontmatter);
-    const introText = readTextFromFile(docConfig.sourceIntroFilePath);
-    const outroText = readTextFromFile(docConfig.sourceOutroFilePath);
+    const introText = readTextFromFile(docConfig.sourceIntroFilePath, context.workingDirectory);
+    const outroText = readTextFromFile(docConfig.sourceOutroFilePath, context.workingDirectory);
     const generate = (): string => {
       validateSpecJsonSchema(jsonSchemaRoot, docConfig.sourceFilePath);
       return generateMarkdown(
@@ -163,30 +175,29 @@ export async function jsonSchemaToDocumentation(configData: SpecToolkitConfigura
         mdFrontmatter,
         introText,
         outroText,
+        { documentationOutputPath: configData.outputPath },
       );
     };
     const text = strictMode ? generate() : withExtensionKeywordsRegistered(jsonSchemaRoot, generate);
 
     // Write Markdown Documentation
-    let filePath = "";
+    let filePath: string;
     if (docConfig.type === "spec") {
-      filePath = `${getOutputPath()}/${documentationOutputFolderName}/${docConfig.id}.md`;
+      filePath = context.outputPath(documentationOutputFolderName, `${docConfig.id}.md`);
     } else if (docConfig.type === "specExtension") {
-      filePath = `${getOutputPath()}/${documentationExtensionsOutputFolderName}/${docConfig.id}.md`;
+      filePath = context.outputPath(documentationExtensionsOutputFolderName, `${docConfig.id}.md`);
+    } else {
+      throw new Error("Unsupported document type.");
     }
     fs.outputFileSync(filePath, text);
-    log.info(`Written: ${filePath}`);
+    logWritten(context.displayPath(filePath));
 
     // Missing object types are inferred only to help the documentation renderer.
     // Remove them before writing the generated schema so its validation semantics stay unchanged.
     for (const node of normalized.inferredObjectNodes) delete node.type;
 
-    writeSpecJsonSchemaFiles(
-      `${getOutputPath()}/${schemasOutputFolderName}/${docConfig.id}.schema.json`,
-      jsonSchemaRoot,
-    );
-
-    log.info("--------------------------------------------------------------------------");
+    const schemaFilePath = context.outputPath(schemasOutputFolderName, `${docConfig.id}.schema.json`);
+    writeSpecJsonSchemaFiles(schemaFilePath, jsonSchemaRoot, [], false, context.displayPath(schemaFilePath));
   }
 }
 
@@ -199,6 +210,7 @@ export function writeSpecJsonSchemaFiles(
   jsonSchema: SpecJsonSchemaRoot,
   preservedCoreSpecificXProperties: string[] = [],
   isMainSchema?: boolean,
+  displayFilePath = filePath,
 ): void {
   const refConvertedJsonSchema = convertRefToDocToStandardRef(jsonSchema);
 
@@ -227,7 +239,7 @@ export function writeSpecJsonSchemaFiles(
         2,
       ),
     );
-    log.info(`Write to file system temporary file ${xSchemaFileName}`);
+    log.debug(`Written temporary file: ${displayFilePath.split(".json").join(".x.json")}`);
   } else {
     // write it as schema file that includes all the x- extensions
     fs.outputFileSync(

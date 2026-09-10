@@ -2,7 +2,8 @@ import * as WorkbookPackage from "exceljs";
 import fs from "fs-extra";
 import type { JSONSchema7, JSONSchema7Object } from "json-schema";
 import type { SpecJsonSchemaRoot } from "../../generated/spec/spec-v1/types/index.js";
-import { log } from "../../util/log.js";
+import { resolveConfiguredPath } from "../../generationContext.js";
+import { log, logWritten } from "../../util/log.js";
 import { loadYaml } from "../../util/yaml.js";
 
 export interface OrdSimplifiedTableFormat {
@@ -17,7 +18,9 @@ export async function generateExcelAndCsvDefinitions(
   outputPath: string,
 ): Promise<void> {
   for (const specSourceFilePath of mainSpecSourceFilePaths) {
-    const specJsonSchemaRoot = loadYaml(fs.readFileSync(specSourceFilePath).toString()) as SpecJsonSchemaRoot;
+    const specJsonSchemaRoot = loadYaml(
+      fs.readFileSync(resolveConfiguredPath(specSourceFilePath)).toString(),
+    ) as SpecJsonSchemaRoot;
     if (!specJsonSchemaRoot.title) {
       log.error(
         `Root JSON Schema object has no "title" property, skipping CSV and Excel generation for file: ${specSourceFilePath}`,
@@ -117,8 +120,8 @@ function convertOrdArrayToString(headers: string[], ordTable: OrdSimplifiedTable
 
 async function writeCsvFiles(outputPath: string, schemaTitle: string, csvContent: string): Promise<void> {
   const filePath = `${outputPath}/${schemaTitle}.csv`;
-  await fs.outputFile(`${process.cwd()}/${filePath}`, csvContent);
-  log.info(`Result: ./${filePath}`);
+  await fs.outputFile(resolveConfiguredPath(filePath), csvContent);
+  logWritten(filePath);
 }
 
 async function writeExcelFiles(
@@ -134,6 +137,6 @@ async function writeExcelFiles(
     worksheet.addRow(Object.values(obj));
   });
   const filePath = `${outputPath}/${schemaTitle}.xlsx`;
-  await workbook.xlsx.writeFile(filePath);
-  log.info(`Result: ./${filePath}`);
+  await workbook.xlsx.writeFile(resolveConfiguredPath(filePath));
+  logWritten(filePath);
 }
