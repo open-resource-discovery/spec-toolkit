@@ -125,7 +125,7 @@ describe("test generateExampleDocumentation", () => {
     expect(spyOnFsOutputFileSync).not.toHaveBeenCalled();
   });
 
-  test("should exit when example validation fails", () => {
+  test("should throw when example validation fails", () => {
     const examplesDir = `./src/__tests__/${tmpTestDataName}/examples`;
     const config: SpecToolkitConfigurationDocument = {
       $schema: "https://open-resource-discovery.github.io/spec-toolkit/spec-v1/spec-toolkit-config.schema.json#",
@@ -154,12 +154,6 @@ describe("test generateExampleDocumentation", () => {
     fs.writeFileSync(path.join(examplesDir, "example2.json"), JSON.stringify(example), "utf8");
     fs.writeFileSync(path.join(examplesDir, "example2.outro.md"), exampleOutro, "utf8");
 
-    const spyOnLogError = mock.spyOn(log, "error");
-    const spyOnProcessExit = mock.spyOn(process, "exit").mockImplementation(() => undefined as never);
-
-    generateExampleDocumentation(config);
-
-    expect(spyOnLogError).toHaveBeenCalledWith(expect.stringContaining("is not valid"));
-    expect(spyOnProcessExit).toHaveBeenCalledWith(1);
+    expect(() => generateExampleDocumentation(config)).toThrow("example2.json is not valid");
   });
 });

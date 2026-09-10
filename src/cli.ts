@@ -17,8 +17,8 @@ try {
     process.exit(1);
   }
 
-  init(process.argv);
+  await init(process.argv);
 } catch (err) {
-  process.stdout.write(String(err));
+  process.stderr.write(`[error]: ${err instanceof Error ? err.message : String(err)}\n\n`);
   process.exit(1);
 }

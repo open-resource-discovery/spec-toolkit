@@ -1,16 +1,16 @@
 import assert from "node:assert";
 import GfmEscape from "gfm-escape";
 import _ from "lodash";
-import { documentationOutputFolderName, extensionFolderDiffToOutputFolderName, getOutputPath } from "../generate.js";
 import type {
   SpecExtensionJsonSchema,
   SpecJsonSchema,
   SpecJsonSchemaRoot,
 } from "../generated/spec/spec-v1/types/index.js";
+import { documentationOutputFolderName, extensionFolderDiffToOutputFolderName } from "../generationContext.js";
 import { isObjectLevelAnyOfRequired } from "../plugin/ums/specJsonSchemaHelper.js";
 import { log } from "../util/log.js";
 import { checkRequiredPropertiesExist, validateDefault, validateExamples } from "../util/validation.js";
-import type { SpecTarget } from "./index.js";
+import type { MarkdownGenerationOptions, SpecTarget } from "./index.js";
 
 const escaper = new GfmEscape({ table: true });
 
@@ -23,6 +23,7 @@ export function jsonSchemaToMd(
   jsonSchemaObject: SpecJsonSchema,
   jsonSchemaRoot: SpecJsonSchemaRoot,
   specTarget: SpecTarget | undefined,
+  options: MarkdownGenerationOptions = {},
 ): string {
   let text = "";
 
@@ -121,12 +122,14 @@ export function jsonSchemaToMd(
       jsonSchemaObject,
       jsonSchemaRoot,
       specTarget ? specTarget.targetDocumentId : undefined,
+      options,
     );
   } else {
     text += generatePrimitiveTypeDescription(
       jsonSchemaObject,
       jsonSchemaRoot,
       specTarget ? specTarget.targetDocumentId : undefined,
+      options,
     );
   }
   return text;
@@ -136,7 +139,7 @@ export function jsonSchemaToMd(
 // ------------ Functions to Calculate certain Texts for MD ------------------------------------
 //----------------------------------------------------------------------------------------------
 
-function handleRefToCore(jsonSchemaObject: SpecJsonSchema): string {
+function handleRefToCore(jsonSchemaObject: SpecJsonSchema, documentationOutputPath = ""): string {
   //Resolve RefToCores
   const refToDoc =
     typeof jsonSchemaObject === "object" && "x-ref-to-doc" in jsonSchemaObject ? jsonSchemaObject["x-ref-to-doc"] : "";
@@ -147,7 +150,7 @@ function handleRefToCore(jsonSchemaObject: SpecJsonSchema): string {
     if (typeof refToDoc === "object" && refToDoc !== undefined) {
       refToDocTitle = "title" in refToDoc ? `${refToDoc.title}` : ""; // TODO: Simplify this
       refToDocDocId = "$refDoc" in refToDoc ? `${refToDoc.$refDoc}` : ""; // TODO: Simplify this
-      refToDocDoc = `${getOutputPath()}/${documentationOutputFolderName}/${refToDocDocId}.md`;
+      refToDocDoc = `${documentationOutputPath}/${documentationOutputFolderName}/${refToDocDocId}.md`;
     }
     //TODO: Calculate RefToCore from Document Title?
     //TODO: remove calculation, use general function
@@ -159,13 +162,14 @@ function getTypeColumnText(
   jsonSchemaObject: SpecJsonSchema,
   jsonSchemaRoot: SpecJsonSchemaRoot,
   targetDocumentId: string | undefined,
+  options: MarkdownGenerationOptions = {},
 ): string {
   const castedJsonSchemaObject = jsonSchemaObject as SpecExtensionJsonSchema;
 
   // in case of an Array: Array< Type of ArrayItems>
   if (jsonSchemaObject && jsonSchemaObject.type === "array") {
     return escapeHtmlChars(
-      `Array<${getTypeColumnText(jsonSchemaObject.items as SpecJsonSchema, jsonSchemaRoot, targetDocumentId)}>`,
+      `Array<${getTypeColumnText(jsonSchemaObject.items as SpecJsonSchema, jsonSchemaRoot, targetDocumentId, options)}>`,
     );
   }
   // in case of a reference link to the reference object
@@ -175,7 +179,7 @@ function getTypeColumnText(
   // in case it is an object through an error that $ ref should be used!
   else if (jsonSchemaObject && jsonSchemaObject.type === "object") {
     // Check if we have a reference to another file
-    const text = handleRefToCore(jsonSchemaObject);
+    const text = handleRefToCore(jsonSchemaObject, options.documentationOutputPath);
     if (text) {
       return text;
     } else {
@@ -206,7 +210,7 @@ function getTypeColumnText(
     return allOfReferenceHandling(jsonSchemaObject, jsonSchemaRoot);
   } else {
     //Check if we have a reference to another file
-    const text = handleRefToCore(jsonSchemaObject);
+    const text = handleRefToCore(jsonSchemaObject, options.documentationOutputPath);
     if (text) {
       return text;
     } else {
@@ -323,7 +327,7 @@ function getObjectPropertyEntryText(
   }
 
   // Add anchor tag link
-  log.info(propertyId);
+  log.debug(`Generated property anchor: ${propertyId}`);
   const link = getAnchorLinkFromTitle(propertyId);
   propertyText += `<a className="hash-link" href="${link}" title="${link}"></a>`;
   return propertyText;
@@ -334,6 +338,7 @@ function getPropertiesTableEntryText(
   jsonSchemaObject: SpecJsonSchema,
   jsonSchemaRoot: SpecJsonSchemaRoot,
   targetDocumentId: string | undefined,
+  options: MarkdownGenerationOptions = {},
 ): string {
   let text = "";
   // Iterate the Properties to fill the table
@@ -350,7 +355,7 @@ function getPropertiesTableEntryText(
       }
 
       // Get Information of the Properties
-      const type = getTypeColumnText(property, jsonSchemaRoot, targetDocumentId);
+      const type = getTypeColumnText(property, jsonSchemaRoot, targetDocumentId, options);
       let description = getDescriptionWithinTable(property, jsonSchemaRoot);
 
       if (!description) {
@@ -467,9 +472,6 @@ function getJsonSchemaDefaultValue(jsonSchemaObject: SpecJsonSchema, jsonSchemaR
   if (jsonSchemaObject.default !== undefined) {
     // Validate default before adding it
     validateDefault(jsonSchemaObject, jsonSchemaRoot);
-    if (jsonSchemaObject["x-extension-targets"]) {
-      log.info("empty title");
-    }
     return `**Default Value**: ${escapeTextInTable(jsonSchemaObject.default, false)}`;
   }
   return "";
@@ -517,6 +519,7 @@ export function getObjectDescriptionTable(
   jsonSchemaObject: SpecJsonSchema,
   jsonSchemaRoot: SpecJsonSchemaRoot,
   targetDocumentId: string | undefined,
+  options: MarkdownGenerationOptions = {},
 ): string {
   let text = "";
   let typeAlreadySet = false;
@@ -583,7 +586,7 @@ export function getObjectDescriptionTable(
       checkRequiredPropertiesExist(jsonSchemaObject);
 
       // Add Properties
-      text += getPropertiesTableEntryText(jsonSchemaObject, jsonSchemaRoot, targetDocumentId);
+      text += getPropertiesTableEntryText(jsonSchemaObject, jsonSchemaRoot, targetDocumentId, options);
     }
 
     //Add Pattern Properties
@@ -657,10 +660,11 @@ function generatePrimitiveTypeDescription(
   jsonSchemaObject: SpecJsonSchema,
   jsonSchemaRoot: SpecJsonSchemaRoot,
   targetDocumentId: string | undefined,
+  options: MarkdownGenerationOptions = {},
 ): string {
   let text = "";
 
-  const type = getTypeColumnText(jsonSchemaObject, jsonSchemaRoot, targetDocumentId);
+  const type = getTypeColumnText(jsonSchemaObject, jsonSchemaRoot, targetDocumentId, options);
 
   if (jsonSchemaObject.type !== undefined) {
     text += `**Type:** ${type}<br/>\n`;

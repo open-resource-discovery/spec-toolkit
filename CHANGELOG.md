@@ -8,6 +8,9 @@ but omits the **patch** level in the spec version number.
 
 ## [unreleased]
 
+- fix: rebuilding a locally linked checkout preserves an executable CLI entry point.
+- changed: CLI failures are consistently written to standard error.
+
 ## [0.9.1]
 
 - fix: tolerant mode accepts unregistered vendor extension (`x-*`) keywords in schemas imported through external references, while strict mode behavior remains unchanged.

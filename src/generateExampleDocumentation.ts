@@ -1,118 +1,98 @@
-import * as path from "node:path";
+import path from "node:path";
 import { parse } from "comment-json";
 import fg from "fast-glob";
 import fs from "fs-extra";
-import { documentationExamplesOutputFolderName, schemasOutputFolderName } from "./generate.js";
 import type { SpecToolkitConfigurationDocument } from "./generated/spec-toolkit-config/spec-v1/types/index.js";
+import {
+  createGenerationContext,
+  documentationExamplesOutputFolderName,
+  type GenerationContext,
+  schemasOutputFolderName,
+} from "./generationContext.js";
 import type { SpecJsonSchemaRoot } from "./index.js";
-import { log } from "./util/log.js";
+import { log, logWritten } from "./util/log.js";
 import { getJsonSchemaValidator } from "./util/validation.js";
 import { loadYaml } from "./util/yaml.js";
 
-interface ExampleDocumentsDict {
-  [fileName: string]: string;
+export interface ExampleDocument {
+  filePath: string;
+  source: string;
+  value: unknown;
 }
 
-export function generateExampleDocumentation(configData: SpecToolkitConfigurationDocument): void {
-  // Iterate the files and generate the example documentation
+export function loadExampleDocument(filePath: string): ExampleDocument {
+  const source = fs.readFileSync(filePath, "utf8");
+  if (filePath.endsWith(".jsonc")) {
+    return { filePath, source, value: parse(source) };
+  }
+  if (filePath.endsWith(".json")) {
+    return { filePath, source, value: loadYaml(source) };
+  }
+  throw new Error(`Unsupported example file extension: ${filePath}. Should be ".json" or ".jsonc"`);
+}
+
+function readOptionalText(filePath: string): string | undefined {
+  return fs.existsSync(filePath) ? fs.readFileSync(filePath, "utf8") : undefined;
+}
+
+export function renderExampleDocument(example: ExampleDocument, specificationId: string): string {
+  const basePath = example.filePath.replace(/\.(?:json|jsonc)$/, "");
+  const intro = readOptionalText(`${basePath}.intro.md`);
+  const outro = readOptionalText(`${basePath}.outro.md`);
+  const title = path.parse(example.filePath).name;
+  let text = intro ?? `---\ntitle: ${title}\ndescription: Example documents for ${specificationId}.\n---\n`;
+
+  text += `\n## Example File:  ${title}\n\n`;
+  text += `\`\`\`json\n${example.source}\n\`\`\`\n`;
+  if (outro) {
+    text += `\n${outro}`;
+  }
+  return text;
+}
+
+export function generateExampleDocumentation(
+  configData: SpecToolkitConfigurationDocument,
+  context: GenerationContext = createGenerationContext(configData),
+): void {
   for (const docConfig of configData.docsConfig) {
-    if (docConfig.type === "spec" && docConfig.examplesFolderPath) {
-      const jsonExampleFilePaths = fg.sync(`${docConfig.examplesFolderPath}/*.{json,jsonc}`, { ignore: ["_*"] });
-      if (jsonExampleFilePaths.length === 0) {
-        log.info(
-          `No example files found in folder "${docConfig.examplesFolderPath}". Skipping example documentation generation.`,
+    if (docConfig.type !== "spec" || !docConfig.examplesFolderPath) {
+      continue;
+    }
+
+    const exampleFilePaths = fg.sync(`${docConfig.examplesFolderPath}/*.{json,jsonc}`, {
+      absolute: true,
+      cwd: context.workingDirectory,
+      ignore: ["_*"],
+    });
+    if (exampleFilePaths.length === 0) {
+      log.info(
+        `No example files found in folder "${docConfig.examplesFolderPath}". Skipping example documentation generation.`,
+      );
+      continue;
+    }
+
+    const schemaFilePath = context.outputPath(schemasOutputFolderName, `${docConfig.id}.schema.json`);
+    const schema = loadYaml(fs.readFileSync(schemaFilePath, "utf8")) as SpecJsonSchemaRoot;
+    const validate = getJsonSchemaValidator(schema);
+    const examples = exampleFilePaths.map(loadExampleDocument);
+
+    log.info(`Validating examples for "${docConfig.id}".`);
+    for (const example of examples) {
+      if (!validate(example.value)) {
+        throw new Error(
+          `Example ${context.displayPath(example.filePath)} is not valid: \n${JSON.stringify(validate.errors, null, 2)}`,
         );
-        continue;
       }
+      log.info(`Valid example: ${context.displayPath(example.filePath)}`);
+    }
 
-      const mdExamplePages: ExampleDocumentsDict = {};
-
-      // for each json, jsonc example validate the example against the generated schema
-      log.info(`Validate '${docConfig.id}' example files...`);
-      const generatedJsonSchemaFilePath = `${configData.outputPath}/${schemasOutputFolderName}/${docConfig.id}.schema.json`;
-      const generatedJsonSchema = loadYaml(
-        fs.readFileSync(path.join(process.cwd(), generatedJsonSchemaFilePath)).toString(),
-      ) as SpecJsonSchemaRoot;
-      for (const filePath of jsonExampleFilePaths) {
-        let exampleFileContent: unknown;
-        if (filePath.endsWith(".jsonc")) {
-          exampleFileContent = parse(fs.readFileSync(filePath).toString());
-        } else if (filePath.endsWith(".json")) {
-          exampleFileContent = loadYaml(fs.readFileSync(filePath).toString());
-        } else {
-          // this should never happen due to the glob pattern,
-          // but just in case the pattern was extended and the file type handler war forgotten to be added here
-          log.error(`Unsupported example file extension: ${filePath}. Should be ".json" or ".jsonc"`);
-          process.exit(1);
-        }
-
-        const validateExampleFileContent = getJsonSchemaValidator(generatedJsonSchema);
-        if (validateExampleFileContent(exampleFileContent)) {
-          log.info(`- Example ${filePath} is valid.`);
-        } else {
-          log.error(
-            `- Example ${filePath} is not valid: \n ${JSON.stringify(validateExampleFileContent.errors, null, 2)}`,
-          );
-          process.exit(1);
-        }
-      }
-
-      // for each json,jsonc example generate a documentation .md site
-      for (const filePath of jsonExampleFilePaths) {
-        const exampleFileContent = fs.readFileSync(filePath).toString();
-        const fileName = `${path.parse(filePath).name}.md`;
-
-        const exampleFileIntroPath = filePath.replace(/.(json?|jsonc?)$/, ".intro.md");
-        let exampleFileIntroContent: string | undefined;
-        try {
-          exampleFileIntroContent = fs.readFileSync(exampleFileIntroPath).toString();
-        } catch (_) {
-          // Ignore
-        }
-
-        const exampleFileOutroPath = filePath.replace(/.(json?|jsonc?)$/, ".outro.md");
-        let exampleFileOutroContent: string | undefined;
-        try {
-          exampleFileOutroContent = fs.readFileSync(exampleFileOutroPath).toString();
-        } catch (_) {
-          // Ignore
-        }
-
-        const title = path.parse(filePath).name;
-        const description = `Example documents for ${docConfig.id}.`;
-
-        let text = "";
-
-        if (exampleFileIntroContent) {
-          text += exampleFileIntroContent;
-          text += "\n";
-        } else {
-          text += `---\n`;
-          text += `title: ${title}\n`;
-          text += `description: ${description}\n`;
-          text += `---\n\n`;
-        }
-        text += `## Example File:  ${title}\n\n`;
-        text += "```json\n";
-        text += exampleFileContent;
-        text += "\n```\n";
-        if (exampleFileOutroContent) {
-          text += `\n${exampleFileOutroContent}`;
-        }
-
-        mdExamplePages[fileName] = text;
-      }
-
-      log.info(`Written:`);
-      for (const fileName in mdExamplePages) {
-        const fileContent = mdExamplePages[fileName];
-        const exampleFilePath = path.join(
-          `${configData.outputPath}/${documentationExamplesOutputFolderName}`,
-          fileName,
-        );
-        fs.outputFileSync(exampleFilePath, fileContent);
-        log.info(`- ${exampleFilePath}`);
-      }
+    for (const example of examples) {
+      const outputFilePath = context.outputPath(
+        documentationExamplesOutputFolderName,
+        `${path.parse(example.filePath).name}.md`,
+      );
+      fs.outputFileSync(outputFilePath, renderExampleDocument(example, docConfig.id));
+      logWritten(context.displayPath(outputFilePath));
     }
   }
 }

@@ -8,96 +8,67 @@ import type { SpecToolkitConfigurationDocument } from "./generated/spec-toolkit-
 import { generateExampleDocumentation } from "./generateExampleDocumentation.js";
 import { jsonSchemaToDocumentation } from "./generateInterfaceDocumentation.js";
 import { generateTypeScriptDefinitions } from "./generateTypeScriptDefinitions.js";
+import {
+  createGenerationContext,
+  documentationExamplesOutputFolderName,
+  documentationExtensionsOutputFolderName,
+  documentationOutputFolderName,
+  extensionFolderDiffToOutputFolderName,
+  type GenerationContext,
+  schemasOutputFolderName,
+  typesOutputFolderName,
+} from "./generationContext.js";
 import { mergeSpecExtensions } from "./mergeSpecExtensions.js";
 import type PluginManager from "./plugin/pluginManager.js";
 import type SpecToolkitPlugin from "./plugin/specToolkitPlugin.js";
-import { log } from "./util/log.js";
+import { log, logBanner, logSection } from "./util/log.js";
 
-export const documentationOutputFolderName = "docs";
-export const documentationExtensionsOutputFolderName = "docs/extensions";
-export const documentationExamplesOutputFolderName = "docs/examples";
-export const typesOutputFolderName = "types";
-export const schemasOutputFolderName = "schemas";
-export const extensionFolderDiffToOutputFolderName = `../`; // to get from "docs/extensions" to "docs" folder, step one folder path out
-
-// global variable to hold the output path
-let outputPath = "";
-export function getOutputPath(): string {
-  return outputPath;
-}
+export {
+  documentationExamplesOutputFolderName,
+  documentationExtensionsOutputFolderName,
+  documentationOutputFolderName,
+  extensionFolderDiffToOutputFolderName,
+  schemasOutputFolderName,
+  typesOutputFolderName,
+};
 
 export async function generate(
   configData: SpecToolkitConfigurationDocument,
   pluginManager: PluginManager,
+  context: GenerationContext = createGenerationContext(configData),
 ): Promise<void> {
-  outputPath = configData.outputPath;
+  logBanner("GENERATE Spec (GitHub) Page");
 
-  log.info(" ");
-  log.info("==========================================================================");
-  log.info("GENERATE Spec (GitHub) Page");
-  log.info("==========================================================================");
+  logSection("GENERATE INTERFACE DOCUMENTATION (JSON-SCHEMA -> MD)");
+  await jsonSchemaToDocumentation(configData, context);
 
-  // Generate everything in order
+  logSection("GENERATE AND MERGE SPEC EXTENSIONS");
+  mergeSpecExtensions(configData, context);
 
-  log.info(" ");
-  log.info("--------------------------------------------------------------------------");
-  log.info("GENERATE INTERFACE DOCUMENTATION (JSON-SCHEMA -> MD)");
-  log.info("--------------------------------------------------------------------------");
-  await jsonSchemaToDocumentation(configData);
+  logSection("GENERATE INTERFACE EXAMPLE PAGES");
+  generateExampleDocumentation(configData, context);
 
-  log.info(" ");
-  log.info("--------------------------------------------------------------------------");
-  log.info("GENERATE AND MERGE SPEC EXTENSIONS");
-  log.info("--------------------------------------------------------------------------");
-  mergeSpecExtensions(configData);
+  logSection("GENERATE TYPESCRIPT DEFINITIONS");
+  await generateTypeScriptDefinitions(configData, context);
 
-  log.info(" ");
-  log.info("--------------------------------------------------------------------------");
-  log.info("GENERATE INTERFACE EXAMPLE PAGES");
-  log.info("--------------------------------------------------------------------------");
-  generateExampleDocumentation(configData);
+  for (const plugin of configData.plugins ?? []) {
+    logSection(`RUN PLUGIN: ${plugin.packageName}`);
+    log.info(`Generating documentation for plugin: ${plugin.packageName}`);
+    const pluginInstance = pluginManager.loadPluginInstance<SpecToolkitPlugin>(plugin.packageName);
+    if (pluginInstance && typeof pluginInstance.generate === "function") {
+      const sourceFilePaths = configData.docsConfig
+        .filter((docConfig) => docConfig.type === "spec" || docConfig.type === "specExtension")
+        .map((docConfig) => docConfig.sourceFilePath);
+      const match = plugin.packageName.match(/\/plugin\/([^/]+)\//);
+      const pluginName = match ? match[1] : plugin.packageName;
 
-  log.info(" ");
-  log.info("--------------------------------------------------------------------------");
-  log.info("GENERATE TypeScript Definitions");
-  log.info("--------------------------------------------------------------------------");
-  await generateTypeScriptDefinitions(configData);
-
-  if (configData.plugins && configData.plugins.length > 0) {
-    for (const plugin of configData.plugins) {
-      log.info(" ");
-      log.info("--------------------------------------------------------------------------");
-      log.info(`RUN PLUGIN: ${plugin.packageName}`);
-      log.info("--------------------------------------------------------------------------");
-
-      log.info(`Generating documentation for plugin: ${plugin.packageName}`);
-      const pluginInstance = pluginManager.loadPluginInstance<SpecToolkitPlugin>(plugin.packageName);
-      if (pluginInstance && typeof pluginInstance.generate === "function") {
-        const allMainSpecSourceFilePaths = [];
-        for (const docConfig of configData.docsConfig) {
-          if (docConfig.type === "spec" || docConfig.type === "specExtension") {
-            allMainSpecSourceFilePaths.push(docConfig.sourceFilePath);
-          }
-        }
-        // check if the plugin is developed locally in the "plugin" folder
-        // the packageName will be in the format "./src/plugin/pluginName/index.js"
-        // if so, extract the plugin name from the packageName
-        const match = plugin.packageName.match(/\/plugin\/([^/]+)\//);
-        const pluginName = match ? match[1] : plugin.packageName;
-
-        await pluginInstance.generate(
-          allMainSpecSourceFilePaths,
-          `${configData.outputPath}/plugin/${pluginName}`,
-          plugin.options,
-        );
-      } else {
-        log.warn(`No valid generate function found for plugin: ${plugin.packageName}`);
-      }
+      // Keep plugin arguments in their configured form for compatibility with
+      // third-party plugins that resolve paths against process.cwd().
+      await pluginInstance.generate(sourceFilePaths, `${configData.outputPath}/plugin/${pluginName}`, plugin.options);
+    } else {
+      log.warn(`No valid generate function found for plugin: ${plugin.packageName}`);
     }
   }
 
-  log.info(" ");
-  log.info("==========================================================================");
-  log.info("SUCCESS: Documentation successfully generated to", configData.outputPath);
-  log.info("==========================================================================");
+  logBanner(`SUCCESS: Documentation successfully generated to ${configData.outputPath}`);
 }
