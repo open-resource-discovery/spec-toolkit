@@ -8,6 +8,7 @@ but omits the **patch** level in the spec version number.
 
 ## [unreleased]
 
+- fix: consecutive generation runs in one process use isolated validation and plugin configuration state, and invalid schema examples or defaults throw errors instead of terminating the host process (#112).
 - fix: rebuilding a locally linked checkout preserves an executable CLI entry point.
 - changed: CLI failures are consistently written to standard error.
 

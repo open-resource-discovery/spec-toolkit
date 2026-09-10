@@ -7,14 +7,7 @@ import _ from "lodash";
 import type { SpecJsonSchema, SpecJsonSchemaRoot } from "../generated/spec/spec-v1/types/index.js";
 import { log } from "./log.js";
 
-// Prepare JSON Schema validator
-export const preparedAjv = new Ajv({
-  allErrors: true,
-  allowUnionTypes: true,
-  allowMatchingProperties: true,
-});
-addFormats.default(preparedAjv);
-const registeredExtensionKeywords = new Set([
+const defaultExtensionKeywords = [
   "x-recommended",
   "x-introduced-in-version",
   "x-deprecated-in-version",
@@ -29,11 +22,33 @@ const registeredExtensionKeywords = new Set([
   "x-header-level",
   "x-ref-to-doc",
   "x-abstract",
-]);
-for (const keyword of registeredExtensionKeywords) preparedAjv.addKeyword(keyword);
+] as const;
 
-// JSON Schema -> TypeScript conversion
-preparedAjv.addKeyword("tsType");
+export interface ValidationContext {
+  readonly ajv: Ajv;
+  readonly registeredExtensionKeywords: Set<string>;
+}
+
+export function createValidationContext(): ValidationContext {
+  const ajv = new Ajv({
+    allErrors: true,
+    allowUnionTypes: true,
+    allowMatchingProperties: true,
+  });
+  addFormats.default(ajv);
+  const registeredExtensionKeywords = new Set<string>();
+  const context = { ajv, registeredExtensionKeywords };
+
+  for (const keyword of defaultExtensionKeywords) registerExtensionKeyword(context, keyword);
+  registerExtensionKeyword(context, "tsType");
+  return context;
+}
+
+export function registerExtensionKeyword(context: ValidationContext, keyword: string): void {
+  if (context.registeredExtensionKeywords.has(keyword)) return;
+  context.ajv.addKeyword(keyword);
+  context.registeredExtensionKeywords.add(keyword);
+}
 
 /**
  * Temporarily register vendor extension keywords while a tolerant schema is
@@ -41,15 +56,18 @@ preparedAjv.addKeyword("tsType");
  * the registrations are removed afterwards so one generation run cannot
  * weaken validation in a later run in the same process.
  */
-export function withExtensionKeywordsRegistered<T>(jsonSchema: SpecJsonSchemaRoot, callback: () => T): T {
+export function withExtensionKeywordsRegistered<T>(
+  jsonSchema: SpecJsonSchemaRoot,
+  callback: () => T,
+  context: ValidationContext = createValidationContext(),
+): T {
   const addedKeywords: string[] = [];
 
   function visit(value: unknown): void {
     if (!value || typeof value !== "object") return;
     for (const [key, child] of Object.entries(value)) {
-      if (key.startsWith("x-") && !registeredExtensionKeywords.has(key)) {
-        preparedAjv.addKeyword(key);
-        registeredExtensionKeywords.add(key);
+      if (key.startsWith("x-") && !context.registeredExtensionKeywords.has(key)) {
+        registerExtensionKeyword(context, key);
         addedKeywords.push(key);
       }
       visit(child);
@@ -61,8 +79,8 @@ export function withExtensionKeywordsRegistered<T>(jsonSchema: SpecJsonSchemaRoo
     return callback();
   } finally {
     for (const keyword of addedKeywords) {
-      preparedAjv.removeKeyword(keyword);
-      registeredExtensionKeywords.delete(keyword);
+      context.ajv.removeKeyword(keyword);
+      context.registeredExtensionKeywords.delete(keyword);
     }
   }
 }
@@ -84,13 +102,17 @@ export interface ValidationResultEntry {
  * TODO: Add more validations here and improve feedback to end-user
  *
  */
-export function validateSpecJsonSchema(jsonSchema: SpecJsonSchemaRoot, jsonSchemaFilePath: string): void {
+export function validateSpecJsonSchema(
+  jsonSchema: SpecJsonSchemaRoot,
+  jsonSchemaFilePath: string,
+  context: ValidationContext = createValidationContext(),
+): void {
   const result: ValidationResult = {
     errors: [],
     warnings: [],
   };
 
-  result.errors.push(...validateJsonSchema(jsonSchema, jsonSchemaFilePath));
+  result.errors.push(...validateJsonSchema(jsonSchema, jsonSchemaFilePath, context));
 
   result.errors.push(...validateRefLinks(jsonSchema, jsonSchemaFilePath));
 
@@ -115,13 +137,16 @@ export function validateSpecJsonSchema(jsonSchema: SpecJsonSchemaRoot, jsonSchem
 /**
  * Returns a JSON Schema validator instance that validates JSON objects according to the given JSON Schema
  */
-export function getJsonSchemaValidator(jsonSchema: SpecJsonSchemaRoot): ValidateFunction {
+export function getJsonSchemaValidator(
+  jsonSchema: SpecJsonSchemaRoot,
+  context: ValidationContext = createValidationContext(),
+): ValidateFunction {
   try {
-    return preparedAjv.compile(jsonSchema);
+    return context.ajv.compile(jsonSchema);
   } catch (err) {
     log.error("JSON Schema Validation issue (ajv)");
     log.error("Error:", err);
-    log.error("ajv errors:", preparedAjv.errors);
+    log.error("ajv errors:", context.ajv.errors);
     throw new Error(`JSON Schema Validation issue (ajv): ${JSON.stringify((err as Error).message, null, 2)}`);
   }
 }
@@ -132,6 +157,7 @@ export function getJsonSchemaValidator(jsonSchema: SpecJsonSchemaRoot): Validate
 export function validateJsonSchema(
   jsonSchema: SpecJsonSchemaRoot,
   jsonSchemaFilePath: string,
+  context: ValidationContext = createValidationContext(),
 ): ValidationResultEntry[] {
   const errors: ValidationResultEntry[] = [];
 
@@ -145,7 +171,7 @@ export function validateJsonSchema(
   ) as SpecJsonSchemaRoot;
   delete jsonSchemaMeta.$id;
 
-  const validateMetaSchema = getJsonSchemaValidator(jsonSchemaMeta);
+  const validateMetaSchema = getJsonSchemaValidator(jsonSchemaMeta, context);
   const validMetaSchema = validateMetaSchema(jsonSchema);
 
   if (!validMetaSchema) {
@@ -213,13 +239,20 @@ export function checkRequiredPropertiesExist(jsonSchemaObject: SpecJsonSchema): 
   }
 }
 
-export function validateExamples(jsonSchemaObject: SpecJsonSchema, jsonSchemaRoot: SpecJsonSchemaRoot): void {
+export function validateExamples(
+  jsonSchemaObject: SpecJsonSchema,
+  jsonSchemaRoot: SpecJsonSchemaRoot,
+  context: ValidationContext = createValidationContext(),
+): void {
   if (jsonSchemaObject.examples && Array.isArray(jsonSchemaObject.examples)) {
-    const validate = getJsonSchemaValidator({
-      ...jsonSchemaObject,
-      // Add definitions so that $ref works
-      definitions: jsonSchemaRoot.definitions,
-    });
+    const validate = getJsonSchemaValidator(
+      {
+        ...jsonSchemaObject,
+        // Add definitions so that $ref works
+        definitions: jsonSchemaRoot.definitions,
+      },
+      context,
+    );
 
     for (const example of jsonSchemaObject.examples) {
       // Validate example if it complies to the JSON Schema
@@ -229,19 +262,28 @@ export function validateExamples(jsonSchemaObject: SpecJsonSchema, jsonSchemaRoo
         log.error(`Example value "${example}" is invalid: \n ${JSON.stringify(jsonSchemaObject, null, 2)}`);
         log.error(validate.errors?.[0].message ?? "Unknown validation error");
         log.error("--------------------------------------------------------------------------");
-        process.exit(1);
+        throw new Error(
+          `Example value "${example}" is invalid: ${validate.errors?.[0].message ?? "Unknown validation error"}`,
+        );
       }
     }
   }
 }
 
-export function validateDefault(jsonSchemaObject: SpecJsonSchema, jsonSchemaRoot: SpecJsonSchemaRoot): void {
+export function validateDefault(
+  jsonSchemaObject: SpecJsonSchema,
+  jsonSchemaRoot: SpecJsonSchemaRoot,
+  context: ValidationContext = createValidationContext(),
+): void {
   if (jsonSchemaObject.default !== undefined) {
-    const validate = getJsonSchemaValidator({
-      ...jsonSchemaObject,
-      // Add definitions so that $ref works
-      definitions: jsonSchemaRoot.definitions,
-    });
+    const validate = getJsonSchemaValidator(
+      {
+        ...jsonSchemaObject,
+        // Add definitions so that $ref works
+        definitions: jsonSchemaRoot.definitions,
+      },
+      context,
+    );
 
     // Validate default value if it complies to the JSON Schema
     const valid = validate(jsonSchemaObject.default);
@@ -252,7 +294,9 @@ export function validateDefault(jsonSchemaObject: SpecJsonSchema, jsonSchemaRoot
       );
       log.error(validate.errors?.[0].message ?? "Unknown validation error");
       log.error("--------------------------------------------------------------------------");
-      process.exit(1);
+      throw new Error(
+        `Default value "${jsonSchemaObject.default}" is invalid: ${validate.errors?.[0].message ?? "Unknown validation error"}`,
+      );
     }
   }
 }

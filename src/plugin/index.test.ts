@@ -1,30 +1,27 @@
 import type { SpecToolkitConfigurationDocument } from "../generated/spec-toolkit-config/spec-v1/types/index.js";
+import { createGenerationContext } from "../generationContext.js";
 import { afterEach, describe, expect, it, mock } from "../testHelpers/nodeTest.js";
-import { ajvPreservedPluginSpecificXPropertiesList } from "../util/jsonSchemaConversion.js";
-import { preparedAjv } from "../util/validation.js";
 import registerPlugins from "./index.js";
 import PluginManager from "./pluginManager.js";
 
 describe("registerPlugins tests", () => {
-  const initialAllowed = [...ajvPreservedPluginSpecificXPropertiesList];
-
   afterEach(() => {
     mock.restoreAll();
   });
 
-  it("registers plugin with its specific plugin x- properties to the preparedAjv", async () => {
+  it("registers plugin-specific x- properties in the run context", async () => {
     const registerSpy = mock
       .spyOn(PluginManager.prototype, "registerPlugin")
       .mockResolvedValue(["x-plugin1-foo-property", "x-plugin1-bar-property"]);
-    const addKeywordSpy = mock.spyOn(preparedAjv, "addKeyword");
-
     const config: SpecToolkitConfigurationDocument = {
       plugins: [{ packageName: "plugin1" }],
       outputPath: "out",
       docsConfig: [{ type: "spec", id: "test-id", sourceFilePath: "test-file.yaml" }],
     };
+    const context = createGenerationContext(config);
+    const addKeywordSpy = mock.spyOn(context.validation.ajv, "addKeyword");
 
-    const pm = await registerPlugins(config);
+    const pm = await registerPlugins(config, context);
 
     expect(pm).toBeInstanceOf(PluginManager);
     expect(registerSpy).toHaveBeenCalledWith({ packageName: "plugin1" });
@@ -32,7 +29,7 @@ describe("registerPlugins tests", () => {
     expect(addKeywordSpy).toHaveBeenCalledWith("x-plugin1-bar-property");
   });
 
-  it("adds configured preservedPluginSpecificXProperties to the prepared Ajv ajvPreservedPluginSpecificXPropertiesList", async () => {
+  it("isolates preserved plugin properties between run contexts", async () => {
     mock.spyOn(PluginManager.prototype, "registerPlugin").mockResolvedValue([]);
     const config: SpecToolkitConfigurationDocument = {
       plugins: [
@@ -42,22 +39,18 @@ describe("registerPlugins tests", () => {
       docsConfig: [{ type: "spec", id: "test-id", sourceFilePath: "test-file.yaml" }],
     };
 
-    expect(ajvPreservedPluginSpecificXPropertiesList).not.toContain("x-plugin1-foo-property");
-    expect(ajvPreservedPluginSpecificXPropertiesList).not.toContain("x-plugin1-bar-property");
+    const context = createGenerationContext(config);
+    const unrelatedContext = createGenerationContext(config);
 
-    await registerPlugins(config);
+    await registerPlugins(config, context);
 
-    expect(ajvPreservedPluginSpecificXPropertiesList).toContain("x-plugin1-foo-property");
-    expect(ajvPreservedPluginSpecificXPropertiesList).not.toContain("x-plugin1-bar-property");
-
-    // restore allowed list to initial state
-    ajvPreservedPluginSpecificXPropertiesList.length = 0;
-    ajvPreservedPluginSpecificXPropertiesList.push(...initialAllowed);
+    expect(context.preservedPluginSpecificXProperties.has("x-plugin1-foo-property")).toBe(true);
+    expect(context.preservedPluginSpecificXProperties.has("x-plugin1-bar-property")).toBe(false);
+    expect(unrelatedContext.preservedPluginSpecificXProperties.has("x-plugin1-foo-property")).toBe(false);
   });
 
   it("does nothing when no plugins are present in the configuration", async () => {
     const registerSpy = mock.spyOn(PluginManager.prototype, "registerPlugin");
-    const addKeywordSpy = mock.spyOn(preparedAjv, "addKeyword");
 
     const config: SpecToolkitConfigurationDocument = {
       plugins: [
@@ -66,10 +59,23 @@ describe("registerPlugins tests", () => {
       outputPath: "out",
       docsConfig: [{ type: "spec", id: "test-id", sourceFilePath: "test-file.yaml" }],
     };
-    const pm = await registerPlugins(config);
+    const context = createGenerationContext(config);
+    const addKeywordSpy = mock.spyOn(context.validation.ajv, "addKeyword");
+    const pm = await registerPlugins(config, context);
 
     expect(pm).toBeInstanceOf(PluginManager);
     expect(registerSpy).not.toHaveBeenCalled();
     expect(addKeywordSpy).not.toHaveBeenCalled();
+  });
+
+  it("allows the same plugin configuration in consecutive runs", async () => {
+    const config: SpecToolkitConfigurationDocument = {
+      plugins: [{ packageName: "./src/plugin/ums/index.js" }],
+      outputPath: "out",
+      docsConfig: [{ type: "spec", id: "test-id", sourceFilePath: "test-file.yaml" }],
+    };
+
+    await registerPlugins(config);
+    await registerPlugins(config);
   });
 });

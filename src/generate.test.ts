@@ -7,6 +7,7 @@ import type {
   SpecToolkitConfigurationDocument,
 } from "./generated/spec-toolkit-config/spec-v1/types/index.js";
 import { createGenerationContext } from "./generationContext.js";
+import registerPlugins from "./plugin/index.js";
 import PluginManager from "./plugin/pluginManager.js";
 import { afterEach, describe, expect, test } from "./testHelpers/nodeTest.js";
 
@@ -117,7 +118,12 @@ describe("generate", () => {
       outputPath: "generated/plugin/example-plugin",
       options: { outputFormat: "compact" },
     });
-    expect(readGeneratedTree(path.join(workingDirectory, "generated"))).toMatchSnapshot();
+    const firstGeneratedTree = readGeneratedTree(path.join(workingDirectory, "generated"));
+    expect(firstGeneratedTree).toMatchSnapshot();
+
+    await generate(config, new RecordingPluginManager(), createGenerationContext(config, workingDirectory));
+
+    expect(readGeneratedTree(path.join(workingDirectory, "generated"))).toEqual(firstGeneratedTree);
   });
 
   test("supports absolute configured paths throughout generation", async () => {
@@ -161,5 +167,63 @@ describe("generate", () => {
     expect(fs.readFileSync(path.join(outputPath, "docs/examples/person.md"), "utf8")).toContain('"name":"Ada"');
     expect(fs.existsSync(path.join(outputPath, "schemas/person.schema.json"))).toBe(true);
     expect(fs.existsSync(path.join(outputPath, "types/person.ts"))).toBe(true);
+  });
+
+  test("isolates plugin validation and preservation settings between generation runs", async () => {
+    const workingDirectory = fs.mkdtempSync(path.join(os.tmpdir(), "spec-toolkit-isolation-"));
+    testDirectories.push(workingDirectory);
+    const schemaPath = path.join(workingDirectory, "person.yaml");
+    const pluginPath = path.join(workingDirectory, "test-plugin.mjs");
+    fs.outputFileSync(
+      schemaPath,
+      JSON.stringify({
+        ...personSchema,
+        "x-test-property": true,
+        properties: {
+          name: { ...personSchema.properties.name, default: "Ada", "x-test-property": true },
+        },
+      }),
+    );
+    fs.outputFileSync(
+      pluginPath,
+      'export default class TestPlugin { get xProperties() { return ["x-test-property"]; } generate() {} }',
+    );
+
+    const createConfig = (outputPath: string, preserve: boolean): SpecToolkitConfigurationDocument => ({
+      outputPath,
+      docsConfig: [{ type: "spec", id: "person", sourceFilePath: schemaPath }],
+      plugins: [
+        {
+          packageName: pluginPath,
+          options: preserve ? { preservedPluginSpecificXProperties: ["x-test-property"] } : undefined,
+        },
+      ],
+    });
+    const firstConfig = createConfig("first-output", true);
+    const firstContext = createGenerationContext(firstConfig, workingDirectory);
+    await generate(firstConfig, await registerPlugins(firstConfig, firstContext), firstContext);
+
+    const secondConfig = createConfig("second-output", false);
+    const secondContext = createGenerationContext(secondConfig, workingDirectory);
+    await generate(secondConfig, await registerPlugins(secondConfig, secondContext), secondContext);
+
+    const firstSchema = JSON.parse(
+      fs.readFileSync(path.join(workingDirectory, "first-output/schemas/person.schema.json"), "utf8"),
+    ) as Record<string, unknown>;
+    const secondSchema = JSON.parse(
+      fs.readFileSync(path.join(workingDirectory, "second-output/schemas/person.schema.json"), "utf8"),
+    ) as Record<string, unknown>;
+    expect(firstSchema["x-test-property"]).toBe(true);
+    expect(secondSchema["x-test-property"]).toBeUndefined();
+
+    const thirdConfig: SpecToolkitConfigurationDocument = {
+      outputPath: "third-output",
+      docsConfig: [{ type: "spec", id: "person", sourceFilePath: schemaPath }],
+    };
+    const thirdContext = createGenerationContext(thirdConfig, workingDirectory);
+
+    await expect(generate(thirdConfig, await registerPlugins(thirdConfig, thirdContext), thirdContext)).rejects.toThrow(
+      /unknown keyword.*x-test-property/,
+    );
   });
 });

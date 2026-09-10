@@ -9,7 +9,12 @@ import type {
 import { documentationOutputFolderName, extensionFolderDiffToOutputFolderName } from "../generationContext.js";
 import { isObjectLevelAnyOfRequired } from "../plugin/ums/specJsonSchemaHelper.js";
 import { log } from "../util/log.js";
-import { checkRequiredPropertiesExist, validateDefault, validateExamples } from "../util/validation.js";
+import {
+  checkRequiredPropertiesExist,
+  type ValidationContext,
+  validateDefault,
+  validateExamples,
+} from "../util/validation.js";
 import type { MarkdownGenerationOptions, SpecTarget } from "./index.js";
 
 const escaper = new GfmEscape({ table: true });
@@ -356,7 +361,7 @@ function getPropertiesTableEntryText(
 
       // Get Information of the Properties
       const type = getTypeColumnText(property, jsonSchemaRoot, targetDocumentId, options);
-      let description = getDescriptionWithinTable(property, jsonSchemaRoot);
+      let description = getDescriptionWithinTable(property, jsonSchemaRoot, options.validation);
 
       if (!description) {
         if (property.$ref) {
@@ -468,10 +473,14 @@ function getPatternPropertiesTableEntryText(
  * Adds default value
  * Will also validate that the default value matches the jsonSchemaObject type
  */
-function getJsonSchemaDefaultValue(jsonSchemaObject: SpecJsonSchema, jsonSchemaRoot: SpecJsonSchemaRoot): string {
+function getJsonSchemaDefaultValue(
+  jsonSchemaObject: SpecJsonSchema,
+  jsonSchemaRoot: SpecJsonSchemaRoot,
+  validation?: ValidationContext,
+): string {
   if (jsonSchemaObject.default !== undefined) {
     // Validate default before adding it
-    validateDefault(jsonSchemaObject, jsonSchemaRoot);
+    validateDefault(jsonSchemaObject, jsonSchemaRoot, validation);
     return `**Default Value**: ${escapeTextInTable(jsonSchemaObject.default, false)}`;
   }
   return "";
@@ -485,12 +494,13 @@ export function getJsonSchemaExamples(
   jsonSchemaObject: SpecJsonSchema,
   jsonSchemaRoot: SpecJsonSchemaRoot,
   resultAs: "htmlListTag" | "jsCodeBlock",
+  validation?: ValidationContext,
 ): string {
   let text = "";
 
   if (jsonSchemaObject.examples && Array.isArray(jsonSchemaObject.examples)) {
     // Validate Examples before adding them
-    validateExamples(jsonSchemaObject, jsonSchemaRoot);
+    validateExamples(jsonSchemaObject, jsonSchemaRoot, validation);
 
     // Add all Examples to Text
     for (const example of jsonSchemaObject.examples) {
@@ -626,7 +636,7 @@ export function getObjectDescriptionTable(
 
   if (jsonSchemaObject.examples && Array.isArray(jsonSchemaObject.examples)) {
     text += `\n###### Example Values:\n`;
-    text += getJsonSchemaExamples(jsonSchemaObject, jsonSchemaRoot, "jsCodeBlock");
+    text += getJsonSchemaExamples(jsonSchemaObject, jsonSchemaRoot, "jsCodeBlock", options.validation);
     text += "\n";
   }
 
@@ -684,7 +694,7 @@ function generatePrimitiveTypeDescription(
   }
 
   if (jsonSchemaObject.default !== undefined) {
-    text += getJsonSchemaDefaultValue(jsonSchemaObject, jsonSchemaRoot);
+    text += getJsonSchemaDefaultValue(jsonSchemaObject, jsonSchemaRoot, options.validation);
     text += "<br/>\n";
   }
 
@@ -765,7 +775,7 @@ function generatePrimitiveTypeDescription(
 
   if (jsonSchemaObject.examples && Array.isArray(jsonSchemaObject.examples)) {
     text += `\n###### Example Values:\n`;
-    text += getJsonSchemaExamples(jsonSchemaObject, jsonSchemaRoot, "jsCodeBlock");
+    text += getJsonSchemaExamples(jsonSchemaObject, jsonSchemaRoot, "jsCodeBlock", options.validation);
     text += "\n";
   }
 
@@ -784,7 +794,11 @@ function getRequired(jsonSchemaObject: SpecJsonSchema, propertyName: string): "m
   }
 }
 
-function getDescriptionWithinTable(jsonSchemaObject: SpecJsonSchema, jsonSchemaRoot: SpecJsonSchemaRoot): string {
+function getDescriptionWithinTable(
+  jsonSchemaObject: SpecJsonSchema,
+  jsonSchemaRoot: SpecJsonSchemaRoot,
+  validation?: ValidationContext,
+): string {
   let result = "";
 
   if (jsonSchemaObject["x-deprecation-text"]) {
@@ -818,7 +832,7 @@ function getDescriptionWithinTable(jsonSchemaObject: SpecJsonSchema, jsonSchemaR
 
   if (jsonSchemaObject.default !== undefined) {
     result = addVerticalSeparator(result);
-    result += getJsonSchemaDefaultValue(jsonSchemaObject, jsonSchemaRoot);
+    result += getJsonSchemaDefaultValue(jsonSchemaObject, jsonSchemaRoot, validation);
   }
 
   if (jsonSchemaObject.const !== undefined) {
@@ -955,7 +969,7 @@ function getDescriptionWithinTable(jsonSchemaObject: SpecJsonSchema, jsonSchemaR
   if (jsonSchemaObject.examples && Array.isArray(jsonSchemaObject.examples)) {
     result = addVerticalSeparator(result);
     result += '**Example Values**: <ul className="examples">';
-    result += getJsonSchemaExamples(jsonSchemaObject, jsonSchemaRoot, "htmlListTag");
+    result += getJsonSchemaExamples(jsonSchemaObject, jsonSchemaRoot, "htmlListTag", validation);
     result += "</ul>";
   }
 

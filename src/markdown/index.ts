@@ -1,6 +1,7 @@
 import _ from "lodash";
 import { extensionFolderDiffToOutputFolderName } from "../generate.js";
 import type { SpecJsonSchemaRoot } from "../generated/spec/spec-v1/types/index.js";
+import type { ValidationContext } from "../util/validation.js";
 import {
   getAnchorLinkFromTitle,
   getExtensionOverviewTable,
@@ -16,6 +17,7 @@ export type SpecTarget = {
 
 export interface MarkdownGenerationOptions {
   documentationOutputPath?: string;
+  validation?: ValidationContext;
 }
 
 /**
@@ -106,7 +108,7 @@ export function generateMarkdown(
 
   if (jsonSchemaRoot.examples && Array.isArray(jsonSchemaRoot.examples)) {
     text += "\n## Complete Examples\n";
-    text += getJsonSchemaExamples(jsonSchemaRoot, jsonSchemaRoot, "jsCodeBlock");
+    text += getJsonSchemaExamples(jsonSchemaRoot, jsonSchemaRoot, "jsCodeBlock", options.validation);
     text += "\n";
   }
 

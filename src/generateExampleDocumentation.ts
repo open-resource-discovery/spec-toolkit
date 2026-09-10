@@ -73,7 +73,7 @@ export function generateExampleDocumentation(
 
     const schemaFilePath = context.outputPath(schemasOutputFolderName, `${docConfig.id}.schema.json`);
     const schema = loadYaml(fs.readFileSync(schemaFilePath, "utf8")) as SpecJsonSchemaRoot;
-    const validate = getJsonSchemaValidator(schema);
+    const validate = getJsonSchemaValidator(schema, context.validation);
     const examples = exampleFilePaths.map(loadExampleDocument);
 
     log.info(`Validating examples for "${docConfig.id}".`);

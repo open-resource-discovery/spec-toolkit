@@ -1,5 +1,6 @@
 import path from "node:path";
 import type { SpecToolkitConfigurationDocument } from "./generated/spec-toolkit-config/spec-v1/types/index.js";
+import { createValidationContext, type ValidationContext } from "./util/validation.js";
 
 export const documentationOutputFolderName = "docs";
 export const documentationExtensionsOutputFolderName = path.join(documentationOutputFolderName, "extensions");
@@ -20,6 +21,8 @@ export interface GenerationContext {
   readonly workingDirectory: string;
   readonly configuredOutputPath: string;
   readonly outputDirectory: string;
+  readonly validation: ValidationContext;
+  readonly preservedPluginSpecificXProperties: Set<string>;
   resolvePath(configuredPath: string): string;
   outputPath(...segments: string[]): string;
   displayPath(filePath: string): string;
@@ -40,6 +43,8 @@ export function createGenerationContext(
     workingDirectory: resolvedWorkingDirectory,
     configuredOutputPath: configData.outputPath,
     outputDirectory,
+    validation: createValidationContext(),
+    preservedPluginSpecificXProperties: new Set<string>(),
     resolvePath: (configuredPath: string) => resolveConfiguredPath(configuredPath, resolvedWorkingDirectory),
     outputPath: (...segments: string[]) => path.join(outputDirectory, ...segments),
     displayPath: (filePath: string) => {
