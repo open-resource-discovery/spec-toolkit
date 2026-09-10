@@ -2,10 +2,62 @@ import os from "node:os";
 import path from "node:path";
 import fs from "fs-extra";
 import { generate } from "./generate.js";
-import type { SpecToolkitConfigurationDocument } from "./generated/spec-toolkit-config/spec-v1/types/index.js";
+import type {
+  PluginOptions,
+  SpecToolkitConfigurationDocument,
+} from "./generated/spec-toolkit-config/spec-v1/types/index.js";
 import { createGenerationContext } from "./generationContext.js";
 import PluginManager from "./plugin/pluginManager.js";
 import { afterEach, describe, expect, test } from "./testHelpers/nodeTest.js";
+
+interface PluginInvocation {
+  sourceFilePaths: string[];
+  outputPath: string;
+  options: PluginOptions | undefined;
+}
+
+class RecordingPluginManager extends PluginManager {
+  public invocation: PluginInvocation | undefined;
+
+  public override loadPluginInstance<T>(): T {
+    return {
+      generate: (sourceFilePaths: string[], outputPath: string, options?: PluginOptions) => {
+        this.invocation = { sourceFilePaths, outputPath, options };
+      },
+    } as T;
+  }
+}
+
+function readGeneratedTree(rootDirectory: string): Record<string, string> {
+  const files: Record<string, string> = {};
+
+  function visit(directory: string): void {
+    for (const entry of fs
+      .readdirSync(directory, { withFileTypes: true })
+      .sort((a, b) => a.name.localeCompare(b.name))) {
+      const filePath = path.join(directory, entry.name);
+      if (entry.isDirectory()) {
+        visit(filePath);
+      } else {
+        files[path.relative(rootDirectory, filePath).split(path.sep).join("/")] = fs.readFileSync(filePath, "utf8");
+      }
+    }
+  }
+
+  visit(rootDirectory);
+  return files;
+}
+
+const personSchema = {
+  $schema: "http://json-schema.org/draft-07/schema#",
+  $id: "https://example.test/person.schema.json",
+  title: "Person",
+  description: "A person.",
+  type: "object",
+  properties: { name: { title: "Name", description: "The person's name.", type: "string" } },
+  required: ["name"],
+  additionalProperties: false,
+};
 
 describe("generate", () => {
   const testDirectories: string[] = [];
@@ -20,16 +72,6 @@ describe("generate", () => {
     const workingDirectory = fs.mkdtempSync(path.join(os.tmpdir(), "spec-toolkit-context-"));
     testDirectories.push(workingDirectory);
     const originalWorkingDirectory = process.cwd();
-    const schema = {
-      $schema: "http://json-schema.org/draft-07/schema#",
-      $id: "https://example.test/person.schema.json",
-      title: "Person",
-      description: "A person.",
-      type: "object",
-      properties: { name: { title: "Name", description: "The person's name.", type: "string" } },
-      required: ["name"],
-      additionalProperties: false,
-    };
     const config: SpecToolkitConfigurationDocument = {
       outputPath: "generated",
       docsConfig: [
@@ -41,13 +83,15 @@ describe("generate", () => {
           examplesFolderPath: "examples",
         },
       ],
+      plugins: [{ packageName: "example-plugin", options: { outputFormat: "compact" } }],
     };
 
-    fs.outputFileSync(path.join(workingDirectory, "schemas/person.yaml"), JSON.stringify(schema));
+    fs.outputFileSync(path.join(workingDirectory, "schemas/person.yaml"), JSON.stringify(personSchema));
     fs.outputFileSync(path.join(workingDirectory, "schemas/person.intro.md"), "# Person specification\n");
     fs.outputFileSync(path.join(workingDirectory, "examples/person.json"), JSON.stringify({ name: "Ada" }));
 
-    await generate(config, new PluginManager(), createGenerationContext(config, workingDirectory));
+    const pluginManager = new RecordingPluginManager();
+    await generate(config, pluginManager, createGenerationContext(config, workingDirectory));
 
     expect(process.cwd()).toBe(originalWorkingDirectory);
     expect(fs.readFileSync(path.join(workingDirectory, "generated/docs/person.md"), "utf8")).toContain(
@@ -68,5 +112,54 @@ describe("generate", () => {
     expect(fs.readFileSync(path.join(workingDirectory, "generated/types/index.ts"), "utf8")).toBe(
       'export * from "./person.js";\n',
     );
+    expect(pluginManager.invocation).toEqual({
+      sourceFilePaths: ["schemas/person.yaml"],
+      outputPath: "generated/plugin/example-plugin",
+      options: { outputFormat: "compact" },
+    });
+    expect(readGeneratedTree(path.join(workingDirectory, "generated"))).toMatchSnapshot();
+  });
+
+  test("supports absolute configured paths throughout generation", async () => {
+    const testDirectory = fs.mkdtempSync(path.join(os.tmpdir(), "spec-toolkit-absolute-"));
+    testDirectories.push(testDirectory);
+    const schemaPath = path.join(testDirectory, "input/person.yaml");
+    const introPath = path.join(testDirectory, "input/person.intro.md");
+    const outroPath = path.join(testDirectory, "input/person.outro.md");
+    const examplesPath = path.join(testDirectory, "input/examples");
+    const outputPath = path.join(testDirectory, "output");
+    const config: SpecToolkitConfigurationDocument = {
+      outputPath,
+      docsConfig: [
+        {
+          type: "spec",
+          id: "person",
+          sourceFilePath: schemaPath,
+          sourceIntroFilePath: introPath,
+          sourceOutroFilePath: outroPath,
+          examplesFolderPath: examplesPath,
+        },
+      ],
+    };
+
+    fs.outputFileSync(
+      schemaPath,
+      JSON.stringify({ ...personSchema, $id: "https://example.test/absolute-person.schema.json" }),
+    );
+    fs.outputFileSync(introPath, "# Absolute person specification\n");
+    fs.outputFileSync(outroPath, "Absolute outro.\n");
+    fs.outputFileSync(path.join(examplesPath, "person.json"), JSON.stringify({ name: "Ada" }));
+
+    await generate(
+      config,
+      new PluginManager(),
+      createGenerationContext(config, path.join(testDirectory, "unrelated-working-directory")),
+    );
+
+    expect(fs.readFileSync(path.join(outputPath, "docs/person.md"), "utf8")).toContain("Absolute person specification");
+    expect(fs.readFileSync(path.join(outputPath, "docs/person.md"), "utf8")).toContain("Absolute outro.");
+    expect(fs.readFileSync(path.join(outputPath, "docs/examples/person.md"), "utf8")).toContain('"name":"Ada"');
+    expect(fs.existsSync(path.join(outputPath, "schemas/person.schema.json"))).toBe(true);
+    expect(fs.existsSync(path.join(outputPath, "types/person.ts"))).toBe(true);
   });
 });

@@ -1,0 +1,9 @@
+exports[`generate > runs against an explicit working directory without changing process state 1`] = `
+{
+  "docs/examples/person.md": "---\\ntitle: person\\ndescription: Example documents for person.\\n---\\n\\n## Example File:  person\\n\\n\`\`\`json\\n{\\"name\\":\\"Ada\\"}\\n\`\`\`\\n",
+  "docs/person.md": "# Person specification\\n\\n## Schema Definitions\\n\\n* The root schema of the document is [Person](#person)\\n* The interface is available as JSON Schema: [person.schema.json](https://example.test/person.schema.json).\\n\\n\\n### Person\\n\\n**Type**: Object(<a href=\\"#person_name\\">name</a>)\\n\\n| Property | Type | Description |\\n| -------- | ---- | ----------- |\\n|<div className=\\"interface-property-name anchor\\" id=\\"person_name\\">name<br/><span className=\\"mandatory\\">MANDATORY</span><a className=\\"hash-link\\" href=\\"#person_name\\" title=\\"#person_name\\"></a></div>|<div className=\\"interface-property-type\\">string</div>|<div className=\\"interface-property-description\\">Name<br/><br/>The person's name.</div>|\\n\\n",
+  "schemas/person.schema.json": "{\\n  \\"description\\": \\"A person.\\",\\n  \\"$schema\\": \\"http://json-schema.org/draft-07/schema#\\",\\n  \\"$id\\": \\"https://example.test/person.schema.json\\",\\n  \\"title\\": \\"Person\\",\\n  \\"type\\": \\"object\\",\\n  \\"properties\\": {\\n    \\"name\\": {\\n      \\"title\\": \\"Name\\",\\n      \\"description\\": \\"The person's name.\\",\\n      \\"type\\": \\"string\\"\\n    }\\n  },\\n  \\"required\\": [\\n    \\"name\\"\\n  ],\\n  \\"additionalProperties\\": false,\\n  \\"definitions\\": {}\\n}",
+  "types/index.ts": "export * from \\"./person.js\\";\\n",
+  "types/person.ts": "// AUTO-GENERATED definition files. Do not modify directly.\\n\\n/**\\n * The person's name.\\n */\\nexport type Name = string;\\n\\n/**\\n * A person.\\n */\\nexport interface Person {\\n  name: Name;\\n}\\n"
+}
+`;

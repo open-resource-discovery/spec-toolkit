@@ -311,8 +311,9 @@ describe("CLI docsConfig tests", () => {
             // expect this to never happen because above code should throw an error
             expect(1).toEqual(2);
           } catch (e) {
-            expect((e as Error).message).toContain("exited with non-zero code: 1");
-            expect((e as spawnAsync.SpawnResult).stderr).toContain(
+            const result = e as spawnAsync.SpawnResult;
+            expect(result.status).toBe(1);
+            expect(result.stderr).toContain(
               "Example src/__tests__/tmpTestData-cli-e2e-docs-config/examples5/example1.json is not valid",
             );
           }
