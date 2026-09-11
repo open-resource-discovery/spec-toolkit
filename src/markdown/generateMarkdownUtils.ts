@@ -530,6 +530,7 @@ export function getObjectDescriptionTable(
   jsonSchemaRoot: SpecJsonSchemaRoot,
   targetDocumentId: string | undefined,
   options: MarkdownGenerationOptions = {},
+  renderExamples = true,
 ): string {
   let text = "";
   let typeAlreadySet = false;
@@ -634,7 +635,7 @@ export function getObjectDescriptionTable(
     text += "<br/>\n";
   }
 
-  if (jsonSchemaObject.examples && Array.isArray(jsonSchemaObject.examples)) {
+  if (renderExamples && jsonSchemaObject.examples && Array.isArray(jsonSchemaObject.examples)) {
     text += `\n###### Example Values:\n`;
     text += getJsonSchemaExamples(jsonSchemaObject, jsonSchemaRoot, "jsCodeBlock", options.validation);
     text += "\n";
