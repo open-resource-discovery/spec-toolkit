@@ -35,7 +35,7 @@ export {
 export async function generate(
   configData: SpecToolkitConfigurationDocument,
   pluginManager: PluginManager,
-  context: GenerationContext = createGenerationContext(configData),
+  context: GenerationContext = pluginManager.generationContext ?? createGenerationContext(configData),
 ): Promise<void> {
   logBanner("GENERATE Spec (GitHub) Page");
 

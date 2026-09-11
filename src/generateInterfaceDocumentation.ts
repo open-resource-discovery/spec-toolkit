@@ -166,7 +166,7 @@ export async function jsonSchemaToDocumentation(
     const introText = readTextFromFile(docConfig.sourceIntroFilePath, context.workingDirectory);
     const outroText = readTextFromFile(docConfig.sourceOutroFilePath, context.workingDirectory);
     const generate = (): string => {
-      validateSpecJsonSchema(jsonSchemaRoot, docConfig.sourceFilePath);
+      validateSpecJsonSchema(jsonSchemaRoot, docConfig.sourceFilePath, context.validation);
       return generateMarkdown(
         jsonSchemaRoot,
         docConfig.id,
@@ -175,10 +175,12 @@ export async function jsonSchemaToDocumentation(
         mdFrontmatter,
         introText,
         outroText,
-        { documentationOutputPath: configData.outputPath },
+        { documentationOutputPath: configData.outputPath, validation: context.validation },
       );
     };
-    const text = strictMode ? generate() : withExtensionKeywordsRegistered(jsonSchemaRoot, generate);
+    const text = strictMode
+      ? generate()
+      : withExtensionKeywordsRegistered(jsonSchemaRoot, generate, context.validation);
 
     // Write Markdown Documentation
     let filePath: string;
@@ -211,6 +213,7 @@ export function writeSpecJsonSchemaFiles(
   preservedCoreSpecificXProperties: string[] = [],
   isMainSchema?: boolean,
   displayFilePath = filePath,
+  preservedPluginSpecificXProperties: ReadonlySet<string> = new Set(),
 ): void {
   const refConvertedJsonSchema = convertRefToDocToStandardRef(jsonSchema);
 
@@ -220,7 +223,11 @@ export function writeSpecJsonSchemaFiles(
   if (isMainSchema) {
     // Clean up the JSON Schema from everything spec specific
     const jsonSchema1 = removeDescriptionsFromRefPointers(refConvertedJsonSchema);
-    const jsonSchema2 = removeSomeExtensionProperties(jsonSchema1, preservedCoreSpecificXProperties);
+    const jsonSchema2 = removeSomeExtensionProperties(
+      jsonSchema1,
+      preservedCoreSpecificXProperties,
+      preservedPluginSpecificXProperties,
+    );
 
     // write it as schema file that does not include all the x- extensions
     fs.outputFileSync(filePath, JSON.stringify(jsonSchema2, null, 2));

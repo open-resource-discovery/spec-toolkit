@@ -1,6 +1,7 @@
 import type { SpecJsonSchemaRoot, SpecJsonSchemaTypeName } from "../generated/spec/spec-v1/types/index.js";
 import { describe, expect, it, mock } from "../testHelpers/nodeTest.js";
 import { log } from "../util/log.js";
+import { createValidationContext } from "../util/validation.js";
 import { generateMarkdown } from "./index.js";
 
 describe("test generateMarkdown", () => {
@@ -1143,7 +1144,28 @@ describe("test generateMarkdown", () => {
   });
 
   describe("test validation", () => {
-    it("should end process on wrong example provided", () => {
+    it("should validate and render root examples once", () => {
+      const testSchema: SpecJsonSchemaRoot = {
+        $id: "http://example.com/schemas/root-examples",
+        title: "Root Examples",
+        type: "object",
+        properties: {
+          name: { type: "string", title: "Name" },
+        },
+        required: ["name"],
+        examples: [{ name: "Ada" }],
+      };
+
+      const result = generateMarkdown(testSchema, specId, "spec", undefined, undefined, undefined, undefined, {
+        validation: createValidationContext(),
+      });
+
+      expect(result).toContain("## Complete Examples");
+      expect(result).not.toContain("###### Example Values:");
+      expect(result.match(/"name": "Ada"/g)?.length).toBe(1);
+    });
+
+    it("should throw on wrong example provided", () => {
       const testSchema: SpecJsonSchemaRoot = {
         $id: "http://example.com/schemas/test-schema",
         title: "Test Schema",
@@ -1168,15 +1190,15 @@ describe("test generateMarkdown", () => {
       };
 
       const spyOnLogError = mock.spyOn(log, "error");
-      const spyOnProcessExit = mock.spyOn(process, "exit").mockImplementation(() => undefined as never);
 
-      generateMarkdown(testSchema, specId, "spec", undefined);
+      expect(() => generateMarkdown(testSchema, specId, "spec", undefined)).toThrow(
+        'Example value "12345" is invalid: must be string',
+      );
 
       expect(spyOnLogError).toHaveBeenCalledWith(expect.stringContaining(`Example value "12345" is invalid:`));
-      expect(spyOnProcessExit).toHaveBeenCalledWith(1);
     });
 
-    it("should end process on wrong default value provided", () => {
+    it("should throw on wrong default value provided", () => {
       const testSchema: SpecJsonSchemaRoot = {
         $id: "http://example.com/schemas/test-schema",
         title: "Test Schema",
@@ -1199,12 +1221,12 @@ describe("test generateMarkdown", () => {
       };
 
       const spyOnLogError = mock.spyOn(log, "error");
-      const spyOnProcessExit = mock.spyOn(process, "exit").mockImplementation(() => undefined as never);
 
-      generateMarkdown(testSchema, specId, "spec", undefined);
+      expect(() => generateMarkdown(testSchema, specId, "spec", undefined)).toThrow(
+        'Default value "12345" is invalid: must be string',
+      );
 
       expect(spyOnLogError).toHaveBeenCalledWith(expect.stringContaining(`Default value "12345" is invalid:`));
-      expect(spyOnProcessExit).toHaveBeenCalledWith(1);
     });
   });
 });

@@ -33,4 +33,14 @@ describe("GenerationContext", () => {
     expect(context.resolvePath("schema.yaml")).toBe(path.resolve("/workspace/first/schema.yaml"));
     expect(Object.isFrozen(context)).toBe(true);
   });
+
+  test("isolates validation and plugin configuration between runs", () => {
+    const first = createGenerationContext({ outputPath: "generated" });
+    const second = createGenerationContext({ outputPath: "generated" });
+
+    first.preservedPluginSpecificXProperties.add("x-example");
+
+    expect(first.validation.ajv === second.validation.ajv).toBe(false);
+    expect(second.preservedPluginSpecificXProperties.has("x-example")).toBe(false);
+  });
 });

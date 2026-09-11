@@ -45,8 +45,9 @@ export function validateConfiguration(configData: unknown, configFilePath: strin
 export async function run(options: CliOptions, workingDirectory = process.cwd()): Promise<void> {
   const configFilePath = resolveConfiguredPath(options.config, workingDirectory);
   const configData = validateConfiguration(loadConfiguration(configFilePath), configFilePath);
-  const pluginManager = await registerPlugins(configData);
-  await generate(configData, pluginManager, createGenerationContext(configData, workingDirectory));
+  const context = createGenerationContext(configData, workingDirectory);
+  const pluginManager = await registerPlugins(configData, context);
+  await generate(configData, pluginManager, context);
 }
 
 /** Executes the CLI with additional command-line arguments. */

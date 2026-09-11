@@ -1,4 +1,5 @@
 import type { PluginConfigData } from "../generated/spec-toolkit-config/spec-v1/types/index.js";
+import type { GenerationContext } from "../generationContext.js";
 import { log } from "../util/log.js";
 
 type PluginInstance = {
@@ -10,9 +11,11 @@ interface Plugin extends PluginConfigData {
 
 class PluginManager {
   private readonly pluginList: Map<string, Plugin>;
+  public readonly generationContext: GenerationContext | undefined;
 
-  public constructor() {
+  public constructor(generationContext?: GenerationContext) {
     this.pluginList = new Map();
+    this.generationContext = generationContext;
   }
 
   public async registerPlugin(pluginConfigData: PluginConfigData): Promise<string[] | undefined> {

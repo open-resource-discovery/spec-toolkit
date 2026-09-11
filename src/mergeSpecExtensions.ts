@@ -96,13 +96,14 @@ function mergeExtensionsIntoDocument(
     mergeExtension(targetDocument, loadYaml(fileText) as SpecJsonSchemaRoot, extensionPoints);
   }
 
-  validateSpecJsonSchema(targetDocument, docConfig.sourceFilePath);
+  validateSpecJsonSchema(targetDocument, docConfig.sourceFilePath, context.validation);
   writeSpecJsonSchemaFiles(
     targetDocumentFilePath,
     targetDocument,
     configData.generalConfig?.preservedCoreSpecificXProperties,
     true,
     context.displayPath(targetDocumentFilePath),
+    context.preservedPluginSpecificXProperties,
   );
   logWritten(context.displayPath(targetDocumentFilePath));
 }
