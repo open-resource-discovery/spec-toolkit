@@ -1255,7 +1255,22 @@ function escapeHtmlChars(input: string): string {
 function escapeMdInTable(md: string = ""): string {
   // TODO: Improve this by not making every linebreak a <br>, just two line-breaks should become a paragraph
   // This will be easier once we convert the markdown table to an HTML table
-  return md.split("\n").join("<br/>");
+  return escapeMarkdownTablePipes(md).split("\n").join("<br/>");
+}
+
+function escapeMarkdownTablePipes(markdown: string): string {
+  let result = "";
+  let precedingBackslashes = 0;
+
+  for (const character of markdown) {
+    if (character === "|" && precedingBackslashes % 2 === 0) {
+      result += "\\";
+    }
+    result += character;
+    precedingBackslashes = character === "\\" ? precedingBackslashes + 1 : 0;
+  }
+
+  return result;
 }
 
 function getHashIdForProperty(schemaObjectId: string, propertyName: string): string {
