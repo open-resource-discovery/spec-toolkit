@@ -1149,6 +1149,7 @@ describe("test generateMarkdown", () => {
         $id: "http://example.com/schemas/root-examples",
         title: "Root Examples",
         type: "object",
+        definitions: {},
         properties: {
           name: { type: "string", title: "Name" },
         },

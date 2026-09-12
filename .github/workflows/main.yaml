@@ -17,7 +17,7 @@ jobs:
       - name: Installing Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: "24"
+          node-version: "26"
 
       - name: Install NPM dependencies
         run: npm ci
@@ -28,27 +28,17 @@ jobs:
   tests:
     name: Tests
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: ["24", "26"]
     steps:
       - uses: actions/checkout@v7
 
       - uses: actions/setup-node@v7
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: "26"
 
       - name: Install NPM dependencies
         run: npm ci
 
       - name: Tests
-        if: matrix.node-version == '24'
-        run: |
-          mkdir -p reports/node-test
-          npm run test -- --test-reporter=spec --test-reporter-destination=stdout --test-reporter=junit --test-reporter-destination=reports/node-test/junit.xml
-
-      - name: Tests with coverage
-        if: matrix.node-version == '26'
         run: |
           mkdir -p reports/node-test
           npm run test:coverage -- --test-reporter=spec --test-reporter-destination=stdout --test-reporter=junit --test-reporter-destination=reports/node-test/junit.xml
@@ -56,7 +46,7 @@ jobs:
       - uses: actions/upload-artifact@v7 # upload test results
         if: success() || failure() # run this step even if previous step failed
         with:
-          name: test-results-node${{ matrix.node-version }}
+          name: test-results-node26
           path: reports/node-test/junit.xml
 
   build:
@@ -67,7 +57,7 @@ jobs:
 
       - uses: actions/setup-node@v7
         with:
-          node-version: "24"
+          node-version: "26"
 
       - name: Install NPM dependencies
         run: npm ci
@@ -81,11 +71,11 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
-          node-version: "24"
+          node-version: "26"
 
       - name: Install NPM dependencies
         run: npm ci
