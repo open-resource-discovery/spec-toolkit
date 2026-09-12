@@ -1,13 +1,18 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.6.3/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.5.12/schema.json",
   "files": {
     "includes": [
       "**",
       "!dist",
+      "!.test-dist",
       "!reports",
       "!node_modules",
       "!website/build",
       "!website/.docusaurus",
+      "!website/docs/docs/spec-toolkit-config.md",
+      "!website/docs/docs/spec.md",
+      "!website/static/spec-v1/spec-toolkit-config.schema.json",
+      "!website/static/spec-v1/spec.schema.json",
       "!src/__tests__/generated",
       "!src/generated",
       "!package-lock.json"
