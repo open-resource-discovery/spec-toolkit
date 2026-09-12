@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { AsyncLocalStorage } from "node:async_hooks";
+import path from "node:path";
 import nodeTest, {
   after,
   afterEach,
@@ -7,12 +8,21 @@ import nodeTest, {
   beforeEach,
   describe,
   mock as nodeMock,
+  snapshot as nodeSnapshot,
   type TestContext,
   type TestOptions,
 } from "node:test";
 import { isDeepStrictEqual } from "node:util";
 
 const testContext = new AsyncLocalStorage<TestContext>();
+
+nodeSnapshot.setResolveSnapshotPath((testFilePath) => {
+  if (!testFilePath) {
+    throw new Error("Snapshot assertions require a test file path.");
+  }
+  const relativeTestPath = path.relative(path.resolve(".test-dist"), testFilePath);
+  return path.resolve("src", relativeTestPath.replace(/\.js$/, ".ts.snapshot"));
+});
 
 type TestCallback = (context: TestContext) => void | Promise<void>;
 

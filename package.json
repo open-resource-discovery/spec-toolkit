@@ -20,7 +20,7 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "npm run build && docusaurus start website",
-    "prebuild": "rimraf ./dist",
+    "prebuild": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
     "build": "tsc -p ./tsconfig.build.json",
     "postbuild": "chmod +x ./dist/cli.js && mkdir -p website/docs/docs website/static/spec-v1 && npm run postbuild-spec-toolkit-config && npm run postbuild-spec",
     "postbuild-spec-toolkit-config": "node ./dist/cli.js -c ./spec-toolkit-config.config.json && cp ./src/generated/spec-toolkit-config/spec-v1/docs/spec-toolkit-config.md website/docs/docs/ && cp ./src/generated/spec-toolkit-config/spec-v1/schemas/* website/static/spec-v1/",
@@ -37,10 +37,10 @@
     "lint:staged": "lint-staged",
     "biome": "biome check --write .",
     "biome:ci": "biome ci .",
-    "test": "npm run build && node --import tsx --test",
-    "test:coverage": "npm run build && node --import tsx --test --experimental-test-coverage --test-coverage-include='src/**/*.ts' --test-coverage-exclude='src/**/*.test.ts' --test-coverage-exclude='src/__tests__/generated/**' --test-coverage-exclude='src/generated/**' --test-coverage-exclude='src/testHelpers/**'",
-    "test:update-snapshots": "node --import tsx --test --test-update-snapshots",
-    "test:watch": "node --import tsx --test --watch",
+    "build:test": "node -e \"require('node:fs').rmSync('.test-dist', { recursive: true, force: true })\" && tsc -p ./tsconfig.test.json",
+    "test": "npm run build && npm run build:test && node --test .test-dist",
+    "test:coverage": "npm run build && npm run build:test && node --test --experimental-test-coverage --test-coverage-include='.test-dist/**/*.js' --test-coverage-exclude='.test-dist/**/*.test.js' --test-coverage-exclude='.test-dist/generated/**' --test-coverage-exclude='.test-dist/testHelpers/**' .test-dist",
+    "test:update-snapshots": "npm run build && npm run build:test && node --test --test-update-snapshots .test-dist",
     "prepare": "is-ci || husky"
   },
   "repository": {
@@ -96,9 +96,6 @@
     "react-markdown": "10.1.0",
     "rehype-slug": "6.0.0",
     "remark-gfm": "4.0.1",
-    "rimraf": "6.1.3",
-    "ts-node": "10.9.2",
-    "tsx": "4.23.13",
     "typescript": "7.0.2"
   },
   "browserslist": {
