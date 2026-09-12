@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import fs from "fs-extra";
 import type { JSONSchema7, JSONSchema7Object } from "json-schema";
 import { log } from "../../util/log.js";
@@ -237,9 +235,7 @@ export class MermaidDiagram {
       id: `${jsonSchemaObjectName}.${propertyName}`,
       title: property.title || propertyName,
       description: property.description,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      type: "Composition" || "Association", // eslint-disable-line no-constant-binary-expression
+      type: "Composition",
       maxCardinality: 1,
       minCardinality: 0,
       relationSource: jsonSchemaObjectName,

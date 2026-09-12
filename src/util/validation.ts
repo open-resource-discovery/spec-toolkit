@@ -3,7 +3,6 @@ import { Ajv, type ValidateFunction } from "ajv";
 import addFormats from "ajv-formats";
 import fs from "fs-extra";
 
-import _ from "lodash";
 import type { SpecJsonSchema, SpecJsonSchemaRoot } from "../generated/spec/spec-v1/types/index.js";
 import { log } from "./log.js";
 
@@ -189,11 +188,16 @@ export function validateJsonSchema(
 
 export function validateRefLinks(jsonSchema: SpecJsonSchemaRoot, jsonSchemaFilePath: string): ValidationResultEntry[] {
   const errors: ValidationResultEntry[] = [];
+  const visited = new WeakSet<object>();
 
-  // biome-ignore lint/suspicious/noExplicitAny: cloneDeep callback requires any types
-  function cloneFn(this: SpecJsonSchemaRoot, value: any, _key: any, _object: any, _stack: any): any {
-    if (value?.$ref && typeof value.$ref === "string") {
-      const $ref = value.$ref as string;
+  function visit(value: unknown): void {
+    if (!value || typeof value !== "object") return;
+    if (visited.has(value)) return;
+    visited.add(value);
+
+    const schemaValue = value as Record<string, unknown>;
+    if (typeof schemaValue.$ref === "string") {
+      const $ref = schemaValue.$ref;
       const refArr = $ref.split("/");
 
       if (!$ref.startsWith("#/definitions/")) {
@@ -206,7 +210,7 @@ export function validateRefLinks(jsonSchema: SpecJsonSchemaRoot, jsonSchemaFileP
       if (refArr.length === 3) {
         // $ref to a definition
 
-        if (!this.definitions[refArr[2]]) {
+        if (!jsonSchema.definitions[refArr[2]]) {
           errors.push({
             message: `Invalid $ref "${$ref}", pointing to unknown definition.`,
             context: `${jsonSchemaFilePath}`,
@@ -219,8 +223,10 @@ export function validateRefLinks(jsonSchema: SpecJsonSchemaRoot, jsonSchemaFileP
         });
       }
     }
+
+    for (const child of Object.values(schemaValue)) visit(child);
   }
-  _.cloneDeepWith(jsonSchema, cloneFn.bind(jsonSchema)) as SpecJsonSchema;
+  visit(jsonSchema);
 
   return errors;
 }
