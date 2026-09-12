@@ -1,5 +1,3 @@
-/* global window document location */
-/* eslint-disable no-console */
 // Little script to highlight the links and definitions that were navigated to
 window.addEventListener(
   "DOMContentLoaded",
