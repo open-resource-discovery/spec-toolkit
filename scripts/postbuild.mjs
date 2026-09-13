@@ -28,8 +28,10 @@ async function copyDirectoryContents(sourceDirectory, targetDirectory) {
 }
 
 const cliPath = "dist/cli.js";
-const cliStats = await stat(cliPath);
-await chmod(cliPath, cliStats.mode | 0o111);
+if (process.platform !== "win32") {
+  const cliStats = await stat(cliPath);
+  await chmod(cliPath, cliStats.mode | 0o111);
+}
 await mkdir(websiteDocsDirectory, { recursive: true });
 await mkdir(websiteSchemasDirectory, { recursive: true });
 

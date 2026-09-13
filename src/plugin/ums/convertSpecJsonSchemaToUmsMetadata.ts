@@ -856,6 +856,8 @@ function mergeOverride<T extends object>(target: T, source: object): T {
 }
 
 function mergeNamedArray(target: unknown[], source: unknown[]): unknown[] {
+  // The former Lodash customizer returned after handling the first source entry.
+  // Preserve that behavior so existing override files keep the same result.
   for (const sourceItem of source) {
     const sourceName = getName(sourceItem);
     const targetElement = target.find((element) => getName(element) === sourceName);
