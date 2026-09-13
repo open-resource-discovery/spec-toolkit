@@ -18,6 +18,7 @@ tmp/
 
 # Build
 dist/
+.test-dist/
 build/
 
 # Website copies produced by the root postbuild scripts

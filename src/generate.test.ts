@@ -195,7 +195,7 @@ describe("generate", () => {
       plugins: [
         {
           packageName: pluginPath,
-          options: preserve ? { preservedPluginSpecificXProperties: ["x-test-property"] } : undefined,
+          ...(preserve && { options: { preservedPluginSpecificXProperties: ["x-test-property"] } }),
         },
       ],
     });

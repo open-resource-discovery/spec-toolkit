@@ -29,12 +29,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: "22"
+          node-version: "26"
           # registry-url is required for releasing packages
           registry-url: ${{ vars.NPM_REGISTRY }}
-
-      - name: Install latest npm cli # TODO: can be removed when updating to node 24, npm v.11 is needed for npm trusted publishing
-        run: npm install -g npm@latest
 
       - name: Install dependencies
         run: npm ci
@@ -61,4 +58,4 @@ jobs:
           fetch-depth: 0
 
       - name: Create GitHub Release
-        uses: open-resource-discovery/github-release@main
+        uses: open-resource-discovery/github-release@118c29af2b3bc2d2d9311adc46cefc33843d7e13 # main on 2026-09-12

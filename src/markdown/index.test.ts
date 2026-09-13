@@ -6,6 +6,29 @@ import { generateMarkdown } from "./index.js";
 
 describe("test generateMarkdown", () => {
   const specId = "test-spec";
+
+  it("keeps configured definition order, removes duplicates, and appends unspecified definitions", () => {
+    const testSchema: SpecJsonSchemaRoot = {
+      title: "Test Schema",
+      type: "object",
+      "x-property-order": ["Second", "First", "Second"],
+      definitions: {
+        First: { title: "First definition", type: "string" },
+        Second: { title: "Second definition", type: "string" },
+        Third: { title: "Third definition", type: "string" },
+      },
+    };
+
+    const result = generateMarkdown(testSchema, specId, "spec", undefined);
+    const secondIndex = result.indexOf("### Second definition");
+    const firstIndex = result.indexOf("### First definition");
+    const thirdIndex = result.indexOf("### Third definition");
+
+    expect(secondIndex < firstIndex).toBe(true);
+    expect(firstIndex < thirdIndex).toBe(true);
+    expect(result.match(/### Second definition/g)).toHaveLength(1);
+  });
+
   describe("test **Type**", () => {
     it("should include correct type information - **Type:** string", () => {
       const testSchema: SpecJsonSchemaRoot = {
@@ -1149,6 +1172,7 @@ describe("test generateMarkdown", () => {
         $id: "http://example.com/schemas/root-examples",
         title: "Root Examples",
         type: "object",
+        definitions: {},
         properties: {
           name: { type: "string", title: "Name" },
         },
@@ -1182,8 +1206,7 @@ describe("test generateMarkdown", () => {
             type: "string",
             title: "Property 1 title",
             description: "Property 1 description",
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            //@ts-expect-error
+            // @ts-expect-error: intentionally invalid example value
             examples: [12345], // invalid example, should be string
           },
         },

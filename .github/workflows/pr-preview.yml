@@ -26,7 +26,7 @@ jobs:
         if: github.event.action != 'closed'
         uses: actions/setup-node@v7
         with:
-          node-version: 22
+          node-version: 26
 
       - name: Build preview
         if: github.event.action != 'closed'
@@ -39,7 +39,7 @@ jobs:
           npm run build:website
 
       - name: PR preview
-        uses: open-resource-discovery/pr-preview-action@main
+        uses: open-resource-discovery/pr-preview-action@2abf52396925f6bb4d0a82e27bd6f060260d09ae # main on 2026-09-12
         with:
           fork: true
           build-dir: website/build

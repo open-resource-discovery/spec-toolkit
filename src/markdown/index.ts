@@ -1,4 +1,3 @@
-import _ from "lodash";
 import { extensionFolderDiffToOutputFolderName } from "../generate.js";
 import type { SpecJsonSchemaRoot } from "../generated/spec/spec-v1/types/index.js";
 import type { ValidationContext } from "../util/validation.js";
@@ -86,7 +85,7 @@ export function generateMarkdown(
     const definitionEntries = Object.keys(jsonSchemaRoot.definitions);
     const propertyOrder = jsonSchemaRoot["x-property-order"] || [];
 
-    const finalPropertyOrder = _.union(propertyOrder, definitionEntries);
+    const finalPropertyOrder = [...new Set([...propertyOrder, ...definitionEntries])];
 
     // Refactor: Loop within jsonSchemaToMd, then we don't have to pass definition name
     for (const definitionName of finalPropertyOrder) {
