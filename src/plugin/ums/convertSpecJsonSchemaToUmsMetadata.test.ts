@@ -113,7 +113,10 @@ describe("convertSpecJsonSchemaToUmsMetadata", () => {
             metadata: { name: entity!.metadata.name, labels: { added: "override" } },
             spec: {
               visibility: "internal",
-              metadataProperties: [{ name: "ordId", description: "Overridden description" }],
+              metadataProperties: [
+                { name: "ordId", description: "Overridden description" },
+                { name: "ignoredInSameEntry", type: "string" },
+              ],
             },
           },
           {
@@ -141,6 +144,9 @@ describe("convertSpecJsonSchemaToUmsMetadata", () => {
         description: "Overridden description",
       });
       expect(overriddenEntity?.spec.metadataProperties).toContainEqual({ name: "added", type: "boolean" });
+      expect(overriddenEntity?.spec.metadataProperties.some((property) => property.name === "ignoredInSameEntry")).toBe(
+        false,
+      );
     } finally {
       rmSync(temporaryDirectory, { recursive: true, force: true });
     }
