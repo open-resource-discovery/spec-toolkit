@@ -11,9 +11,6 @@ but omits the **patch** level in the spec version number.
 ## [0.10.0]
 
 - new feature: support object-level `oneOf` with `required`-only entries, expressing an "exactly one of these (groups of) properties must be present" constraint. A branch may require several properties together. Accepted in strict mode and rendered in the documentation as _Exactly one of the following properties must be present: ..._ when every branch is a single property, or _Exactly one of the following must be satisfied: `a` or (`b` and `c`)._ when a branch groups several properties. Mirrors the existing `anyOf` ("at least one of") support.
-
-## [0.9.2]
-
 - fix: escape pipe characters in Markdown content rendered inside property table cells, preventing malformed tables and MDX compilation failures.
 - fix: root-level schema examples are validated and rendered once in the dedicated Complete Examples section (#115).
 - fix: consecutive generation runs in one process use isolated validation and plugin configuration state, and invalid schema examples or defaults throw errors instead of terminating the host process (#112).
