@@ -7,7 +7,7 @@ import type {
   SpecJsonSchemaRoot,
 } from "../generated/spec/spec-v1/types/index.js";
 import { documentationOutputFolderName, extensionFolderDiffToOutputFolderName } from "../generationContext.js";
-import { isObjectLevelAnyOfRequired } from "../plugin/ums/specJsonSchemaHelper.js";
+import { isObjectLevelAnyOfRequired, isObjectLevelOneOfRequired } from "../plugin/ums/specJsonSchemaHelper.js";
 import { log } from "../util/log.js";
 import {
   checkRequiredPropertiesExist,
@@ -629,10 +629,34 @@ export function getObjectDescriptionTable(
     }
   }
 
-  if (jsonSchemaObject.oneOf) {
+  if (jsonSchemaObject.oneOf && !isObjectLevelOneOfRequired(jsonSchemaObject)) {
     text += "One of the following: \n";
     text += oneOfReferenceHandling(jsonSchemaObject, jsonSchemaRoot);
     text += "<br/>\n";
+  } else if (jsonSchemaObject.oneOf && isObjectLevelOneOfRequired(jsonSchemaObject)) {
+    // Object-level `oneOf` where every branch is a `required`-only entry expresses an "exactly one
+    // of these (groups of) properties must be present" constraint. The individual properties stay
+    // optional in the table, so surface the constraint explicitly instead of dropping it.
+    const branches = jsonSchemaObject.oneOf
+      .map((entry) => (Array.isArray(entry.required) ? entry.required : []))
+      .filter((required) => required.length > 0);
+    if (branches.length > 0) {
+      if (branches.every((required) => required.length === 1)) {
+        // Every branch names a single property: render the flat, readable form.
+        const requiredProperties = [...new Set(branches.map((required) => required[0]))];
+        text += `_Exactly one of the following properties must be present: ${requiredProperties
+          .map((propertyName) => `\`${propertyName}\``)
+          .join(", ")}._<br/>\n`;
+      } else {
+        // At least one branch requires several properties together: render each branch as a group
+        // so "either A, or B and C" is not flattened into a misleading "one of A, B, C".
+        const renderedBranches = branches.map((required) => {
+          const group = required.map((propertyName) => `\`${propertyName}\``).join(" and ");
+          return required.length === 1 ? group : `(${group})`;
+        });
+        text += `_Exactly one of the following must be satisfied: ${renderedBranches.join(" or ")}._<br/>\n`;
+      }
+    }
   }
 
   if (renderExamples && jsonSchemaObject.examples && Array.isArray(jsonSchemaObject.examples)) {
