@@ -34,7 +34,7 @@ but omits the **patch** level in the spec version number.
   - a node that has object keywords (`properties`/`patternProperties`/`additionalProperties`) but no `type` is treated as `type: object`;
   - `allOf` `if`/`then` conditionals expressing conditional requiredness are surfaced as a note rather than erroring;
   - a node with no recognizable construct is rendered as a free-form value instead of throwing.
-  Schemas already authored to the conventions avoid structural rewrites beyond internal renderer bookkeeping (#83).
+    Schemas already authored to the conventions avoid structural rewrites beyond internal renderer bookkeeping (#83).
 - fix: in tolerant mode, TypeScript type generation for a single schema that `json-schema-to-typescript` cannot handle (e.g. inline `if`/`then`/`else` conditionals) is skipped with a warning instead of aborting the whole run.
   The Markdown documentation is still produced.
   Strict mode keeps conversion failures fatal (#83).

@@ -1,4 +1,5 @@
 ---
+
 title: Authoring Guide
 sidebar_position: 1.5
 description: A hands-on guide to authoring JSON Schema specifications with Spec Toolkit.
@@ -232,11 +233,7 @@ Preserve an annotation only when a downstream consumer needs it.
 ```json
 {
   "generalConfig": {
-    "preservedCoreSpecificXProperties": [
-      "x-association-target",
-      "x-recommended",
-      "x-introduced-in-version"
-    ]
+    "preservedCoreSpecificXProperties": ["x-association-target", "x-recommended", "x-introduced-in-version"]
   }
 }
 ```
@@ -280,23 +277,23 @@ At the schema root, `x-property-order` orders the generated definition sections,
 
 The core authoring annotations are summarized below.
 
-| Annotation | Place it on | Effect |
-| --- | --- | --- |
-| `x-recommended` | An object schema | Lists optional property names that the documentation labels as recommended. |
-| `x-introduced-in-version` | A definition, property, or supported union branch | Shows when the element was introduced. |
-| `x-deprecated-in-version` | A definition, property, or supported union branch | Shows when the element was deprecated. |
-| `x-deprecation-text` | A definition or property | Explains the deprecation and migration path. |
-| `x-feature-status` | A definition, property, or supported union branch | Adds a `proposed`, `alpha`, or `beta` status marker. |
-| `x-association-target` | A property or array `items` schema | Links an identifier to one or more target definitions or identifier properties. |
-| `x-hide` | A schema node | Omits the node from Markdown while retaining the modeled node in the exported schema. |
-| `x-pattern-properties-description` | An object with `patternProperties` | Adds prose above generated pattern-property documentation. |
-| `x-property-order` | The schema root | Orders definition sections in generated Markdown. |
-| `x-header-level` | A definition | Overrides its generated Markdown heading level, whose default is 3. |
-| `x-abstract` | A definition | Omits an abstract definition from the interface reference and identifies it for advanced plugin use. |
-| `x-extension-points` | A base-spec definition | Names the extension points accepted by that definition. |
-| `x-extension-targets` | An extension definition | Names the base extension points into which the definition is merged. |
-| `x-ref-to-doc` | An extension definition or property | Links extension documentation to a definition in the base specification. |
-| `x-custom-typescript-types` | The schema root | Declares advanced custom TypeScript types used by `tsType`. |
+| Annotation                         | Place it on                                       | Effect                                                                                               |
+| ---------------------------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `x-recommended`                    | An object schema                                  | Lists optional property names that the documentation labels as recommended.                          |
+| `x-introduced-in-version`          | A definition, property, or supported union branch | Shows when the element was introduced.                                                               |
+| `x-deprecated-in-version`          | A definition, property, or supported union branch | Shows when the element was deprecated.                                                               |
+| `x-deprecation-text`               | A definition or property                          | Explains the deprecation and migration path.                                                         |
+| `x-feature-status`                 | A definition, property, or supported union branch | Adds a `proposed`, `alpha`, or `beta` status marker.                                                 |
+| `x-association-target`             | A property or array `items` schema                | Links an identifier to one or more target definitions or identifier properties.                      |
+| `x-hide`                           | A schema node                                     | Omits the node from Markdown while retaining the modeled node in the exported schema.                |
+| `x-pattern-properties-description` | An object with `patternProperties`                | Adds prose above generated pattern-property documentation.                                           |
+| `x-property-order`                 | The schema root                                   | Orders definition sections in generated Markdown.                                                    |
+| `x-header-level`                   | A definition                                      | Overrides its generated Markdown heading level, whose default is 3.                                  |
+| `x-abstract`                       | A definition                                      | Omits an abstract definition from the interface reference and identifies it for advanced plugin use. |
+| `x-extension-points`               | A base-spec definition                            | Names the extension points accepted by that definition.                                              |
+| `x-extension-targets`              | An extension definition                           | Names the base extension points into which the definition is merged.                                 |
+| `x-ref-to-doc`                     | An extension definition or property               | Links extension documentation to a definition in the base specification.                             |
+| `x-custom-typescript-types`        | The schema root                                   | Declares advanced custom TypeScript types used by `tsType`.                                          |
 
 `tsType` is not an `x-` annotation, but it can override generated TypeScript for an advanced schema node.
 Treat both `tsType` and `x-custom-typescript-types` as escape hatches because they couple the schema to the TypeScript generator.
