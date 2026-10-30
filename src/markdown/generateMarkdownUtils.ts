@@ -7,7 +7,7 @@ import type {
   SpecJsonSchemaRoot,
 } from "../generated/spec/spec-v1/types/index.js";
 import { documentationOutputFolderName, extensionFolderDiffToOutputFolderName } from "../generationContext.js";
-import { isObjectLevelAnyOfRequired } from "../plugin/ums/specJsonSchemaHelper.js";
+import { isObjectLevelAnyOfRequired, isObjectLevelOneOfRequired } from "../plugin/ums/specJsonSchemaHelper.js";
 import { log } from "../util/log.js";
 import {
   checkRequiredPropertiesExist,
@@ -629,10 +629,23 @@ export function getObjectDescriptionTable(
     }
   }
 
-  if (jsonSchemaObject.oneOf) {
+  if (jsonSchemaObject.oneOf && !isObjectLevelOneOfRequired(jsonSchemaObject)) {
     text += "One of the following: \n";
     text += oneOfReferenceHandling(jsonSchemaObject, jsonSchemaRoot);
     text += "<br/>\n";
+  } else if (jsonSchemaObject.oneOf && isObjectLevelOneOfRequired(jsonSchemaObject)) {
+    // Object-level `oneOf` where every branch is a `required`-only entry
+    // expresses an "exactly one of these properties must be present"
+    // constraint. The individual properties stay optional in the table, so
+    // surface the constraint explicitly instead of dropping it.
+    const requiredProperties = [
+      ...new Set(jsonSchemaObject.oneOf.flatMap((entry) => (Array.isArray(entry.required) ? entry.required : []))),
+    ];
+    if (requiredProperties.length > 0) {
+      text += `_Exactly one of the following properties must be present: ${requiredProperties
+        .map((propertyName) => `\`${propertyName}\``)
+        .join(", ")}._<br/>\n`;
+    }
   }
 
   if (renderExamples && jsonSchemaObject.examples && Array.isArray(jsonSchemaObject.examples)) {

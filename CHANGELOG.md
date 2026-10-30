@@ -8,6 +8,10 @@ but omits the **patch** level in the spec version number.
 
 ## [unreleased]
 
+## [0.10.0]
+
+- new feature: support object-level `oneOf` with single-property `required` entries, expressing an "exactly one of these properties must be present" constraint. Accepted in strict mode and rendered in the documentation as _Exactly one of the following properties must be present: ..._, mirroring the existing `anyOf` ("at least one of") support.
+
 ## [0.9.2]
 
 - fix: escape pipe characters in Markdown content rendered inside property table cells, preventing malformed tables and MDX compilation failures.

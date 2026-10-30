@@ -201,6 +201,19 @@ describe("normalizeArbitrarySchema", () => {
     expect(warnings).toHaveLength(0);
   });
 
+  it("accepts object-level required-only oneOf constraints in strict mode", () => {
+    const schema = {
+      type: "object",
+      properties: { a: { type: "string" }, b: { type: "string" } },
+      oneOf: [{ required: ["a"] }, { required: ["b"] }],
+    } as unknown as SpecJsonSchemaRoot;
+
+    const { schema: result, warnings } = normalizeArbitrarySchema(schema, { strict: true });
+
+    expect(result.oneOf).toEqual([{ required: ["a"] }, { required: ["b"] }]);
+    expect(warnings).toHaveLength(0);
+  });
+
   it("rejects multi-property required branches in strict mode", () => {
     const schema = {
       type: "object",

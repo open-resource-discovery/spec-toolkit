@@ -47,6 +47,29 @@ export function isObjectLevelAnyOfRequired(schema: SpecJsonSchemaWithUmsSupport)
 }
 
 /**
+ * Detects whether an object schema has an object-level `oneOf` where every entry contains only a `required`
+ * array with one property. This represents the "exactly one of these properties must be present" constraint
+ * pattern.
+ *
+ * Example:
+ * ```yaml
+ * oneOf:
+ *   - required: [ordId]
+ *   - required: [url]
+ *   - required: [correlationIds]
+ * ```
+ */
+export function isObjectLevelOneOfRequired(schema: SpecJsonSchemaWithUmsSupport): boolean {
+  if (!schema.oneOf || schema.oneOf.length === 0) {
+    return false;
+  }
+  return schema.oneOf.every((entry) => {
+    const keys = Object.keys(entry);
+    return keys.length === 1 && keys[0] === "required" && Array.isArray(entry.required) && entry.required.length === 1;
+  });
+}
+
+/**
  * Detects whether this is an "extensible" enum where the enum values are described via `anyOf`
  *
  * TODO: Reconsider how to do this best and complement with validation

@@ -337,8 +337,8 @@ export function normalizeArbitrarySchema(schema: SpecJsonSchemaRoot, options: No
     for (const key of ["allOf", "anyOf", "oneOf"] as const) {
       const branches = node[key];
       if (Array.isArray(branches)) {
-        const isSupportedRequiredOnlyAnyOf =
-          key === "anyOf" && branches.length > 0 && branches.every(isRequiredOnlyConstraint);
+        const isSupportedRequiredOnlyComposition =
+          (key === "anyOf" || key === "oneOf") && branches.length > 0 && branches.every(isRequiredOnlyConstraint);
         node[key] = branches.map((sub: SpecJsonSchema, idx: number) => {
           // A pure constraint branch (conditional requiredness, no shape) is
           // left in place; the renderer surfaces it as a condition note.
@@ -347,7 +347,7 @@ export function normalizeArbitrarySchema(schema: SpecJsonSchemaRoot, options: No
             // conditions whose `then` selects a definition by $ref. Only the
             // conditional-requiredness fallback is tolerant-only.
             const isSupportedConditionalRef = key === "allOf" && !!sub.if && !!sub.then?.$ref;
-            if (options.strict && !isSupportedConditionalRef && !isSupportedRequiredOnlyAnyOf) {
+            if (options.strict && !isSupportedConditionalRef && !isSupportedRequiredOnlyComposition) {
               warn(
                 `Strict mode: inline ${key} constraint branch at "${pathParts.join(".") || "(root)"}" is unsupported.`,
               );
