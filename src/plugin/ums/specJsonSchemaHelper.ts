@@ -47,16 +47,17 @@ export function isObjectLevelAnyOfRequired(schema: SpecJsonSchemaWithUmsSupport)
 }
 
 /**
- * Detects whether an object schema has an object-level `oneOf` where every entry contains only a `required`
- * array with one property. This represents the "exactly one of these properties must be present" constraint
- * pattern.
+ * Detects whether an object schema has an object-level `oneOf` where every entry contains only a
+ * `required` array with one or more properties. This represents the "exactly one of these
+ * (groups of) properties must be present" constraint pattern. A branch may list more than one
+ * property, meaning that whole group must be present together for that branch to be satisfied.
  *
  * Example:
  * ```yaml
  * oneOf:
  *   - required: [ordId]
- *   - required: [url]
- *   - required: [correlationIds]
+ *   - required: [groupId]
+ *   - required: [systemNamespace, systemId]
  * ```
  */
 export function isObjectLevelOneOfRequired(schema: SpecJsonSchemaWithUmsSupport): boolean {
@@ -65,7 +66,7 @@ export function isObjectLevelOneOfRequired(schema: SpecJsonSchemaWithUmsSupport)
   }
   return schema.oneOf.every((entry) => {
     const keys = Object.keys(entry);
-    return keys.length === 1 && keys[0] === "required" && Array.isArray(entry.required) && entry.required.length === 1;
+    return keys.length === 1 && keys[0] === "required" && Array.isArray(entry.required) && entry.required.length >= 1;
   });
 }
 

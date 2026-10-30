@@ -26,6 +26,10 @@ describe("CLI e2e: oneOf with required-only entries", () => {
           type: "array",
           items: { $ref: "#/definitions/Overlay" },
         },
+        groupedTargets: {
+          type: "array",
+          items: { $ref: "#/definitions/GroupedTarget" },
+        },
       },
       definitions: {
         Overlay: {
@@ -64,6 +68,18 @@ describe("CLI e2e: oneOf with required-only entries", () => {
                 maxLength: 255,
               },
             },
+          },
+        },
+        GroupedTarget: {
+          title: "Grouped Target",
+          type: "object",
+          description: "Target addressed either by ordId alone, or by a system namespace and id together.",
+          additionalProperties: false,
+          oneOf: [{ required: ["ordId"] }, { required: ["systemNamespace", "systemId"] }],
+          properties: {
+            ordId: { type: "string", description: "ORD ID of the target." },
+            systemNamespace: { type: "string", description: "System namespace." },
+            systemId: { type: "string", description: "System id within the namespace." },
           },
         },
       },
@@ -128,6 +144,41 @@ describe("CLI e2e: oneOf with required-only entries", () => {
       expect(overlayTarget.properties).toHaveProperty("ordId");
       expect(overlayTarget.properties).toHaveProperty("url");
       expect(overlayTarget.properties).toHaveProperty("correlationIds");
+    } catch (e) {
+      expect(e).toEqual("expect this to never happen because above code should not throw an error");
+    }
+  });
+
+  test("renders a multi-property oneOf branch as a group", async () => {
+    const config: SpecToolkitConfigurationDocument = {
+      $schema: "https://open-resource-discovery.github.io/spec-toolkit/spec-v1/spec-toolkit-config.schema.json#",
+      outputPath: `src/__tests__/${tmpTestOutputName}`,
+      docsConfig: [
+        {
+          type: "spec",
+          id: "overlay-spec",
+          sourceFilePath: `./src/__tests__/${tmpTestDataName}/overlay.schema.yaml`,
+        },
+      ],
+    };
+
+    const configFilePath = path.join(tmpTestData, "config.json");
+    fs.writeFileSync(configFilePath, JSON.stringify(config), "utf8");
+
+    const cliArguments = [cliScriptPath, "-c", `./src/__tests__/${tmpTestDataName}/config.json`];
+
+    try {
+      const { stdout, stderr } = await spawnAsync(cliBin, cliArguments);
+      expect(stdout).toContain(`SUCCESS: Documentation successfully generated to src/__tests__/${tmpTestOutputName}`);
+      expect(stderr).toEqual("");
+
+      const mdFileContent = fs.readFileSync(`src/__tests__/${tmpTestOutputName}/docs/overlay-spec.md`).toString();
+      // A branch requiring several properties together is rendered as a parenthesized group, so the
+      // "either ordId, or systemNamespace and systemId together" semantics are not flattened.
+      expect(mdFileContent).toContain(
+        "Exactly one of the following must be satisfied: `ordId` or (`systemNamespace` and `systemId`)",
+      );
+      expect(mdFileContent).not.toContain("One of the following");
     } catch (e) {
       expect(e).toEqual("expect this to never happen because above code should not throw an error");
     }

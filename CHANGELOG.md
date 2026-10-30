@@ -10,7 +10,7 @@ but omits the **patch** level in the spec version number.
 
 ## [0.10.0]
 
-- new feature: support object-level `oneOf` with single-property `required` entries, expressing an "exactly one of these properties must be present" constraint. Accepted in strict mode and rendered in the documentation as _Exactly one of the following properties must be present: ..._, mirroring the existing `anyOf` ("at least one of") support.
+- new feature: support object-level `oneOf` with `required`-only entries, expressing an "exactly one of these (groups of) properties must be present" constraint. A branch may require several properties together. Accepted in strict mode and rendered in the documentation as _Exactly one of the following properties must be present: ..._ when every branch is a single property, or _Exactly one of the following must be satisfied: `a` or (`b` and `c`)._ when a branch groups several properties. Mirrors the existing `anyOf` ("at least one of") support.
 
 ## [0.9.2]
 

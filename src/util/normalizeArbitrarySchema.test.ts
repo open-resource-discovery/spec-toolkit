@@ -214,14 +214,19 @@ describe("normalizeArbitrarySchema", () => {
     expect(warnings).toHaveLength(0);
   });
 
-  it("rejects multi-property required branches in strict mode", () => {
+  it("accepts multi-property required branches in strict mode", () => {
     const schema = {
       type: "object",
       properties: { a: { type: "string" }, b: { type: "string" }, c: { type: "string" } },
-      anyOf: [{ required: ["a", "b"] }, { required: ["c"] }],
+      oneOf: [{ required: ["a", "b"] }, { required: ["c"] }],
     } as unknown as SpecJsonSchemaRoot;
 
-    expect(() => normalizeArbitrarySchema(schema, { strict: true })).toThrow("Strict schema mode rejected");
+    const { schema: result, warnings } = normalizeArbitrarySchema(schema, { strict: true });
+
+    // A branch may require several properties together; the whole oneOf is left in place and the
+    // renderer surfaces it as grouped presence requirements.
+    expect(result.oneOf).toEqual([{ required: ["a", "b"] }, { required: ["c"] }]);
+    expect(warnings).toHaveLength(0);
   });
 
   it("does not mutate the input schema", () => {
