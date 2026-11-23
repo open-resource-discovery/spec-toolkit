@@ -6,7 +6,7 @@
   "author": "SAP SE",
   "license": "Apache-2.0",
   "engines": {
-    "node": ">=26.0.0",
+    "node": ">=22.0.0",
     "npm": ">=10.0.0"
   },
   "type": "module",
@@ -31,15 +31,19 @@
     "write-translations": "docusaurus write-translations website",
     "write-heading-ids": "docusaurus write-heading-ids website",
     "typecheck": "tsc --project website/tsconfig.json",
-    "lint": "npm run biome",
+    "lint": "biome lint .",
     "lint:staged": "lint-staged",
     "biome": "biome check --write .",
     "biome:ci": "biome ci .",
     "build:test": "node -e \"require('node:fs').rmSync('.test-dist', { recursive: true, force: true })\" && tsc -p ./tsconfig.test.json",
-    "test": "npm run build && npm run build:test && node --test .test-dist",
-    "test:coverage": "npm run build && npm run build:test && node --test --experimental-test-coverage --test-coverage-include='.test-dist/**/*.js' --test-coverage-exclude='.test-dist/**/*.test.js' --test-coverage-exclude='.test-dist/generated/**' --test-coverage-exclude='.test-dist/testHelpers/**' .test-dist",
-    "test:update-snapshots": "npm run build && npm run build:test && node --test --test-update-snapshots .test-dist",
-    "prepare": "is-ci || husky"
+    "test": "npm run build && npm run build:test && node scripts/run-tests.mjs",
+    "test:coverage": "npm run build && npm run build:test && node scripts/run-tests.mjs --experimental-test-coverage --test-coverage-include='.test-dist/**/*.js' --test-coverage-exclude='.test-dist/**/*.test.js' --test-coverage-exclude='.test-dist/generated/**' --test-coverage-exclude='.test-dist/testHelpers/**'",
+    "test:update-snapshots": "npm run build && npm run build:test && node scripts/run-tests.mjs --test-update-snapshots",
+    "prepare": "is-ci || husky",
+    "lint:fix": "biome lint --write .",
+    "format": "biome format --write . && oxfmt --no-error-on-unmatched-pattern '**/*.{md,yml,yaml,css,scss,html}'",
+    "format:check": "biome format . && oxfmt --check --no-error-on-unmatched-pattern '**/*.{md,yml,yaml,css,scss,html}'",
+    "check:tooling": "npm run lint && npm run format:check"
   },
   "repository": {
     "type": "git",
@@ -54,15 +58,15 @@
     "comment-json": "5.0.0",
     "exceljs": "4.4.0",
     "fast-glob": "3.3.3",
-    "fs-extra": "11.4.0",
+    "fs-extra": "11.4.1",
     "gfm-escape": "0.2.0",
-    "js-yaml": "5.4.1",
+    "js-yaml": "5.5.0",
     "json-schema-to-typescript": "16.0.0",
     "quicktype-core": "26.0.0",
     "tslog": "5.1.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.12",
+    "@biomejs/biome": "2.6.4",
     "@docusaurus/core": "3.10.2",
     "@docusaurus/module-type-aliases": "3.10.2",
     "@docusaurus/preset-classic": "3.10.2",
@@ -72,10 +76,9 @@
     "@easyops-cn/docusaurus-search-local": "0.55.3",
     "@expo/spawn-async": "1.8.0",
     "@monaco-editor/react": "4.7.0",
-    "@tsconfig/node26": "26.0.1",
     "@types/fs-extra": "11.0.4",
     "@types/js-yaml": "4.0.9",
-    "@types/node": "26.5.0",
+    "@types/node": "26.6.5",
     "@ui5/webcomponents-base": "2.26.0",
     "@ui5/webcomponents-icons": "2.26.0",
     "@ui5/webcomponents-react": "2.26.0",
@@ -84,15 +87,17 @@
     "husky": "9.1.7",
     "is-ci": "4.1.0",
     "json-schema": "0.4.0",
-    "json-schema-library": "11.6.2",
-    "lint-staged": "17.5.0",
+    "json-schema-library": "11.6.16",
+    "lint-staged": "17.6.0",
     "prism-react-renderer": "2.4.1",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "react-markdown": "10.1.0",
     "rehype-slug": "6.0.0",
     "remark-gfm": "4.0.1",
-    "typescript": "7.0.2"
+    "typescript": "7.0.2",
+    "@tsconfig/node22": "22.0.6",
+    "oxfmt": "0.75.0"
   },
   "browserslist": {
     "production": [
@@ -107,8 +112,11 @@
     ]
   },
   "lint-staged": {
-    "**/*.{js,ts,json,yml,yaml,md}": [
+    "*.{js,jsx,ts,tsx,mjs,cjs,json,jsonc,css,html}": [
       "biome check --write --no-errors-on-unmatched"
+    ],
+    "*.{md,yml,yaml}": [
+      "oxfmt"
     ]
   }
 }

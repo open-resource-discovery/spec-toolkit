@@ -151,7 +151,6 @@ The following steps show a typical workflow.
 
 1. Inspect the generated output and use it in your documentation or build process.
    Spec Toolkit generates three kinds of artifacts:
-
    - Markdown documentation for each main specification and extension;
    - JSON Schema files in `.json` format; and
    - TypeScript interfaces.

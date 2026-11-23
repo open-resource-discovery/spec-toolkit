@@ -1,4 +1,5 @@
 ---
+
 name: Spec-Toolkit Bug Report
 about: Bug report for Spec-Toolkit
 labels: bug
