@@ -1,0 +1,5 @@
+# Review owners for CI and build configuration.
+/.github/ @open-resource-discovery/spec-toolkit-admin
+/renovate.json @open-resource-discovery/spec-toolkit-admin
+/package.json @open-resource-discovery/spec-toolkit-admin
+/package-lock.json @open-resource-discovery/spec-toolkit-admin

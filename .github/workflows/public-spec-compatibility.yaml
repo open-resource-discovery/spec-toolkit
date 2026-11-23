@@ -9,7 +9,6 @@ on:
 
 permissions:
   contents: read
-
 concurrency:
   group: public-spec-compatibility-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
@@ -101,3 +100,5 @@ jobs:
           echo "| Revision | \`${{ steps.consumer.outputs.revision }}\` |" >> "$GITHUB_STEP_SUMMARY"
           echo "| Schema mode | \`${{ steps.consumer.outputs.mode }}\` |" >> "$GITHUB_STEP_SUMMARY"
           echo "| Command | \`npm run generate\` |" >> "$GITHUB_STEP_SUMMARY"
+    permissions:
+      contents: read
