@@ -8,8 +8,9 @@ but omits the **patch** level in the spec version number.
 
 ## [unreleased]
 
-## [0.9.2]
+## [0.10.0]
 
+- new feature: support object-level `oneOf` with `required`-only entries, expressing an "exactly one of these (groups of) properties must be present" constraint. A branch may require several properties together. Accepted in strict mode and rendered in the documentation as _Exactly one of the following properties must be present: ..._ when every branch is a single property, or _Exactly one of the following must be satisfied: `a` or (`b` and `c`)._ when a branch groups several properties. Mirrors the existing `anyOf` ("at least one of") support.
 - fix: escape pipe characters in Markdown content rendered inside property table cells, preventing malformed tables and MDX compilation failures.
 - fix: root-level schema examples are validated and rendered once in the dedicated Complete Examples section (#115).
 - fix: consecutive generation runs in one process use isolated validation and plugin configuration state, and invalid schema examples or defaults throw errors instead of terminating the host process (#112).
@@ -33,7 +34,7 @@ but omits the **patch** level in the spec version number.
   - a node that has object keywords (`properties`/`patternProperties`/`additionalProperties`) but no `type` is treated as `type: object`;
   - `allOf` `if`/`then` conditionals expressing conditional requiredness are surfaced as a note rather than erroring;
   - a node with no recognizable construct is rendered as a free-form value instead of throwing.
-  Schemas already authored to the conventions avoid structural rewrites beyond internal renderer bookkeeping (#83).
+    Schemas already authored to the conventions avoid structural rewrites beyond internal renderer bookkeeping (#83).
 - fix: in tolerant mode, TypeScript type generation for a single schema that `json-schema-to-typescript` cannot handle (e.g. inline `if`/`then`/`else` conditionals) is skipped with a warning instead of aborting the whole run.
   The Markdown documentation is still produced.
   Strict mode keeps conversion failures fatal (#83).

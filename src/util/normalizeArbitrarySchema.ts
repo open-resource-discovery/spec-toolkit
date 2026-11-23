@@ -249,13 +249,16 @@ export function normalizeArbitrarySchema(schema: SpecJsonSchemaRoot, options: No
     node.const === undefined &&
     (node.required !== undefined || node.if !== undefined || node.then !== undefined || node.else !== undefined);
 
-  const isRequiredOnlyConstraint = (node: SpecJsonSchema): boolean =>
+  // A branch that only constrains presence: a single `required` array (one or more properties
+  // that must appear together). Used to accept object-level anyOf/oneOf "presence" constraints;
+  // the documentation renderer surfaces multi-property branches as groups.
+  const isRequiredOnlyBranch = (node: SpecJsonSchema): boolean =>
     !!node &&
     typeof node === "object" &&
     !Array.isArray(node) &&
     Object.keys(node).length === 1 &&
     Array.isArray(node.required) &&
-    node.required.length === 1;
+    node.required.length >= 1;
 
   const hoist = (node: SpecJsonSchema, pathParts: string[], reason: string): SpecJsonSchema => {
     const base = node.title ? pascalCase(node.title) : pascalCase(pathParts.filter(Boolean).join(" ")) || "Object";
@@ -337,8 +340,8 @@ export function normalizeArbitrarySchema(schema: SpecJsonSchemaRoot, options: No
     for (const key of ["allOf", "anyOf", "oneOf"] as const) {
       const branches = node[key];
       if (Array.isArray(branches)) {
-        const isSupportedRequiredOnlyAnyOf =
-          key === "anyOf" && branches.length > 0 && branches.every(isRequiredOnlyConstraint);
+        const isSupportedRequiredOnlyComposition =
+          (key === "anyOf" || key === "oneOf") && branches.length > 0 && branches.every(isRequiredOnlyBranch);
         node[key] = branches.map((sub: SpecJsonSchema, idx: number) => {
           // A pure constraint branch (conditional requiredness, no shape) is
           // left in place; the renderer surfaces it as a condition note.
@@ -347,7 +350,7 @@ export function normalizeArbitrarySchema(schema: SpecJsonSchemaRoot, options: No
             // conditions whose `then` selects a definition by $ref. Only the
             // conditional-requiredness fallback is tolerant-only.
             const isSupportedConditionalRef = key === "allOf" && !!sub.if && !!sub.then?.$ref;
-            if (options.strict && !isSupportedConditionalRef && !isSupportedRequiredOnlyAnyOf) {
+            if (options.strict && !isSupportedConditionalRef && !isSupportedRequiredOnlyComposition) {
               warn(
                 `Strict mode: inline ${key} constraint branch at "${pathParts.join(".") || "(root)"}" is unsupported.`,
               );
