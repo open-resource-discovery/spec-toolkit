@@ -100,5 +100,3 @@ jobs:
           echo "| Revision | \`${{ steps.consumer.outputs.revision }}\` |" >> "$GITHUB_STEP_SUMMARY"
           echo "| Schema mode | \`${{ steps.consumer.outputs.mode }}\` |" >> "$GITHUB_STEP_SUMMARY"
           echo "| Command | \`npm run generate\` |" >> "$GITHUB_STEP_SUMMARY"
-    permissions:
-      contents: read

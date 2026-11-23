@@ -11,8 +11,6 @@ permissions:
 
 jobs:
   linting:
-    permissions:
-      contents: read
     name: Static linting
     runs-on: ubuntu-latest
     steps:
@@ -32,8 +30,6 @@ jobs:
         run: npm run biome:ci
 
   tests:
-    permissions:
-      contents: read
     name: Tests
     runs-on: ubuntu-latest
     strategy:
@@ -70,8 +66,6 @@ jobs:
           path: reports/node-test/junit.xml
 
   build:
-    permissions:
-      contents: read
     name: Build job
     runs-on: ubuntu-latest
     steps:
@@ -91,8 +85,6 @@ jobs:
   website-build:
     name: Website Build
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
 
