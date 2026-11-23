@@ -1,3 +1,5 @@
+* @Fannon
+
 # Review owners for CI and build configuration.
 /.github/ @open-resource-discovery/spec-toolkit-admin
 /renovate.json @open-resource-discovery/spec-toolkit-admin
