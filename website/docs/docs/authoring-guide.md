@@ -1,4 +1,5 @@
 ---
+
 title: Authoring Guide
 sidebar_position: 1.5
 description: A hands-on guide to authoring JSON Schema specifications with Spec Toolkit.
