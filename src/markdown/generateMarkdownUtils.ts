@@ -1,6 +1,5 @@
 import assert from "node:assert";
 import GfmEscape from "gfm-escape";
-import _ from "lodash";
 import type {
   SpecExtensionJsonSchema,
   SpecJsonSchema,
@@ -41,7 +40,7 @@ export function jsonSchemaToMd(
     return text;
   }
 
-  jsonSchemaObject = _.cloneDeep(jsonSchemaObject);
+  jsonSchemaObject = structuredClone(jsonSchemaObject);
 
   const title = getTitleFromSchemaObject(jsonSchemaObject);
 

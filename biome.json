@@ -1,23 +1,55 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.6.3/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.6.4/schema.json",
   "files": {
     "includes": [
       "**",
-      "!dist",
-      "!reports",
-      "!node_modules",
-      "!website/build",
-      "!website/.docusaurus",
-      "!src/__tests__/generated",
-      "!src/generated",
-      "!package-lock.json"
+      "!!**/node_modules",
+      "!!**/dist",
+      "!!**/dist-*",
+      "!!**/.test-dist",
+      "!!**/reports",
+      "!!**/coverage",
+      "!!**/.next",
+      "!!**/build",
+      "!!**/.docusaurus",
+      "!!**/vendor",
+      "!!**/generated",
+      "!!**/__snapshots__",
+      "!!src/__tests__/tmpTestData-*",
+      "!!src/__tests__/tmpTestOutput-*",
+      "!!**/test-results",
+      "!!**/playwright-report",
+      "!!**/storybook-static",
+      "!**/package-lock.json",
+      "!**/pnpm-lock.yaml",
+      "!**/examples",
+      "!**/fixtures",
+      "!**/original-schema",
+      "!**/.vscode-test",
+      "!**/resources",
+      "!**/test-data",
+      "!**/testdata",
+      "!**/*.scss",
+      "!**/*.svg",
+      "!**/.github/actions/**/dist",
+      "!**/example",
+      "!**/test-files",
+      "!**/resources",
+      "!**/schemas",
+      "!**/static",
+      "!**/res",
+      "!**/*.md",
+      "!**/*.yml",
+      "!**/*.yaml",
+      "!**/.github"
     ]
   },
   "formatter": {
     "enabled": true,
     "lineWidth": 120,
     "indentStyle": "space",
-    "indentWidth": 2
+    "indentWidth": 2,
+    "includes": ["**", "!**/.github"]
   },
   "linter": {
     "enabled": true,
@@ -33,7 +65,12 @@
         "noDuplicateObjectKeys": "error"
       },
       "style": {
-        "useConsistentArrayType": { "level": "error", "options": { "syntax": "shorthand" } },
+        "useConsistentArrayType": {
+          "level": "error",
+          "options": {
+            "syntax": "shorthand"
+          }
+        },
         "noNonNullAssertion": "off"
       }
     }
@@ -42,6 +79,23 @@
     "formatter": {
       "quoteStyle": "double",
       "trailingCommas": "all"
+    },
+    "globals": [
+      "afterAll",
+      "afterEach",
+      "beforeAll",
+      "beforeEach",
+      "describe",
+      "expect",
+      "it",
+      "jest",
+      "setup",
+      "suite",
+      "teardown",
+      "test"
+    ],
+    "parser": {
+      "unsafeParameterDecoratorsEnabled": true
     }
   },
   "json": {

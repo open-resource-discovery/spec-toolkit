@@ -18,6 +18,7 @@ tmp/
 
 # Build
 dist/
+.test-dist/
 build/
 
 # Website copies produced by the root postbuild scripts
@@ -28,3 +29,5 @@ website/static/spec-v1/spec.schema.json
 
 # generated filed during unit test execution
 src/__tests__/generated/
+src/__tests__/tmpTestData-*/
+src/__tests__/tmpTestOutput-*/

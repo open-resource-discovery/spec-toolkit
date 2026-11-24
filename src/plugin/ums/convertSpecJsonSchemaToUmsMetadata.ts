@@ -4,7 +4,6 @@
 // # TODO: Add ID for the Consumption Bundle (metadata relation)
 
 import fs from "fs-extra";
-import _ from "lodash";
 import { log } from "../../util/log.js";
 import { loadYaml } from "../../util/yaml.js";
 import type { UmsMetadataOverrides, UmsPluginConfig } from "./configModel.js";
@@ -725,7 +724,6 @@ export function validatePreconditions(document: SpecJsonSchemaRootWithUmsSupport
  */
 export function getReverseRelation(property: SpecJsonSchemaWithUmsSupport): Partial<MetadataRelation> {
   const reverseRelation = property["x-ums-reverse-relationship"];
-  // eslint-disable-next-line eqeqeq
   if (reverseRelation == null) {
     return {};
   } else {
@@ -754,7 +752,6 @@ export function addReverseRelations(
       const propertyContext = getContext(entityContext, propertyName);
       const analyze = property.items || property;
       const reverseRelation = property["x-ums-reverse-relationship"];
-      // eslint-disable-next-line eqeqeq
       if (reverseRelation != null) {
         const reverseMetadataRelation: MetadataRelation = {
           propertyName: reverseRelation.propertyName,
@@ -827,7 +824,7 @@ function applyOverrides(results: UmsMetadata[], config: UmsPluginConfig): UmsMet
 
         if (metadata) {
           log.info(` Merging override for ${metadataType}: "${name}"`);
-          metadata = _.mergeWith(metadata, overrideContent, customMerger);
+          metadata = mergeOverride(metadata, overrideContent);
         } else {
           log.info(` Appending override for ${metadataType}: "${name}"`);
           results.push(overrideContent as UmsMetadata);
@@ -839,29 +836,55 @@ function applyOverrides(results: UmsMetadata[], config: UmsPluginConfig): UmsMet
   return results;
 }
 
-function customMerger(target: unknown, src: unknown): unknown | undefined {
-  if (_.isArray(target)) {
-    for (const srcItem of src as MetadataProperty[]) {
-      const srcName = getName(srcItem);
-      const targetEl = target.find((el) => {
-        const elName = getName(el);
-        return elName === srcName;
-      });
+function mergeOverride<T extends object>(target: T, source: object): T {
+  const properties = target as Record<string, unknown>;
+  for (const [key, sourceValue] of Object.entries(source)) {
+    if (key === "__proto__" || key === "constructor" || key === "prototype") {
+      continue;
+    }
 
-      if (targetEl) {
-        const targetName = getName(targetEl);
-        log.debug(`Merging element: ${srcName} into ${targetName}`);
+    const hasOwnValue = Object.hasOwn(properties, key);
+    const targetValue = hasOwnValue ? properties[key] : undefined;
+    if (sourceValue === undefined && hasOwnValue) {
+      continue;
+    }
 
-        // Merge the properties of the existing element with the new element
-        _.mergeWith(targetEl, srcItem, customMerger);
-        return target;
-      } else {
-        log.debug(`Adding new element: ${srcName}`);
-        return target.concat(srcItem);
-      }
+    if (Array.isArray(targetValue) && Array.isArray(sourceValue)) {
+      properties[key] = mergeNamedArray(targetValue, sourceValue);
+    } else if (isPlainObject(targetValue) && isPlainObject(sourceValue)) {
+      mergeOverride(targetValue, sourceValue);
+    } else {
+      properties[key] = structuredClone(sourceValue);
     }
   }
-  return undefined;
+  return target;
+}
+
+function mergeNamedArray(target: unknown[], source: unknown[]): unknown[] {
+  // The former Lodash customizer returned after handling the first source entry.
+  // Preserve that behavior so existing override files keep the same result.
+  for (const sourceItem of source) {
+    const sourceName = getName(sourceItem);
+    const targetElement = target.find((element) => getName(element) === sourceName);
+
+    if (isPlainObject(targetElement) && isPlainObject(sourceItem)) {
+      log.debug(`Merging element: ${sourceName} into ${getName(targetElement)}`);
+      mergeOverride(targetElement, sourceItem);
+      return target;
+    }
+
+    log.debug(`Adding new element: ${sourceName}`);
+    return target.concat(structuredClone(sourceItem));
+  }
+  return target;
+}
+
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  if (value === null || typeof value !== "object") {
+    return false;
+  }
+  const prototype = Object.getPrototypeOf(value);
+  return prototype === Object.prototype || prototype === null;
 }
 
 function getName(object: unknown): string {
