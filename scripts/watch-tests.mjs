@@ -44,8 +44,15 @@ function scheduleTests() {
 const watchers = [
   watch(join(packageRoot, "src"), { recursive: true }, (_event, filename) => {
     const relativePath = filename?.toString().replaceAll("\\", "/");
-    // Test and build commands write generated output under src; avoid a rebuild loop.
-    if (relativePath?.startsWith("generated/") || relativePath?.startsWith("__tests__/generated/")) return;
+    // CLI tests create temporary input/output under src as well as generated fixtures.
+    // Watching those paths would schedule another run after every test execution.
+    if (
+      relativePath?.startsWith("generated/") ||
+      relativePath?.startsWith("__tests__/generated/") ||
+      relativePath?.startsWith("__tests__/tmpTestData-") ||
+      relativePath?.startsWith("__tests__/tmpTestOutput-")
+    )
+      return;
     scheduleTests();
   }),
   watch(packageRoot, (_event, filename) => {
