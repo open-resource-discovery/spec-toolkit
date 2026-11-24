@@ -37,12 +37,13 @@
     "biome:ci": "biome ci .",
     "build:test": "node -e \"require('node:fs').rmSync('.test-dist', { recursive: true, force: true })\" && tsc -p ./tsconfig.test.json",
     "test": "npm run build && npm run build:test && node scripts/run-tests.mjs",
+    "test:watch": "node scripts/watch-tests.mjs",
     "test:coverage": "npm run build && npm run build:test && node scripts/run-tests.mjs --experimental-test-coverage --test-coverage-include='.test-dist/**/*.js' --test-coverage-exclude='.test-dist/**/*.test.js' --test-coverage-exclude='.test-dist/generated/**' --test-coverage-exclude='.test-dist/testHelpers/**'",
     "test:update-snapshots": "npm run build && npm run build:test && node scripts/run-tests.mjs --test-update-snapshots",
     "prepare": "is-ci || husky",
     "lint:fix": "biome lint --write .",
-    "format": "biome format --write . && oxfmt --no-error-on-unmatched-pattern \"**/*.{md,yml,yaml,css,scss,html}\"",
-    "format:check": "biome format . && oxfmt --check --no-error-on-unmatched-pattern \"**/*.{md,yml,yaml,css,scss,html}\"",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
     "check:tooling": "npm run lint && npm run format:check"
   },
   "repository": {
@@ -96,8 +97,7 @@
     "rehype-slug": "6.0.0",
     "remark-gfm": "4.0.1",
     "typescript": "7.0.2",
-    "@tsconfig/node22": "22.0.6",
-    "oxfmt": "0.75.0"
+    "@tsconfig/node22": "22.0.6"
   },
   "browserslist": {
     "production": [
@@ -114,9 +114,6 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx,mjs,cjs,json,jsonc,css,html}": [
       "biome check --write --no-errors-on-unmatched"
-    ],
-    "*.{md,yml,yaml}": [
-      "oxfmt"
     ]
   }
 }

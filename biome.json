@@ -27,9 +27,7 @@
       "!**/resources",
       "!**/test-data",
       "!**/testdata",
-      "!**/*.css",
       "!**/*.scss",
-      "!**/*.html",
       "!**/*.svg",
       "!**/.github/actions/**/dist",
       "!**/example",
@@ -41,7 +39,7 @@
       "!**/*.md",
       "!**/*.yml",
       "!**/*.yaml",
-      "!**/.github/**"
+      "!**/.github"
     ]
   },
   "formatter": {
@@ -49,7 +47,7 @@
     "lineWidth": 120,
     "indentStyle": "space",
     "indentWidth": 2,
-    "includes": ["**", "!**/.github/**"]
+    "includes": ["**", "!**/.github"]
   },
   "linter": {
     "enabled": true,
