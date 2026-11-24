@@ -41,8 +41,8 @@
     "test:update-snapshots": "npm run build && npm run build:test && node scripts/run-tests.mjs --test-update-snapshots",
     "prepare": "is-ci || husky",
     "lint:fix": "biome lint --write .",
-    "format": "biome format --write . && oxfmt --no-error-on-unmatched-pattern '**/*.{md,yml,yaml,css,scss,html}'",
-    "format:check": "biome format . && oxfmt --check --no-error-on-unmatched-pattern '**/*.{md,yml,yaml,css,scss,html}'",
+    "format": "biome format --write . && oxfmt --no-error-on-unmatched-pattern \"**/*.{md,yml,yaml,css,scss,html}\"",
+    "format:check": "biome format . && oxfmt --check --no-error-on-unmatched-pattern \"**/*.{md,yml,yaml,css,scss,html}\"",
     "check:tooling": "npm run lint && npm run format:check"
   },
   "repository": {

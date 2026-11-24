@@ -837,19 +837,24 @@ function applyOverrides(results: UmsMetadata[], config: UmsPluginConfig): UmsMet
 }
 
 function mergeOverride<T extends object>(target: T, source: object): T {
+  const properties = target as Record<string, unknown>;
   for (const [key, sourceValue] of Object.entries(source)) {
-    const targetValue = (target as Record<string, unknown>)[key];
+    if (key === "__proto__" || key === "constructor" || key === "prototype") {
+      continue;
+    }
 
-    if (sourceValue === undefined && Object.hasOwn(target, key)) {
+    const hasOwnValue = Object.hasOwn(properties, key);
+    const targetValue = hasOwnValue ? properties[key] : undefined;
+    if (sourceValue === undefined && hasOwnValue) {
       continue;
     }
 
     if (Array.isArray(targetValue) && Array.isArray(sourceValue)) {
-      (target as Record<string, unknown>)[key] = mergeNamedArray(targetValue, sourceValue);
+      properties[key] = mergeNamedArray(targetValue, sourceValue);
     } else if (isPlainObject(targetValue) && isPlainObject(sourceValue)) {
       mergeOverride(targetValue, sourceValue);
     } else {
-      (target as Record<string, unknown>)[key] = structuredClone(sourceValue);
+      properties[key] = structuredClone(sourceValue);
     }
   }
   return target;
@@ -862,7 +867,7 @@ function mergeNamedArray(target: unknown[], source: unknown[]): unknown[] {
     const sourceName = getName(sourceItem);
     const targetElement = target.find((element) => getName(element) === sourceName);
 
-    if (targetElement && typeof targetElement === "object" && isPlainObject(sourceItem)) {
+    if (isPlainObject(targetElement) && isPlainObject(sourceItem)) {
       log.debug(`Merging element: ${sourceName} into ${getName(targetElement)}`);
       mergeOverride(targetElement, sourceItem);
       return target;
@@ -875,7 +880,11 @@ function mergeNamedArray(target: unknown[], source: unknown[]): unknown[] {
 }
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
-  return value !== null && typeof value === "object" && !Array.isArray(value);
+  if (value === null || typeof value !== "object") {
+    return false;
+  }
+  const prototype = Object.getPrototypeOf(value);
+  return prototype === Object.prototype || prototype === null;
 }
 
 function getName(object: unknown): string {
