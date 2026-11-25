@@ -30,6 +30,7 @@ jobs:
           package-manager-cache: false
           node-version: "26"
       - name: Install pinned npm for dependency policy
+        if: github.event.action != 'closed'
         run: npm install --global --ignore-scripts npm@11.20.0 --registry=https://registry.npmjs.org/
 
       - name: Build preview
@@ -43,9 +44,8 @@ jobs:
           npm run build:website
 
       - name: PR preview
-        uses: open-resource-discovery/pr-preview-action@245fafc76cbc9b14ca2b6a2b61b9ca64b1d89c98 # main; shared action PR #30
+        uses: open-resource-discovery/pr-preview-action@245fafc76cbc9b14ca2b6a2b61b9ca64b1d89c98 # merged same-repository preview action
         with:
-          fork: false
           build-dir: website/build
           target-repo: open-resource-discovery/pr-preview
           pages-base-url: https://open-resource-discovery.github.io/pr-preview
