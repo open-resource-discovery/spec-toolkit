@@ -115,5 +115,23 @@
     "*.{js,jsx,ts,tsx,mjs,cjs,json,jsonc,css,html}": [
       "biome check --write --no-errors-on-unmatched"
     ]
+  },
+  "packageManager": "npm@11.20.0",
+  "devEngines": {
+    "packageManager": {
+      "name": "npm",
+      "version": ">=11.20.0",
+      "onFail": "error"
+    }
+  },
+  "allowScripts": {
+    "core-js@3.50.0": false,
+    "fsevents@2.3.3": false
+  },
+  "overrides": {
+    "@docusaurus/core": {
+      "tinypool": "2.1.2",
+      "serialize-javascript": "7.1.4"
+    }
   }
 }

@@ -5,3 +5,4 @@
 /renovate.json @open-resource-discovery/spec-toolkit-admin
 /package.json @open-resource-discovery/spec-toolkit-admin
 /package-lock.json @open-resource-discovery/spec-toolkit-admin
+/npmrc @open-resource-discovery/spec-toolkit-admin

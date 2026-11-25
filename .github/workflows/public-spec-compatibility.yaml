@@ -55,6 +55,9 @@ jobs:
             spec-toolkit/package-lock.json
             consumer/package-lock.json
 
+      - name: Install pinned npm for dependency policy
+        run: npm install --global --ignore-scripts npm@11.20.0 --registry=https://registry.npmjs.org/
+
       - name: Build candidate package
         working-directory: spec-toolkit
         run: |
