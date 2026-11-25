@@ -20,9 +20,7 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "npm run build && docusaurus start website",
-    "prebuild": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
-    "build": "tsc -p ./tsconfig.build.json",
-    "postbuild": "node ./scripts/postbuild.mjs",
+    "build": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\" && tsc -p ./tsconfig.build.json && node ./scripts/postbuild.mjs",
     "build:website": "npm run build && docusaurus build website",
     "swizzle": "docusaurus swizzle website",
     "deploy": "docusaurus deploy website",
@@ -44,7 +42,8 @@
     "lint:fix": "biome lint --write .",
     "format": "biome format --write .",
     "format:check": "biome format .",
-    "check:tooling": "npm run lint && npm run format:check"
+    "check:tooling": "npm run lint && npm run format:check",
+    "setup:hooks": "is-ci || husky"
   },
   "repository": {
     "type": "git",

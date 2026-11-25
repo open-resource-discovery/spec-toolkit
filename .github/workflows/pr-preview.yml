@@ -38,7 +38,7 @@ jobs:
           BASE_URL: /pr-preview/spec-toolkit/pr-${{ github.event.pull_request.number }}/
         run: |
           set -euo pipefail
-          npm ci
+          npm ci --ignore-scripts
           npm run build:website
 
       - name: PR preview

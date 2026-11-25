@@ -26,7 +26,7 @@ jobs:
         run: npm install --global --ignore-scripts npm@11.20.0 --registry=https://registry.npmjs.org/
 
       - name: Install NPM dependencies
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: Biome
         run: npm run biome:ci
@@ -51,7 +51,7 @@ jobs:
         run: npm install --global --ignore-scripts npm@11.20.0 --registry=https://registry.npmjs.org/
 
       - name: Install NPM dependencies
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: Tests
         if: matrix.node-version == '24'
@@ -86,7 +86,7 @@ jobs:
         run: npm install --global --ignore-scripts npm@11.20.0 --registry=https://registry.npmjs.org/
 
       - name: Install NPM dependencies
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: Build
         run: npm run build
@@ -106,7 +106,7 @@ jobs:
         run: npm install --global --ignore-scripts npm@11.20.0 --registry=https://registry.npmjs.org/
 
       - name: Install NPM dependencies
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: Build
         run: npm run build:website

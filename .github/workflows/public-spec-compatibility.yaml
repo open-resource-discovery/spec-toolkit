@@ -61,13 +61,13 @@ jobs:
       - name: Build candidate package
         working-directory: spec-toolkit
         run: |
-          npm ci
+          npm ci --ignore-scripts
           npm run build
 
       - name: Install ${{ matrix.name }} dependencies and link candidate
         working-directory: consumer
         run: |
-          npm ci
+          npm ci --ignore-scripts
           npm link ../spec-toolkit --no-save --ignore-scripts
 
       - name: Generate ${{ matrix.name }} in ${{ steps.consumer.outputs.mode }} mode
