@@ -1,1 +1,0 @@
-"use strict";(globalThis.webpackChunk_open_resource_discovery_spec_toolkit=globalThis.webpackChunk_open_resource_discovery_spec_toolkit||[]).push([[7632],{7632(e,o,s){s.d(o,{createWardleyServices:()=>c.J});var c=s(9427);s(4954)}}]);
