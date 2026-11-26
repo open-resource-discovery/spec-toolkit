@@ -27,6 +27,10 @@ If you have questions about an issue, ask them in a comment so a maintainer can 
 
 ## Contributing Code or Documentation
 
+For a checkout, use Node.js 22.22.1 or later with npm 11.20.0 or later.
+Install the locked dependencies with `npm ci --ignore-scripts`.
+The published library and CLI support Node.js 22.12.0 or later with npm 10.0.0 or later.
+
 You are welcome to contribute code or documentation for an accepted issue.
 
 The following rules apply to contributions:
