@@ -6,7 +6,7 @@
   "author": "SAP SE",
   "license": "Apache-2.0",
   "engines": {
-    "node": ">=22.0.0",
+    "node": ">=22.12.0",
     "npm": ">=10.0.0"
   },
   "type": "module",
@@ -20,9 +20,7 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "npm run build && docusaurus start website",
-    "prebuild": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
-    "build": "tsc -p ./tsconfig.build.json",
-    "postbuild": "node ./scripts/postbuild.mjs",
+    "build": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\" && tsc -p ./tsconfig.build.json && node ./scripts/postbuild.mjs",
     "build:website": "npm run build && docusaurus build website",
     "swizzle": "docusaurus swizzle website",
     "deploy": "docusaurus deploy website",
@@ -44,7 +42,8 @@
     "lint:fix": "biome lint --write .",
     "format": "biome format --write .",
     "format:check": "biome format .",
-    "check:tooling": "npm run lint && npm run format:check"
+    "check:tooling": "npm run lint && npm run format:check",
+    "setup:hooks": "is-ci || husky"
   },
   "repository": {
     "type": "git",
@@ -115,5 +114,34 @@
     "*.{js,jsx,ts,tsx,mjs,cjs,json,jsonc,css,html}": [
       "biome check --write --no-errors-on-unmatched"
     ]
+  },
+  "packageManager": "npm@11.20.0",
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": ">=22.22.1",
+      "onFail": "error"
+    },
+    "packageManager": {
+      "name": "npm",
+      "version": ">=11.20.0",
+      "onFail": "error"
+    }
+  },
+  "allowScripts": {
+    "core-js@3.50.0": false,
+    "fsevents@2.3.3": false
+  },
+  "overrides": {
+    "@docusaurus/core": {
+      "tinypool": "2.1.2",
+      "serialize-javascript": "7.1.4"
+    },
+    "exceljs": {
+      "uuid": "11.1.1"
+    },
+    "sockjs": {
+      "uuid": "11.1.1"
+    }
   }
 }
